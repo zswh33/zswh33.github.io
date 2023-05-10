@@ -1,0 +1,261 @@
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="Java 数据结构 Note"><meta name="keywords" content="Java"><meta name="author" content="YN"><meta name="copyright" content="YN"><title>Java 数据结构 Note | uwupu Blog</title><link rel="shortcut icon" href="/melody-favicon.ico"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="manifest" href="/manifest.json"><link rel="manifest" href="/manifest.json"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容:${query}"}},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  hexoVersion: '6.2.0'
+} </script><meta name="generator" content="Hexo 6.2.0"><link rel="alternate" href="/atom.xml" title="uwupu Blog" type="application/atom+xml">
+<script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.9.1');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.9.1"></noscript></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="切换文章详情">切换站点概览</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Java%E4%B8%AD%E7%9A%84%E9%98%9F%E5%88%97"><span class="toc-number">1.</span> <span class="toc-text">Java中的队列</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Queue"><span class="toc-number">1.1.</span> <span class="toc-text">Queue</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#API"><span class="toc-number">1.1.1.</span> <span class="toc-text">API</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Deque"><span class="toc-number">1.1.2.</span> <span class="toc-text">Deque</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BlockingQueue"><span class="toc-number">1.1.3.</span> <span class="toc-text">BlockingQueue</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BlockingDeque"><span class="toc-number">1.1.4.</span> <span class="toc-text">BlockingDeque</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#LinkedBlockingDeque"><span class="toc-number">1.1.4.1.</span> <span class="toc-text">LinkedBlockingDeque</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ArrayBlockingQueue"><span class="toc-number">1.1.4.2.</span> <span class="toc-text">ArrayBlockingQueue</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#PriorityBlockingQueue"><span class="toc-number">1.1.4.3.</span> <span class="toc-text">PriorityBlockingQueue</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#SynchronousQueue"><span class="toc-number">1.1.4.4.</span> <span class="toc-text">SynchronousQueue</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#API-1"><span class="toc-number">1.1.4.4.1.</span> <span class="toc-text">API</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TransferQueue"><span class="toc-number">1.1.5.</span> <span class="toc-text">TransferQueue</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%B0%E5%A2%9EAPI"><span class="toc-number">1.1.5.1.</span> <span class="toc-text">新增API</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#LinkedTransferQueue"><span class="toc-number">1.1.5.2.</span> <span class="toc-text">LinkedTransferQueue</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%89%B9%E5%88%AB%E7%9A%84API"><span class="toc-number">1.1.5.2.1.</span> <span class="toc-text">特别的API</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#AbstractQueue"><span class="toc-number">1.1.6.</span> <span class="toc-text">AbstractQueue</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#API-2"><span class="toc-number">1.1.6.1.</span> <span class="toc-text">API</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ConcurrentLinkedQueue"><span class="toc-number">1.1.6.2.</span> <span class="toc-text">ConcurrentLinkedQueue</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LinkList"><span class="toc-number">1.1.7.</span> <span class="toc-text">LinkList</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PriorityQueue%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97"><span class="toc-number">1.1.8.</span> <span class="toc-text">PriorityQueue优先队列</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%89%B9%E7%82%B9"><span class="toc-number">1.1.8.1.</span> <span class="toc-text">特点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#API-3"><span class="toc-number">1.1.8.2.</span> <span class="toc-text">API</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%80%E4%BA%9BAPI%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">1.1.8.3.</span> <span class="toc-text">一些API的区别</span></a></li></ol></li></ol></li></ol></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="/img/avatar.png"></div><div class="author-info__name text-center">YN</div><div class="author-info__description text-center">一个包含有学习日记的博客</div><div class="follow-button"><a target="_blank" rel="noopener" href="https://uwupu.tk/">Follow Me</a></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">文章</span><span class="pull-right">99</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">标签</span><span class="pull-right">24</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">Links</div><a class="author-info-links__name text-center" target="_blank" rel="noopener" href="https://uwupu.tk/">uwupuBlog</a></div></div></div><div id="content-outer"><div class="plain" id="top-container"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">uwupu Blog</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">诶嘿</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a><a class="site-page" href="/categories">Categories</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> 搜索</span></a></span></div></div><div class="layout" id="content-inner"><article id="post"><div class="plain" id="post-title">Java 数据结构 Note</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2022-10-30</time><span class="post-meta__separator">|</span><span class="post-meta-wordcount"><span>字数总计: </span><span class="word-count">1.4k</span><span class="post-meta__separator">|</span><span>阅读时长: 4 分钟</span></span></div><div class="article-container" id="post-content"><h1 id="Java中的队列"><a href="#Java中的队列" class="headerlink" title="Java中的队列"></a>Java中的队列</h1><h2 id="Queue"><a href="#Queue" class="headerlink" title="Queue"></a>Queue</h2><h3 id="API"><a href="#API" class="headerlink" title="API"></a>API</h3><table>
+<thead>
+<tr>
+<th>功能</th>
+<th>抛出异常</th>
+<th>返回false或null</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>添加</td>
+<td>add()</td>
+<td>offer()</td>
+</tr>
+<tr>
+<td>查询不删除</td>
+<td>element()</td>
+<td>peek()</td>
+</tr>
+<tr>
+<td>查询并删除</td>
+<td>remove()</td>
+<td>poll()</td>
+</tr>
+</tbody></table>
+<h3 id="Deque"><a href="#Deque" class="headerlink" title="Deque"></a>Deque</h3><p>双端队列</p>
+<table>
+<thead>
+<tr>
+<th>功能</th>
+<th>抛出异常</th>
+<th>返回false或null</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>添加到队列尾部</td>
+<td>add()</td>
+<td>offer()</td>
+</tr>
+<tr>
+<td></td>
+<td>addLast()</td>
+<td>offerLast()</td>
+</tr>
+<tr>
+<td>添加到队列头部</td>
+<td>push()</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>addFirst()</td>
+<td>offerFirst()</td>
+</tr>
+<tr>
+<td>查询不删除头部</td>
+<td>element()</td>
+<td>peek()</td>
+</tr>
+<tr>
+<td></td>
+<td>getFirst()</td>
+<td>peekFirst()</td>
+</tr>
+<tr>
+<td>查询不删除尾部</td>
+<td>getLast()</td>
+<td>peekLast()</td>
+</tr>
+<tr>
+<td>查询并删除头部</td>
+<td>remove()/pop()</td>
+<td>poll()</td>
+</tr>
+<tr>
+<td></td>
+<td>removeFirst()</td>
+<td>pollFirst()</td>
+</tr>
+<tr>
+<td>查询并删除尾部</td>
+<td>removeLast()</td>
+<td>pollLast()</td>
+</tr>
+</tbody></table>
+<h3 id="BlockingQueue"><a href="#BlockingQueue" class="headerlink" title="BlockingQueue"></a>BlockingQueue</h3><p>阻塞队列，线程安全</p>
+<table>
+<thead>
+<tr>
+<th>功能</th>
+<th>抛出异常</th>
+<th>返回false或null</th>
+<th>阻塞</th>
+<th>阻塞等待，超时抛出异常</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>添加</td>
+<td>add()</td>
+<td>offer()</td>
+<td>put()</td>
+<td>offer(E e,long timeout,TimeUnit unit)</td>
+</tr>
+<tr>
+<td>查询并删除</td>
+<td></td>
+<td></td>
+<td>take()</td>
+<td>poll(long timeout,TimeUnit unit)</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>其他API</p>
+</blockquote>
+<p><code>int remainingCapacity()</code>：返回剩余容量；</p>
+<p><code>boolean remove(Object o)</code>：删除一个指定元素，成功返回true；</p>
+<p><code>boolean contains(Object o)</code>：若队列包含指定元素，返回true；</p>
+<p><code>int drainTo(Collection&lt;? super E&gt; c)</code>：队列中删除所有元素，并将元素添加到指定集合；</p>
+<p><code>int drainTo(Collection&lt;? super E&gt; c,int maxElements)</code>：同上，可以指定最大元素数量；</p>
+<h3 id="BlockingDeque"><a href="#BlockingDeque" class="headerlink" title="BlockingDeque"></a>BlockingDeque</h3><p>阻塞队列和双端队列的结合；</p>
+<blockquote>
+<p> 新增的API</p>
+</blockquote>
+<p><strong>等待</strong></p>
+<p><code>takeFirst</code> / <code>take</code>：查询并删除队列第一个元素，如果没有则阻塞；</p>
+<p><code>takeLast</code>：查询并删除队列最后一个元素，没有则阻塞；</p>
+<p><code>putFirst</code> / <code>putLast</code>：插入元素，若队列满则阻塞等待；</p>
+<p><strong>等待超时</strong></p>
+<p><code>offerFirst(E e, long timeout,TimeUnit unit)</code>：添加元素到队首，若队列满则等待；</p>
+<p><code>offer</code> 或 <code>offerLast(E e,long timeout,TimeUnit unit)</code>：同上；</p>
+<p><code>pollFirst(long timeout,TimeUnit unit)</code>：查询并删除第一个元素，队列空则等待，超时则抛出错误；</p>
+<p><code>pollLast(long timeout,TimeUnit unit)</code>：同上；</p>
+<h4 id="LinkedBlockingDeque"><a href="#LinkedBlockingDeque" class="headerlink" title="LinkedBlockingDeque"></a>LinkedBlockingDeque</h4><p>链表实现的双端阻塞队列</p>
+<h4 id="ArrayBlockingQueue"><a href="#ArrayBlockingQueue" class="headerlink" title="ArrayBlockingQueue"></a>ArrayBlockingQueue</h4><p>数组实现的阻塞队列</p>
+<p>可以给定容量和访问策略</p>
+<ul>
+<li>ArrayBlockingQueue(int capacity)</li>
+<li>ArrayBlockingQueue(int capacity,boolean fair)</li>
+<li>ArrayBlockingQueue(int capacity,boolean fair,Collection&lt;?extends E&gt; c)</li>
+</ul>
+<h4 id="PriorityBlockingQueue"><a href="#PriorityBlockingQueue" class="headerlink" title="PriorityBlockingQueue"></a>PriorityBlockingQueue</h4><p>优先队列的阻塞版本</p>
+<p>不允许有null元素</p>
+<h4 id="SynchronousQueue"><a href="#SynchronousQueue" class="headerlink" title="SynchronousQueue"></a>SynchronousQueue</h4><ul>
+<li><p>没有容量的同步队列。</p>
+</li>
+<li><p>一旦有<strong>消费或生产</strong>过程，就必须有<strong>相应的生产或消费</strong>过程，否则阻塞；</p>
+</li>
+<li><p>队列中没有容量，在这个队列中，不参与等待的API一律返回null，比如：</p>
+<ul>
+<li>remove、containsAll、removeAll、retainAll永远返回false；</li>
+<li>peek永远返回null。</li>
+</ul>
+</li>
+</ul>
+<p>可以指定访问策略</p>
+<ul>
+<li>SynchronousQueue()，创建一个不公平的同步队列；</li>
+<li>SynchronousQueue(boolean fair)，指定公平/不公平。</li>
+</ul>
+<h5 id="API-1"><a href="#API-1" class="headerlink" title="API"></a>API</h5><p>put(E e)：将元素添加到队列，然后阻塞等待另一个线程接收元素；</p>
+<p>offer(E e, long timeout,TimeUnit unit)：将元素插入到队列中，等待消费者消费，超时则hole..；</p>
+<p>offer(E e)：若有另一个线程在等待接收元素，则将元素插入到队列中，否则返回false；</p>
+<p>take()：查询队列首元素，删除元素并返回，若队列中没有数据则阻塞等待；</p>
+<p>poll(long timeout,TimeUnit unit)：查询队列首元素，删除元素并返回，若队列空则等待，超时返回null；</p>
+<p>poll()：查询队列首元素，删除元素并返回，若队列空则返回null；</p>
+<h3 id="TransferQueue"><a href="#TransferQueue" class="headerlink" title="TransferQueue"></a>TransferQueue</h3><p>这个队列可以实现<strong>生产者消费者程序</strong>，并<strong>协调消息</strong>使消息能够从生产者传输到消费者；</p>
+<h4 id="新增API"><a href="#新增API" class="headerlink" title="新增API"></a>新增API</h4><p><code>getWaitingConsumerCount()</code>：获取等待的消费者数量；</p>
+<p><code>hasWaitingConsumer()</code>：获取是否有消费者在等待；</p>
+<p><code>transfer()</code>：将元素交给消费者，如果没有消费者，则等待；</p>
+<p><code>tryTransfer()</code>：将元素交给消费者，若没有消费者，则抛弃元素，返回false；</p>
+<p><code>tryTransfer(E e,long timeout,Timeunit unit)</code>：将元素交给消费者，若没有消费者，则等待，超时则抛弃元素，返回false；</p>
+<h4 id="LinkedTransferQueue"><a href="#LinkedTransferQueue" class="headerlink" title="LinkedTransferQueue"></a>LinkedTransferQueue</h4><p>链表实现的TransferQueue。</p>
+<h5 id="特别的API"><a href="#特别的API" class="headerlink" title="特别的API"></a>特别的API</h5><ul>
+<li>transfer：将元素转移给消费者，若没有消费者，则等待；<ul>
+<li>将元素插入到队列尾部，然后等待消费者消费；</li>
+</ul>
+</li>
+<li>tryTransfer(E e, long timeout, TimeUnit unit)：将元素插入队列，然后等待消费者消费；若超时，则取消阻塞，返回false；成功返回true；</li>
+<li>take：从队列的头中取出元素，若没有元素则等待；</li>
+<li>poll(long timeout, TimeUnit unit)：take的超时版本，从队列的头中取出元素，若没有元素则等待，超时返回null；</li>
+<li>poll()：从队列头部取出元素，若没有元素，则返回null；</li>
+<li>peek()：查询不删除队列头部元素，若队列空，则返回null；</li>
+</ul>
+<h3 id="AbstractQueue"><a href="#AbstractQueue" class="headerlink" title="AbstractQueue"></a>AbstractQueue</h3><h4 id="API-2"><a href="#API-2" class="headerlink" title="API"></a>API</h4><p>add(E e)：添加元素，失败抛出异常；</p>
+<p>addAll(Collection&lt;? extends E&gt; c)：添加元素，失败抛出异常；</p>
+<p>clear：删除所有元素；</p>
+<p>element：查询不删除头部元素；</p>
+<p>remove：查询并删除头部元素；</p>
+<h4 id="ConcurrentLinkedQueue"><a href="#ConcurrentLinkedQueue" class="headerlink" title="ConcurrentLinkedQueue"></a>ConcurrentLinkedQueue</h4><p>基于<strong>链表</strong>，<strong>无界</strong>的<strong>线程安全</strong>队列；</p>
+<h3 id="LinkList"><a href="#LinkList" class="headerlink" title="LinkList"></a>LinkList</h3><p><strong>线程不安全</strong>，基于<strong>链表</strong>的队列；</p>
+<h3 id="PriorityQueue优先队列"><a href="#PriorityQueue优先队列" class="headerlink" title="PriorityQueue优先队列"></a>PriorityQueue优先队列</h3><h4 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h4><ol>
+<li>无限长的队列，并且动态增长，默认初始容量可以用构造参数initialCapacity参数覆盖；</li>
+<li>不允许有NULL对象；</li>
+<li>添加到PriorityQueue的对象必须有可比性；</li>
+<li>默认情况下，队列按自然顺序排序；</li>
+<li>比较器可用于队列中对象的自定义排序；</li>
+<li>线程不安全；</li>
+<li>add和poll方法复杂度：O(log(n))</li>
+</ol>
+<h4 id="API-3"><a href="#API-3" class="headerlink" title="API"></a>API</h4><ul>
+<li><p>boolean add(object) 将指定对象插入；</p>
+</li>
+<li><p>boolean offer(object) 将指定对象插入；</p>
+</li>
+<li><p>boolean remove(object) 从此队列删除指定元素的单个实例；</p>
+</li>
+<li><p>Object poll()：删除并返回队列的头部，若队列为空，返回null；</p>
+</li>
+<li><p>Object element()：获取队列头部；</p>
+</li>
+<li><p>Object peek()：获取队列头部；</p>
+</li>
+<li><p>clear()：从队列中删除所有元素；</p>
+</li>
+<li><p>comparator()：返回队列的比较器；</p>
+</li>
+<li><p>contains(Object o)：是否包含指定元素。</p>
+</li>
+</ul>
+<h4 id="一些API的区别"><a href="#一些API的区别" class="headerlink" title="一些API的区别"></a>一些API的区别</h4><p>add、remove、element：抛出异常；</p>
+<p>offer、poll、peek：不抛出异常，返回null；</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>抛出异常</th>
+<th>不抛出异常</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>添加</td>
+<td>add</td>
+<td>offer</td>
+</tr>
+<tr>
+<td>删除</td>
+<td>remove</td>
+<td>poll</td>
+</tr>
+<tr>
+<td>获取首元素</td>
+<td>element</td>
+<td>peek</td>
+</tr>
+</tbody></table>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">YN</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://zswh33.github.io/2022/10/30/Java-数据结构-Note/">http://zswh33.github.io/2022/10/30/Java-数据结构-Note/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://zswh33.github.io">uwupu Blog</a>！</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Java/">Java</a></div><nav id="pagination"><div class="prev-post pull-left"><a href="/2022/11/01/Nginx-Note/"><i class="fa fa-chevron-left">  </i><span>Nginx Note</span></a></div><div class="next-post pull-right"><a href="/2022/10/23/openEuler-1/"><span>openEuler 1 Linux操作系统 版本更新 登录和电源管理 文件管理 文件查看 文件查找 压缩解压 软链接硬链接</span><i class="fa fa-chevron-right"></i></a></div></nav></div></div><footer><div class="layout" id="footer"><div class="copyright">©2019 - 2023 By YN</div><div class="framework-info"><span>驱动 - </span><a target="_blank" rel="noopener" href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 - </span><a target="_blank" rel="noopener" href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div><div class="footer_custom_text">哇！感谢你来到这个Blog，虽然没有什么内容...嗯..</div><div class="busuanzi"><script async="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/lib/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a target="_blank" rel="noopener" href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div><script src="/bundle.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script></body></html>

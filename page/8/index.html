@@ -1,0 +1,85 @@
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="一个包含有学习日记的博客"><meta name="keywords" content=""><meta name="author" content="YN"><meta name="copyright" content="YN"><title>学习日志 | uwupu Blog</title><link rel="shortcut icon" href="/melody-favicon.ico"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="manifest" href="/manifest.json"><link rel="manifest" href="/manifest.json"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容:${query}"}},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  hexoVersion: '6.2.0'
+} </script><meta name="generator" content="Hexo 6.2.0"><link rel="alternate" href="/atom.xml" title="uwupu Blog" type="application/atom+xml">
+<script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.9.1');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.9.1"></noscript></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="false"><div class="author-info"><div class="author-info__avatar text-center"><img src="/img/avatar.png"></div><div class="author-info__name text-center">YN</div><div class="author-info__description text-center">一个包含有学习日记的博客</div><div class="follow-button"><a target="_blank" rel="noopener" href="https://uwupu.tk/">Follow Me</a></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">文章</span><span class="pull-right">99</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">标签</span><span class="pull-right">24</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">Links</div><a class="author-info-links__name text-center" target="_blank" rel="noopener" href="https://uwupu.tk/">uwupuBlog</a></div></div></div><nav class="no-bg" id="nav"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">uwupu Blog</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">诶嘿</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a><a class="site-page" href="/categories">Categories</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> 搜索</span></a></span></div><div id="site-info"><div id="site-title">uwupu Blog</div><div id="site-sub-title">学习日志</div></div></nav><div id="content-outer"><div class="layout" id="content-inner"><div class="recent-post-item article-container"><a class="article-title" href="/2022/09/06/Day14-JVM-2/">Day14 JVM 2 GC 垃圾回收机制</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2022-09-06</time><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/tags/Java/">Java</a></span><div class="content">GC：垃圾回收机制GC作用区：Heap 和 方法区；
+JVM在进行GC时，大部分时候，回收的都是新生代。
+类型
+轻GC（GC），大部分时候清理新生代，偶尔幸存区
+重GC（全局GC），
+
+如何判断哪些对象需要被回收Java 垃圾回收判断哪些对象需要被回收有两种方法：引用计数法和可达性分析算法。
+可达性 ...</div><a class="more" href="/2022/09/06/Day14-JVM-2/#more" style="margin-top: 14px">阅读更多</a><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/2022/09/04/Day12-JVM-1/">Day12 JVM 1 JVM体系结构 类加载器 沙箱安全机制 Native 栈 堆 JProfiler</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2022-09-04</time><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/tags/Java/">Java</a></span><div class="content">JVM体系结构
+JVM完整架构图
+
+
+
+
+JVM简图
+
+
+
+Java程序执行过程：java文件编编译 —&gt; class字节码文件  —&gt; 类加载器 —&gt; 运行时数据区；
+其中：
+
+Java栈、本地方法栈和程序计数器不能进行垃圾回收；
+JVM调优一般指的是调优方法区和堆
+
+类加载器
+ ...</div><a class="more" href="/2022/09/04/Day12-JVM-1/#more" style="margin-top: 14px">阅读更多</a><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/2022/09/03/Day11-Multithreading2-10/">Day11 多线程进阶 10 各种锁 排查死锁</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2022-09-03</time><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/tags/Java/">Java</a></span><div class="content">Java的各种锁公平锁 不公平锁公平锁：非常公平，不能插队，必须先来后到。
+不公平锁：非常不公平，可以插队。（默认都是非公平锁）
+
+ReentrantLock下的锁
+
+123public ReentrantLock() {    sync = new NonfairSync();//非公平 ...</div><a class="more" href="/2022/09/03/Day11-Multithreading2-10/#more" style="margin-top: 14px">阅读更多</a><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/2022/09/03/Day11-Multithreading2-9/">Day11 多线程进阶 9 CAS 原子引用</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2022-09-03</time><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/tags/Java/">Java</a></span><div class="content">CAS
+介绍
+
+比较当前工作内存中的值和主内存的值，若这个值为期望值，则执行操作。若不是就一直循环，即阻塞。
+
+public final boolean compareAndSet(int expect, int update)
+
+public final boolean compareAndSet ...</div><a class="more" href="/2022/09/03/Day11-Multithreading2-9/#more" style="margin-top: 14px">阅读更多</a><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/2022/09/03/Day11-Crack-DCL-LayMan/">Day11 DCL懒汉式单例反破解攻坚战 (๑•̀ㅂ•́)و✧</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2022-09-03</time><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/tags/Java/">Java</a></span><div class="content">DCL懒汉式单例反破解攻坚战 (๑•̀ㅂ•́)و✧DCL懒汉式单例1234567891011121314151617181920//懒汉式单例public class LazyMan {    private volatile static LazyMan lazyMan;//添加vola ...</div><a class="more" href="/2022/09/03/Day11-Crack-DCL-LayMan/#more" style="margin-top: 14px">阅读更多</a><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/2022/09/03/Day11-Multithreading2-8/">Day11 多线程进阶 8 单例模式</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2022-09-03</time><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/tags/Java/">Java</a></span><div class="content">单例模式创建的对象只有一个，程序运行过程中只使用这一个对象
+
+构造方法私有private
+程序运行过程中只有一个，使用getInstance()方法获取对象。
+
+饿汉式单例恶汉！！！
+一次性分配所有空间。
+123456789101112//饿汉式单例public class Hungry { ...</div><a class="more" href="/2022/09/03/Day11-Multithreading2-8/#more" style="margin-top: 14px">阅读更多</a><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/2022/09/03/Day11-Multithreading2-7/">Day11 多线程进阶 7 JMM Volatile</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2022-09-03</time><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/tags/Java/">Java</a></span><div class="content">JMMJava Memory Model
+
+介绍
+
+JMM：Java内存模型。（一个约定，协议）
+
+使用场景 / 解决的问题
+
+在不同硬件生产商和不同操作系统下，内存的访问逻辑有一定的差异，导致一段代码在某个系统环境下运行良好，并且线程安全，但是换了系统就出现各种问题。
+Java内存模型， ...</div><a class="more" href="/2022/09/03/Day11-Multithreading2-7/#more" style="margin-top: 14px">阅读更多</a><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/2022/09/02/Day10-Multitherading2-6/">Day10 多线程进阶 6 四大函数式接口 Stream流式计算 ForkJoin分支合并 CompletableFuture异步回调</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2022-09-02</time><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/tags/Java/">Java</a></span><div class="content">四大函数式接口
+函数式接口
+
+只有一个方法的接口。
+12345678910//例 Callable接口public interface Callable&lt;V&gt; {    /**     * Computes a result, or throws an exception if ...</div><a class="more" href="/2022/09/02/Day10-Multitherading2-6/#more" style="margin-top: 14px">阅读更多</a><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/2022/09/01/Day9-Multithreading2-5/">Day9 多线程进阶 5 读写锁 阻塞队列 同步队列 线程池</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2022-09-01</time><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/tags/Java/">Java</a></span><div class="content">读写锁 ReentrantReadWriteLockReentrantReadWriteLock维护一对关联的Locks，一个用于只读操作，一个用于写入操作。
+读操作可以由多个线程进行，写操作只能由一个线程操作。
+当写操作由一个线程执行时，其他线程不能进行读操作，也不能进行写操作。
+当读操作被执行时 ...</div><a class="more" href="/2022/09/01/Day9-Multithreading2-5/#more" style="margin-top: 14px">阅读更多</a><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/2022/09/01/Day9-Multithreading2-4/">Day9 多线程进阶 4 Callable 和 常用的并发用三个辅助类</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2022-09-01</time><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/tags/Java/">Java</a></span><div class="content">CallableCallable创建线程的优势
+可以有返回值
+可以抛出异常
+
+
+FutureTask简述
+
+
+Runnable、FutureTask、Thread和Callable的关系
+12new Thread(new FutureTask&lt;V&gt;(new Callable&lt;V&amp;g ...</div><a class="more" href="/2022/09/01/Day9-Multithreading2-4/#more" style="margin-top: 14px">阅读更多</a><hr></div><nav id="pagination"><div class="pagination"><a class="extend prev" rel="prev" href="/page/7/"><i class="fa fa-chevron-left"></i></a><a class="page-number" href="/">1</a><span class="space">…</span><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/9/"><i class="fa fa-chevron-right"></i></a></div></nav></div></div><footer><div class="layout" id="footer"><div class="copyright">©2019 - 2023 By YN</div><div class="framework-info"><span>驱动 - </span><a target="_blank" rel="noopener" href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 - </span><a target="_blank" rel="noopener" href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div><div class="footer_custom_text">哇！感谢你来到这个Blog，虽然没有什么内容...嗯..</div><div class="busuanzi"><script async="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span><span></span></span><span class="footer-separator">|</span><span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/lib/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a target="_blank" rel="noopener" href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div><script src="/bundle.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script></body></html>

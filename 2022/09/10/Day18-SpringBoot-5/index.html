@@ -1,0 +1,137 @@
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="Day18 SpringBoot 5 Lombok thymeleaf国际化 locale springboot拦截器 springboot错误页面 session"><meta name="keywords" content="SpringBoot"><meta name="author" content="YN"><meta name="copyright" content="YN"><title>Day18 SpringBoot 5 Lombok thymeleaf国际化 locale springboot拦截器 springboot错误页面 session | uwupu Blog</title><link rel="shortcut icon" href="/melody-favicon.ico"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="manifest" href="/manifest.json"><link rel="manifest" href="/manifest.json"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容:${query}"}},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  hexoVersion: '6.2.0'
+} </script><meta name="generator" content="Hexo 6.2.0"><link rel="alternate" href="/atom.xml" title="uwupu Blog" type="application/atom+xml">
+<script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.9.1');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.9.1"></noscript></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="切换文章详情">切换站点概览</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Lombok"><span class="toc-number">1.</span> <span class="toc-text">Lombok</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#thymeleaf%E5%9B%BD%E9%99%85%E5%8C%96"><span class="toc-number">2.</span> <span class="toc-text">thymeleaf国际化</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%80%9A%E8%BF%87url%E5%8F%82%E6%95%B0%E4%BF%AE%E6%94%B9%E8%AF%AD%E8%A8%80-x2F-%E9%85%8D%E7%BD%AE%E8%87%AA%E5%AE%9A%E4%B9%89LocaleResolver"><span class="toc-number">3.</span> <span class="toc-text">通过url参数修改语言/配置自定义LocaleResolver</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Locale-%E5%8E%9F%E7%90%86"><span class="toc-number">4.</span> <span class="toc-text">Locale 原理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#SpringBoot%E7%9A%84%E6%8B%A6%E6%88%AA%E5%99%A8"><span class="toc-number">5.</span> <span class="toc-text">SpringBoot的拦截器</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#SpringBoot%E7%9A%84%E9%94%99%E8%AF%AF%E9%A1%B5%E9%9D%A2-404%E7%AD%89"><span class="toc-number">6.</span> <span class="toc-text">SpringBoot的错误页面 404等</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%94%99%E8%AF%AF%E4%BB%A3%E7%A0%81%E6%8C%87%E5%AE%9A%E9%A1%B5%E9%9D%A2"><span class="toc-number">6.1.</span> <span class="toc-text">错误代码指定页面</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Servlet%E7%9A%84Session"><span class="toc-number">7.</span> <span class="toc-text">Servlet的Session</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%B6%E4%BB%96"><span class="toc-number">8.</span> <span class="toc-text">其他</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#i18n"><span class="toc-number">8.1.</span> <span class="toc-text">i18n</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#zh-CN"><span class="toc-number">8.2.</span> <span class="toc-text">zh_CN</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CRUD"><span class="toc-number">8.3.</span> <span class="toc-text">CRUD</span></a></li></ol></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="/img/avatar.png"></div><div class="author-info__name text-center">YN</div><div class="author-info__description text-center">一个包含有学习日记的博客</div><div class="follow-button"><a target="_blank" rel="noopener" href="https://uwupu.tk/">Follow Me</a></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">文章</span><span class="pull-right">99</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">标签</span><span class="pull-right">24</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">Links</div><a class="author-info-links__name text-center" target="_blank" rel="noopener" href="https://uwupu.tk/">uwupuBlog</a></div></div></div><div id="content-outer"><div class="plain" id="top-container"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">uwupu Blog</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">诶嘿</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a><a class="site-page" href="/categories">Categories</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> 搜索</span></a></span></div></div><div class="layout" id="content-inner"><article id="post"><div class="plain" id="post-title">Day18 SpringBoot 5 Lombok thymeleaf国际化 locale springboot拦截器 springboot错误页面 session</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2022-09-10</time><span class="post-meta__separator">|</span><span class="post-meta-wordcount"><span>字数总计: </span><span class="word-count">941</span><span class="post-meta__separator">|</span><span>阅读时长: 3 分钟</span></span></div><div class="article-container" id="post-content"><h1 id="Lombok"><a href="#Lombok" class="headerlink" title="Lombok"></a>Lombok</h1><p>Lombok通过注解可以直接实现getter、setter、equals、toString等方法，不需要手动写这些方法。</p>
+<table>
+<thead>
+<tr>
+<th>注解名</th>
+<th>介绍</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>@Data</td>
+<td>整合了Getter、Setter、ToString、EqualsAndHashCode、RequiredArgsConstructor注解</td>
+</tr>
+<tr>
+<td>@Getter</td>
+<td>getter方法</td>
+</tr>
+<tr>
+<td>@Setter</td>
+<td>setter方法</td>
+</tr>
+<tr>
+<td>@ToString</td>
+<td>toString方法</td>
+</tr>
+<tr>
+<td>@EqualsAndHashCode</td>
+<td>equals和hashCode方法</td>
+</tr>
+<tr>
+<td>@NonNull</td>
+<td>不为Null</td>
+</tr>
+<tr>
+<td>@AllArgsConstructor</td>
+<td>所有有参构造方法</td>
+</tr>
+<tr>
+<td>@NoArgsConstructor</td>
+<td>无参构造方法</td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+</tr>
+</tbody></table>
+<h1 id="thymeleaf国际化"><a href="#thymeleaf国际化" class="headerlink" title="thymeleaf国际化"></a>thymeleaf国际化</h1><p>thymeleaf国际化可以提供页面多语言功能。配置之后可以依据Header中的语言来返回相应的语言的页面。</p>
+<ol>
+<li><p>创建一个多语言配置文件夹，这里使用classpath:/i18n/。</p>
+<p><img src="/2022/09/10/Day18-SpringBoot-5/image-20220910113807957.png" alt="image-20220910113807957"></p>
+<p>文件名使用语言简写作为后缀。如：简体中文zh_CN，米国英语en_US。</p>
+</li>
+<li><p>在文件夹下创建配置文件用于表示各种语言在页面上应该显示的内容；</p>
+<p><img src="/2022/09/10/Day18-SpringBoot-5/image-20220910114005507.png" alt="image-20220910114005507"></p>
+</li>
+<li><p>在html文件中添加相应的属性，使用“th:text”和表达式”#{login.tip}”。（注：表达式使用”#”作为开头）</p>
+<figure class="highlight html"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">label</span> <span class="attr">class</span>=<span class="string">"sr-only"</span> <span class="attr">th:text</span>=<span class="string">"#{login.username}"</span>&gt;</span>Username<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">label</span> <span class="attr">class</span>=<span class="string">"sr-only"</span> <span class="attr">th:text</span>=<span class="string">"#{login.password}"</span>&gt;</span>Password<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure></li>
+</ol>
+<h1 id="通过url参数修改语言-x2F-配置自定义LocaleResolver"><a href="#通过url参数修改语言-x2F-配置自定义LocaleResolver" class="headerlink" title="通过url参数修改语言/配置自定义LocaleResolver"></a>通过url参数修改语言/配置自定义LocaleResolver</h1><ol>
+<li><p>创建一个类，实现LocaleResolver接口。根据url参数返回相应的Locale对象。</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyLocaleResover</span> <span class="keyword">implements</span> <span class="title class_">LocaleResolver</span> {</span><br><span class="line">    <span class="comment">//解析请求</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Locale <span class="title function_">resolveLocale</span><span class="params">(HttpServletRequest request)</span> {</span><br><span class="line">        <span class="type">String</span> <span class="variable">lang</span> <span class="operator">=</span> request.getParameter(<span class="string">"l"</span>);<span class="comment">//获取链接中的参数l</span></span><br><span class="line">        <span class="type">Locale</span> <span class="variable">localeDefault</span> <span class="operator">=</span> Locale.getDefault();<span class="comment">//如果没有就使用默认的</span></span><br><span class="line">        <span class="comment">//如果请求的链接携带了国际化的参数</span></span><br><span class="line">        <span class="keyword">if</span> (!StringUtils.isEmpty(lang)){</span><br><span class="line">            <span class="comment">//zh_CN</span></span><br><span class="line">            String[] lang2 = lang.split(<span class="string">"_"</span>);<span class="comment">//将语言和国家分开</span></span><br><span class="line">            <span class="comment">//语言 国家</span></span><br><span class="line">            <span class="type">Locale</span> <span class="variable">locale</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Locale</span>(lang2[<span class="number">0</span>], lang2[<span class="number">1</span>]);</span><br><span class="line">            <span class="keyword">return</span> locale;<span class="comment">//使用url中参数指定</span></span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">return</span> localeDefault;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setLocale</span><span class="params">(HttpServletRequest request, HttpServletResponse response, Locale locale)</span> {</span><br><span class="line"></span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>在SpringMvc配置中添加自定义的LocaleResolver；</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyMvcConfig</span> <span class="keyword">implements</span> <span class="title class_">WebMvcConfigurer</span> {</span><br><span class="line">    <span class="comment">//自定义的localeResolver</span></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> LocaleResolver <span class="title function_">localeResolver</span><span class="params">()</span>{</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">MyLocaleResover</span>();</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>在thymeleaf语法配置结束后，使用url参数即可控制页面的语言；</p>
+<img src="/2022/09/10/Day18-SpringBoot-5/image-20220910131841518.png" alt="image-20220910131841518" style="zoom:67%;">
+
+<img src="/2022/09/10/Day18-SpringBoot-5/image-20220910131903328.png" alt="image-20220910131903328" style="zoom:67%;"></li>
+</ol>
+<h1 id="Locale-原理"><a href="#Locale-原理" class="headerlink" title="Locale 原理"></a>Locale 原理</h1><p>首先判断是否有本地配置，有则使用本地配置，没有则使用默认配置。</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ConditionalOnMissingBean(name = DispatcherServlet.LOCALE_RESOLVER_BEAN_NAME)</span></span><br><span class="line"><span class="keyword">public</span> LocaleResolver <span class="title function_">localeResolver</span><span class="params">()</span> {</span><br><span class="line">   <span class="keyword">if</span> (<span class="built_in">this</span>.webProperties.getLocaleResolver() == WebProperties.LocaleResolver.FIXED) {</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">FixedLocaleResolver</span>(<span class="built_in">this</span>.webProperties.getLocale());</span><br><span class="line">   }<span class="comment">//判断本地配置是否存在，若存在则使用，不存在则执行下面</span></span><br><span class="line">   <span class="type">AcceptHeaderLocaleResolver</span> <span class="variable">localeResolver</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AcceptHeaderLocaleResolver</span>();</span><br><span class="line">   localeResolver.setDefaultLocale(<span class="built_in">this</span>.webProperties.getLocale());<span class="comment">//使用默认的LocalteResolvery</span></span><br><span class="line">   <span class="keyword">return</span> localeResolver;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>hole…</p>
+<h1 id="SpringBoot的拦截器"><a href="#SpringBoot的拦截器" class="headerlink" title="SpringBoot的拦截器"></a>SpringBoot的拦截器</h1><ol>
+<li><p>定义一个自定义拦截器；</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LoginHandlerInterceptor</span>  <span class="keyword">implements</span> <span class="title class_">HandlerInterceptor</span> {</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">preHandle</span><span class="params">(HttpServletRequest request, HttpServletResponse response, Object handler)</span> <span class="keyword">throws</span> Exception {</span><br><span class="line">        <span class="comment">//登录成功之后，应该有用户的session</span></span><br><span class="line">        <span class="type">Object</span> <span class="variable">loginUser</span> <span class="operator">=</span> request.getSession().getAttribute(<span class="string">"loginUser"</span>);</span><br><span class="line">        <span class="keyword">if</span>(loginUser==<span class="literal">null</span>){</span><br><span class="line">            <span class="comment">//没有登录</span></span><br><span class="line">            request.setAttribute(<span class="string">"msg"</span>,<span class="string">"没有权限，请先登录"</span>);</span><br><span class="line">            request.getRequestDispatcher(<span class="string">"/"</span>).forward(request,response);</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        }<span class="keyword">else</span> {</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>在MvcConfig类下实现addInterceptors方法并注册相应的拦截器；</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyMvcConfig</span> <span class="keyword">implements</span> <span class="title class_">WebMvcConfigurer</span> {</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addInterceptors</span><span class="params">(InterceptorRegistry registry)</span> {</span><br><span class="line">        registry.addInterceptor(<span class="keyword">new</span> <span class="title class_">LoginHandlerInterceptor</span>());</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure></li>
+</ol>
+<h1 id="SpringBoot的错误页面-404等"><a href="#SpringBoot的错误页面-404等" class="headerlink" title="SpringBoot的错误页面 404等"></a>SpringBoot的错误页面 404等</h1><h2 id="错误代码指定页面"><a href="#错误代码指定页面" class="headerlink" title="错误代码指定页面"></a>错误代码指定页面</h2><p>对于错误404，在templates下创建error/404.html即可。</p>
+<p><img src="/2022/09/10/Day18-SpringBoot-5/image-20220911124703184.png" alt="image-20220911124703184"></p>
+<p>其他同理。</p>
+<h1 id="Servlet的Session"><a href="#Servlet的Session" class="headerlink" title="Servlet的Session"></a>Servlet的Session</h1><p>Java Servlet提供为每个session存储<code>Map&lt;String,Object&gt;</code>的功能；</p>
+<p>每次有浏览器访问网站，JavaServlet会为浏览器生成一个JSESSIONID。</p>
+<p>底层会存储JSESSIONID与Map的对应关系。</p>
+<p>对于开发者，使用对象HttpSession可以直接为当前交互的用户存储Map数据。</p>
+<p>注：Map存储在服务器，JSESSIONID存储在浏览器。</p>
+<p>方法：</p>
+<table>
+<thead>
+<tr>
+<th>HttpSession</th>
+<th>介绍</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>setAttribute(key,value)</td>
+<td>为当前session的Map设置一个键值对。如：setAttribute(“username”,”qweasd”)，会为session对应的Map中设置key为username值为qweasd的键值对。</td>
+</tr>
+<tr>
+<td>invalidate()</td>
+<td>使当前session无效化，并为浏览器删除cookies JSESSIONID。</td>
+</tr>
+<tr>
+<td>…</td>
+<td>….</td>
+</tr>
+</tbody></table>
+<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><h2 id="i18n"><a href="#i18n" class="headerlink" title="i18n"></a>i18n</h2><ul>
+<li><p>n. 国际化</p>
+</li>
+<li><p>internationalization单词的缩写。</p>
+</li>
+<li><p>i和n中间有18个字母。</p>
+</li>
+</ul>
+<h2 id="zh-CN"><a href="#zh-CN" class="headerlink" title="zh_CN"></a>zh_CN</h2><p>格式：语言_国家 </p>
+<p>zh取自拼音zhongguo前两个字母。</p>
+<h2 id="CRUD"><a href="#CRUD" class="headerlink" title="CRUD"></a>CRUD</h2><p>增删改查</p>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">YN</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://zswh33.github.io/2022/09/10/Day18-SpringBoot-5/">http://zswh33.github.io/2022/09/10/Day18-SpringBoot-5/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://zswh33.github.io">uwupu Blog</a>！</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/SpringBoot/">SpringBoot</a></div><nav id="pagination"><div class="prev-post pull-left"><a href="/2022/09/11/Day19-SpringBoot-6/"><i class="fa fa-chevron-left">  </i><span>Day19 SpringBoot 6 SpringDate JdbcTemplate Alibaba的Druid</span></a></div><div class="next-post pull-right"><a href="/2022/09/10/Day18-SpringBoot-4/"><span>Day18 SpringBoot 4 MVC配置原理 扩展MVC</span><i class="fa fa-chevron-right"></i></a></div></nav></div></div><footer><div class="layout" id="footer"><div class="copyright">©2019 - 2023 By YN</div><div class="framework-info"><span>驱动 - </span><a target="_blank" rel="noopener" href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 - </span><a target="_blank" rel="noopener" href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div><div class="footer_custom_text">哇！感谢你来到这个Blog，虽然没有什么内容...嗯..</div><div class="busuanzi"><script async="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/lib/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a target="_blank" rel="noopener" href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div><script src="/bundle.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script></body></html>

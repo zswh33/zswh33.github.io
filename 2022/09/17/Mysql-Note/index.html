@@ -1,0 +1,108 @@
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="Mysql Note"><meta name="keywords" content="Mysql"><meta name="author" content="YN"><meta name="copyright" content="YN"><title>Mysql Note | uwupu Blog</title><link rel="shortcut icon" href="/melody-favicon.ico"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="manifest" href="/manifest.json"><link rel="manifest" href="/manifest.json"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容:${query}"}},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  hexoVersion: '6.2.0'
+} </script><meta name="generator" content="Hexo 6.2.0"><link rel="alternate" href="/atom.xml" title="uwupu Blog" type="application/atom+xml">
+<script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.9.1');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.9.1"></noscript></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="切换文章详情">切换站点概览</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#InnoDB-%E8%A1%8C%E6%A0%BC%E5%BC%8F"><span class="toc-number">1.</span> <span class="toc-text">InnoDB 行格式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A1%8C%E6%A0%BC%E5%BC%8FROW-FORMAT"><span class="toc-number">1.1.</span> <span class="toc-text">行格式ROW_FORMAT</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#REDUNDANT-%E5%86%97%E4%BD%99"><span class="toc-number">1.2.</span> <span class="toc-text">REDUNDANT  冗余</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%89%B9%E7%82%B9"><span class="toc-number">1.2.1.</span> <span class="toc-text">特点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#COMPACT-%E7%B4%A7%E5%87%91"><span class="toc-number">1.3.</span> <span class="toc-text">COMPACT  紧凑</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%89%B9%E7%82%B9-1"><span class="toc-number">1.4.</span> <span class="toc-text">特点</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Mysql-BLOB"><span class="toc-number">2.</span> <span class="toc-text">Mysql BLOB</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#KEY"><span class="toc-number">3.</span> <span class="toc-text">KEY</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%99%AE%E9%80%9Akey"><span class="toc-number">3.1.</span> <span class="toc-text">普通key</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#unique-key"><span class="toc-number">3.2.</span> <span class="toc-text">unique key</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#primary-key"><span class="toc-number">3.3.</span> <span class="toc-text">primary key</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#foreign-key"><span class="toc-number">3.4.</span> <span class="toc-text">foreign key</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#index"><span class="toc-number">3.5.</span> <span class="toc-text">index</span></a></li></ol></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="/img/avatar.png"></div><div class="author-info__name text-center">YN</div><div class="author-info__description text-center">一个包含有学习日记的博客</div><div class="follow-button"><a target="_blank" rel="noopener" href="https://uwupu.tk/">Follow Me</a></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">文章</span><span class="pull-right">99</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">标签</span><span class="pull-right">24</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">Links</div><a class="author-info-links__name text-center" target="_blank" rel="noopener" href="https://uwupu.tk/">uwupuBlog</a></div></div></div><div id="content-outer"><div class="plain" id="top-container"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">uwupu Blog</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">诶嘿</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a><a class="site-page" href="/categories">Categories</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> 搜索</span></a></span></div></div><div class="layout" id="content-inner"><article id="post"><div class="plain" id="post-title">Mysql Note</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2022-09-17</time><span class="post-meta__separator">|</span><span class="post-meta-wordcount"><span>字数总计: </span><span class="word-count">1.1k</span><span class="post-meta__separator">|</span><span>阅读时长: 3 分钟</span></span></div><div class="article-container" id="post-content"><h1 id="InnoDB-行格式"><a href="#InnoDB-行格式" class="headerlink" title="InnoDB 行格式"></a>InnoDB 行格式</h1><p><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/innodb-row-format.html#innodb-row-format-redundant">https://dev.mysql.com/doc/refman/8.0/en/innodb-row-format.html#innodb-row-format-redundant</a></p>
+<h2 id="行格式ROW-FORMAT"><a href="#行格式ROW-FORMAT" class="headerlink" title="行格式ROW_FORMAT"></a>行格式ROW_FORMAT</h2><p>ROW_FORMAT决定一行数据在磁盘中的存储方式，因而影响查询和DML操作的性能。</p>
+<p>当一行数据放在同一张盘页，请求和索引查询会更快。</p>
+<p>InnoDB存储引擎支持四种行格式：REDUNDANT、COMPACT、DYNAMIC和COMPRESSED。</p>
+<p>（冗余、紧凑、动态、压缩）</p>
+<h2 id="REDUNDANT-冗余"><a href="#REDUNDANT-冗余" class="headerlink" title="REDUNDANT  冗余"></a>REDUNDANT  冗余</h2><p>REDUNDANT 冗余n.</p>
+<ul>
+<li><p>存储可变长读列时（varchar、varbinary、blob、text），在B树节点中存储前768个字节，剩余部分存放在溢出页；</p>
+</li>
+<li><p>大于768字节的定长列值会被编码为可变长度列，放在页外存储；</p>
+</li>
+<li><p>若列值小于768字节，则不使用溢出页，列的值全部存储在B树节点中，这样可以节省IO（去溢出页取数据）；</p>
+</li>
+<li><p>Blob短值友好，但只存储数据，不存储键值，效率会变低。</p>
+</li>
+</ul>
+<h3 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h3><ul>
+<li>每个索引记录包含一个6字节的标头，使用标头将连续的记录链接在一起，用于行级锁定；</li>
+<li>聚集索引的记录会包含用户定义列的所有字段。除此之外，还有一个6字节的transaction ID字段和7字节的roll pointer字段；</li>
+<li>如果表没有定义主键，每个聚集索引记录还会包含6字节的行id字段；</li>
+<li>每个二级索引中包含的是聚集索引定义的主键值，而非每一行的数据；</li>
+<li>记录包含指向每个字段的指针。<ul>
+<li>如果字段的长度小于128字节，指针为1字节，否则两个字节。</li>
+<li><del>这样的指针数组称为记录目录，</del>指针指向的是记录的数据部分。</li>
+</ul>
+</li>
+<li>大于或等于768字节的固定长度列编码为可变长度列，存储在页外；</li>
+<li>null值使用记录目录的一个或两个字节。<ul>
+<li>如果是可变长列，在记录的数据区null值占用0字节；</li>
+<li>如果是定长列，会在数据区保留定长字段需要的长度。当数据从null变成非null值，保留空间被新的数据替代，这样就可以避免造成索引页碎片产生。</li>
+</ul>
+</li>
+</ul>
+<h2 id="COMPACT-紧凑"><a href="#COMPACT-紧凑" class="headerlink" title="COMPACT  紧凑"></a>COMPACT  紧凑</h2><p>相对REDUNDANT方式，COMPACT方式节约了约20%的存储空间，但是增加了CPU的使用。</p>
+<ul>
+<li>如果工作量被击中缓存和磁盘速度限制，COMPACT格式相对更快；</li>
+<li>如果工作量被CPU速度限制，COMPACT相对会更慢；</li>
+</ul>
+<h2 id="特点-1"><a href="#特点-1" class="headerlink" title="特点"></a>特点</h2><ul>
+<li>每个索引包含5字节的头  hole….</li>
+</ul>
+<h1 id="Mysql-BLOB"><a href="#Mysql-BLOB" class="headerlink" title="Mysql BLOB"></a>Mysql BLOB</h1><p>在MySQL中Blob是一个二进制对象，可以存储大量数据的容器（图片、音乐等）。</p>
+<blockquote>
+<p>Blob对象分为四种</p>
+</blockquote>
+<ol>
+<li>TinyBlob，最大可以存储255B的数据；</li>
+<li>Blob，最大存储65KB的数据；</li>
+<li>MediumBlob，最大存储16MB的数据；</li>
+<li>LongBlob，最大容纳4GB的数据。</li>
+</ol>
+<blockquote>
+<p>应用场景</p>
+</blockquote>
+<ol>
+<li>存储图片或文件与数据表中数据有高度相关性，存在一起<strong>方便后续维护</strong>；<ul>
+<li>如：学校学生花名册的图片，产品手册中产品的照片以及PDF说明书等；</li>
+</ul>
+</li>
+<li>这种存储方式，对于数据的导入导出，数据迁移等操作来说非常便捷、安全、完整；</li>
+<li>mysql在索引比较大的Blob和Text时，对MySQL性能影响较大；<ul>
+<li>原因<ul>
+<li>Blob数据量较大，影响MySQL的查询效率；</li>
+</ul>
+</li>
+<li>如何解决<ol>
+<li>优先考虑<strong>压缩</strong>；</li>
+<li>将Blob列单独做一张表，当需要查询时再引用；</li>
+<li>可以将有Blob列的表存储到不同的存储设备甚至单独的数据库示例；</li>
+<li>一些情况下，使用varchar代替blob；</li>
+<li>为了避免blob列长文本内容进行比较，使用md5或crc32将hash存入另一列；查询时，查询比较其hash值，在比较blob列内容是否正确。</li>
+</ol>
+</li>
+</ul>
+</li>
+</ol>
+<h1 id="KEY"><a href="#KEY" class="headerlink" title="KEY"></a>KEY</h1><p>key是数据库的物理结构，作用：</p>
+<ul>
+<li>约束作用，约束数据的唯一性、完整性；</li>
+<li>索引作用，用于建立索引，优化查询速度。</li>
+</ul>
+<p>有四种：普通key，primary key，unique key，foreign key，index；</p>
+<h2 id="普通key"><a href="#普通key" class="headerlink" title="普通key"></a>普通key</h2><p>没有约束作用，但会在此key上建立索引；</p>
+<h2 id="unique-key"><a href="#unique-key" class="headerlink" title="unique key"></a>unique key</h2><p>唯一约束，是指所有记录中字段的值不能重复出现，比如id；</p>
+<p>会建立索引。</p>
+<h2 id="primary-key"><a href="#primary-key" class="headerlink" title="primary key"></a>primary key</h2><p>主键，一个表可以有一个主键，主键可以为<strong>单一主键</strong>和<strong>复合主键</strong>；</p>
+<p>可以规定一个存储主键，规范数据的唯一性。</p>
+<p>会在此key上建立一个索引。</p>
+<h2 id="foreign-key"><a href="#foreign-key" class="headerlink" title="foreign key"></a>foreign key</h2><p>外键，规范数据的引用完整性；</p>
+<p>会建立索引。</p>
+<h2 id="index"><a href="#index" class="headerlink" title="index"></a>index</h2><p>key作用的一个维度，可以替代关键字key。</p>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">YN</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://zswh33.github.io/2022/09/17/Mysql-Note/">http://zswh33.github.io/2022/09/17/Mysql-Note/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://zswh33.github.io">uwupu Blog</a>！</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Mysql/">Mysql</a></div><nav id="pagination"><div class="prev-post pull-left"><a href="/2022/09/17/Java-%E5%A4%9A%E7%BA%BF%E7%A8%8B-Note/"><i class="fa fa-chevron-left">  </i><span>Java 多线程 Note</span></a></div><div class="next-post pull-right"><a href="/2022/09/16/Day24-%E5%A4%8D%E4%B9%A0/"><span>行业的现状以及未来 2019-11</span><i class="fa fa-chevron-right"></i></a></div></nav></div></div><footer><div class="layout" id="footer"><div class="copyright">©2019 - 2023 By YN</div><div class="framework-info"><span>驱动 - </span><a target="_blank" rel="noopener" href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 - </span><a target="_blank" rel="noopener" href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div><div class="footer_custom_text">哇！感谢你来到这个Blog，虽然没有什么内容...嗯..</div><div class="busuanzi"><script async="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/lib/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a target="_blank" rel="noopener" href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div><script src="/bundle.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script></body></html>

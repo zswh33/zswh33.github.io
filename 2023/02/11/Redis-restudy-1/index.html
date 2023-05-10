@@ -1,0 +1,247 @@
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="Redis restudy 1 NoSQL"><meta name="keywords" content="Redis"><meta name="author" content="YN"><meta name="copyright" content="YN"><title>Redis restudy 1 NoSQL | uwupu Blog</title><link rel="shortcut icon" href="/melody-favicon.ico"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="manifest" href="/manifest.json"><link rel="manifest" href="/manifest.json"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容:${query}"}},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  hexoVersion: '6.2.0'
+} </script><meta name="generator" content="Hexo 6.2.0"><link rel="alternate" href="/atom.xml" title="uwupu Blog" type="application/atom+xml">
+<script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.9.1');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.9.1"></noscript></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="切换文章详情">切换站点概览</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#NoSQL%E6%A6%82%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">NoSQL概述</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%91%E5%B1%95"><span class="toc-number">1.1.</span> <span class="toc-text">发展</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%94%A8NoSQL"><span class="toc-number">1.2.</span> <span class="toc-text">为什么要用NoSQL</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFNoSQL"><span class="toc-number">1.3.</span> <span class="toc-text">什么是NoSQL</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NoSQL%E7%89%B9%E7%82%B9"><span class="toc-number">1.4.</span> <span class="toc-text">NoSQL特点</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%97%B6%E4%BB%A3%E7%9A%843V-3%E9%AB%98"><span class="toc-number">2.</span> <span class="toc-text">大数据时代的3V+3高</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E6%9E%B6%E6%9E%84"><span class="toc-number">3.</span> <span class="toc-text">数据架构</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%A7%E5%9E%8B%E4%BA%92%E8%81%94%E7%BD%91%E7%9A%84%E5%BA%94%E7%94%A8%E9%97%AE%E9%A2%98"><span class="toc-number">4.</span> <span class="toc-text">大型互联网的应用问题</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#NoSQL%E5%9B%9B%E5%A4%A7%E5%88%86%E7%B1%BB"><span class="toc-number">5.</span> <span class="toc-text">NoSQL四大分类</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%B6%E4%BB%96"><span class="toc-number">6.</span> <span class="toc-text">其他</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9E%82%E7%9B%B4%E6%8B%86%E5%88%86%EF%BC%9A%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB"><span class="toc-number">6.1.</span> <span class="toc-text">垂直拆分：读写分离</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B0%B4%E5%B9%B3%E6%8B%86%E5%88%86%EF%BC%9AMysql%E9%9B%86%E7%BE%A4"><span class="toc-number">6.2.</span> <span class="toc-text">水平拆分：Mysql集群</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Mysql%E5%BC%95%E6%93%8E"><span class="toc-number">6.2.1.</span> <span class="toc-text">Mysql引擎</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Redis%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-number">6.3.</span> <span class="toc-text">Redis数据类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A6%81%E5%AD%A6%E7%9A%84"><span class="toc-number">6.4.</span> <span class="toc-text">要学的</span></a></li></ol></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="/img/avatar.png"></div><div class="author-info__name text-center">YN</div><div class="author-info__description text-center">一个包含有学习日记的博客</div><div class="follow-button"><a target="_blank" rel="noopener" href="https://uwupu.tk/">Follow Me</a></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">文章</span><span class="pull-right">99</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">标签</span><span class="pull-right">24</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">Links</div><a class="author-info-links__name text-center" target="_blank" rel="noopener" href="https://uwupu.tk/">uwupuBlog</a></div></div></div><div id="content-outer"><div class="plain" id="top-container"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">uwupu Blog</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">诶嘿</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a><a class="site-page" href="/categories">Categories</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> 搜索</span></a></span></div></div><div class="layout" id="content-inner"><article id="post"><div class="plain" id="post-title">Redis restudy 1 NoSQL</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2023-02-11</time><span class="post-meta__separator">|</span><span class="post-meta-wordcount"><span>字数总计: </span><span class="word-count">1.4k</span><span class="post-meta__separator">|</span><span>阅读时长: 4 分钟</span></span></div><div class="article-container" id="post-content"><h1 id="NoSQL概述"><a href="#NoSQL概述" class="headerlink" title="NoSQL概述"></a>NoSQL概述</h1><p>为什么要用Nosql：大数据</p>
+<h2 id="发展"><a href="#发展" class="headerlink" title="发展"></a>发展</h2><blockquote>
+<ol>
+<li>单机MySQL年代</li>
+</ol>
+</blockquote>
+<p><img src="/2023/02/11/Redis-restudy-1/%E5%8D%95%E6%9C%BASQL.svg" alt="单机SQL"></p>
+<p>网站瓶颈：</p>
+<ol>
+<li>数据量太大，一个机器放不下；</li>
+<li>数据索引（B+ Tree）一个机器内存放不下；</li>
+<li>访问量太大；</li>
+</ol>
+<blockquote>
+<ol start="2">
+<li>Memcached（缓存） + MySQL + 垂直拆分</li>
+</ol>
+</blockquote>
+<p>优化发展过程：</p>
+<ol>
+<li>优化数据结构和索引；</li>
+<li>文件缓存（IO）；</li>
+<li><strong>Memcached</strong>。（当时最热门的技术）</li>
+</ol>
+<p><img src="/2023/02/11/Redis-restudy-1/Memcached.svg" alt="Memcached"></p>
+<ul>
+<li>网站80%的情况都是在读，每次到数据库查询非常麻烦；为减轻数据库压力，可以设置<strong>缓存</strong>。</li>
+</ul>
+<p><img src="/2023/02/11/Redis-restudy-1/3.svg" alt="3"></p>
+<blockquote>
+<ol start="3">
+<li>分库分表：水平拆分</li>
+</ol>
+</blockquote>
+<p>水平拆分：Mysql集群。</p>
+<p><img src="/2023/02/11/Redis-restudy-1/4.svg" alt="4"></p>
+<h2 id="为什么要用NoSQL"><a href="#为什么要用NoSQL" class="headerlink" title="为什么要用NoSQL"></a>为什么要用NoSQL</h2><p>用户个人信息，社交网络，地理位置。用户自己产生的数据，用户日志等等爆发式的增长！</p>
+<p>NoSQL可以很好地处理以上的情况；</p>
+<h2 id="什么是NoSQL"><a href="#什么是NoSQL" class="headerlink" title="什么是NoSQL"></a>什么是NoSQL</h2><p>NoSQL = Not Only SQL （不仅仅是SQL）</p>
+<p>泛指：非关系型数据库</p>
+<p>随着Web2.0互联网的诞生，传统的关系型数据库已难以应付，尤其是超大规模的高并发的社区！</p>
+<p>很多数据类型用户的个人信息，社交网络，地理位置。这些数据类型的存储不需要一个固定的格式。不需要多余的操作就可以横向扩展的。使用键值对来控制。</p>
+<h2 id="NoSQL特点"><a href="#NoSQL特点" class="headerlink" title="NoSQL特点"></a>NoSQL特点</h2><ol>
+<li>方便扩展（数据之间没有关系，扩展方便！）</li>
+<li>大数据量高性能（Redis 一秒可以写8万次）</li>
+<li>数据类型多样型</li>
+<li>传统RDBMS与NoSQL区别<ul>
+<li>RDBMS<ul>
+<li>结构化组织</li>
+<li>SQL</li>
+<li>数据和关系都存储在单独的表中 row col</li>
+<li>数据操作语言，数据定义语言</li>
+<li>严格的一致性</li>
+<li>基础的事务操作</li>
+<li>…</li>
+</ul>
+</li>
+<li>NoSQL<ul>
+<li>不仅仅是数据</li>
+<li>没有固定查询语言</li>
+<li>多种存储方式：键值对存储，列存储，文档存储，图形数据库（社交关系）</li>
+<li>最终一致性</li>
+<li>CAP定理和BASE理论 （异地多活！）</li>
+<li>高性能，高可用，高可扩展性</li>
+<li>…</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h1 id="大数据时代的3V-3高"><a href="#大数据时代的3V-3高" class="headerlink" title="大数据时代的3V+3高"></a>大数据时代的3V+3高</h1><p>3V：用来描述问题</p>
+<ul>
+<li>海量Volume，多样Variety，实时Velocity</li>
+</ul>
+<p>3高：对程序的要求</p>
+<ul>
+<li>高并发</li>
+<li>高可扩（随时水平拆分，随时扩展机器）</li>
+<li>高性能（保证用户体验和性能）</li>
+</ul>
+<h1 id="数据架构"><a href="#数据架构" class="headerlink" title="数据架构"></a>数据架构</h1><ol>
+<li>商品的基本信息<ul>
+<li>名称、价格、商家信息</li>
+<li>使用<strong>关系型数据库</strong>；</li>
+</ul>
+</li>
+<li>商品的描述，评论（文字比较多的情况）<ul>
+<li>使用<strong>文档型数据库</strong>，MongoDB</li>
+</ul>
+</li>
+<li>图片<ul>
+<li>分布式文件系统，FastDFS；</li>
+<li>淘宝自己的：TFS</li>
+<li>Google：GFS</li>
+<li>Hadoop：HDFS</li>
+<li>阿里云： OSS</li>
+</ul>
+</li>
+<li>商品的关键字（用来搜索）<ul>
+<li>搜索引擎 solr，elasticsearch</li>
+<li>淘宝用的：ISearch</li>
+</ul>
+</li>
+<li>商品的热门波段信息<ul>
+<li>内存数据库 Redis，Tair，Memcache…</li>
+</ul>
+</li>
+<li>商品的交易，外部的支付接口<ul>
+<li>三方应用。</li>
+</ul>
+</li>
+</ol>
+<h1 id="大型互联网的应用问题"><a href="#大型互联网的应用问题" class="headerlink" title="大型互联网的应用问题"></a>大型互联网的应用问题</h1><ul>
+<li>数据类型太多了</li>
+<li>数据源繁多，经常重构</li>
+<li>数据要改造，需要大面积改造</li>
+</ul>
+<p><strong>解决方案</strong>：UDSL（统一的数据服务层）。</p>
+<p><img src="/2023/02/11/Redis-restudy-1/image-20230211170032442.png" alt="image-20230211170032442"></p>
+<p><img src="/2023/02/11/Redis-restudy-1/image-20230211170242014.png" alt="image-20230211170242014"></p>
+<h1 id="NoSQL四大分类"><a href="#NoSQL四大分类" class="headerlink" title="NoSQL四大分类"></a>NoSQL四大分类</h1><ul>
+<li><p>KV键值对：</p>
+<ul>
+<li><p>新浪：Redis</p>
+</li>
+<li><p>美团：Redis + Tair</p>
+</li>
+<li><p>阿里、百度：Redis + memcache</p>
+</li>
+</ul>
+</li>
+<li><p>文档型数据库（bson格式，与JSON一样）</p>
+<ul>
+<li>MongoDB<ul>
+<li>MongoDB（一般必须要掌握）：基于分布式文件存储的数据库，用C++编写，主要用来处理大量的文档。</li>
+<li>MongoDB是一个介于关系型数据库和非关系型数据库中间的产品。</li>
+<li>MongoDB是非关系型数据库中功能最丰富最像关系型数据库的。</li>
+</ul>
+</li>
+<li>ConthDB</li>
+</ul>
+</li>
+<li><p>列存储数据库</p>
+<ul>
+<li>HBase</li>
+<li>分布式文件系统</li>
+</ul>
+</li>
+<li><p>图形关系数据库</p>
+<ul>
+<li>不是用来存图形的</li>
+<li>存储<strong>关系</strong>，比如：朋友圈社交网络，广告推荐。</li>
+<li>Neo4j，infoGrid</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>分类</th>
+<th>举例</th>
+<th>典型应用场景</th>
+<th>数据模型</th>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>键值对</td>
+<td>Redis，Oracle BDB</td>
+<td>内容缓存，主要用于存储大量数据的高访问负载，也用于一些日志系统等等</td>
+<td>Key指向Value的键值对，通常用hash table实现</td>
+<td>查找速度快</td>
+<td>数据无结构化，通常只被当做字符串或二进制数据。</td>
+</tr>
+<tr>
+<td>列存储数据库</td>
+<td>Cassandra，HBase</td>
+<td>分布式文件系统</td>
+<td>以列簇式存储，将同一列数据存在一起</td>
+<td>查找速度快，可扩展性强，更容易进行分布式扩展</td>
+<td>功能相对局限</td>
+</tr>
+<tr>
+<td>文档型数据库</td>
+<td>CouchDB,MongoDB</td>
+<td>Web应用（与Key-Value类似，Value是结构化的，不同的是数据库能够了解Value的内容）</td>
+<td>Key-Value对应的键值对，Value为结构化数据</td>
+<td>数据结构要求不严格，表结构可变，不需要像关系数据库一样需要预先定义表结构</td>
+<td>查询性能不高，而且缺乏统一的查询语法</td>
+</tr>
+<tr>
+<td>图形数据库</td>
+<td>Neo4J，InfoGrid，Infinite Graph</td>
+<td>社交网络，推荐系统等，专注于构建关系图谱</td>
+<td>图结构</td>
+<td>利用图结构相关算法，比如最短路径寻址，N度关系查找等</td>
+<td>很多时候需要对整个图做计算才能得出需要的信息，而且这种结构不太好做分布式的集群方案</td>
+</tr>
+</tbody></table>
+<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><h2 id="垂直拆分：读写分离"><a href="#垂直拆分：读写分离" class="headerlink" title="垂直拆分：读写分离"></a>垂直拆分：读写分离</h2><p><img src="/2023/02/11/Redis-restudy-1/Memcached-1676095243317-1.svg" alt="Memcached"></p>
+<p>三个mysql服务器，</p>
+<p>可以设定，<strong>第二个</strong>负责写，<strong>其他两个</strong>负责读；</p>
+<p>写数据到2，读数据到1和3；1和3随时同步来自2的数据。</p>
+<h2 id="水平拆分：Mysql集群"><a href="#水平拆分：Mysql集群" class="headerlink" title="水平拆分：Mysql集群"></a>水平拆分：Mysql集群</h2><h3 id="Mysql引擎"><a href="#Mysql引擎" class="headerlink" title="Mysql引擎"></a>Mysql引擎</h3><p>早些年MyISAM：表锁（读写锁整个表，十分影响效率，高并发会有严重的问题）</p>
+<p>现在Innodb：行锁（读写锁一行）。</p>
+<h2 id="Redis数据类型"><a href="#Redis数据类型" class="headerlink" title="Redis数据类型"></a>Redis数据类型</h2><ul>
+<li><p>五大基础数据类型</p>
+<ul>
+<li><p>String</p>
+</li>
+<li><p>List</p>
+</li>
+<li><p>Set</p>
+</li>
+<li><p>Hash</p>
+</li>
+<li><p>Zset</p>
+</li>
+</ul>
+</li>
+<li><p>三种特殊数据类型</p>
+<ul>
+<li>geo</li>
+<li>hyperloglog</li>
+<li>bitmap</li>
+</ul>
+</li>
+</ul>
+<h2 id="要学的"><a href="#要学的" class="headerlink" title="要学的"></a>要学的</h2><p>Redis，MongoDB，HBase，Neo4j</p>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">YN</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://zswh33.github.io/2023/02/11/Redis-restudy-1/">http://zswh33.github.io/2023/02/11/Redis-restudy-1/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://zswh33.github.io">uwupu Blog</a>！</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Redis/">Redis</a></div><nav id="pagination"><div class="prev-post pull-left"><a href="/2023/02/11/Redis-restudy-2/"><i class="fa fa-chevron-left">  </i><span>Redis restudy 2 基础 Redis-key String</span></a></div><div class="next-post pull-right"><a href="/2023/01/04/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E5%AD%A6%E4%B9%A0/"><span>动态规划学习</span><i class="fa fa-chevron-right"></i></a></div></nav></div></div><footer><div class="layout" id="footer"><div class="copyright">©2019 - 2023 By YN</div><div class="framework-info"><span>驱动 - </span><a target="_blank" rel="noopener" href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 - </span><a target="_blank" rel="noopener" href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div><div class="footer_custom_text">哇！感谢你来到这个Blog，虽然没有什么内容...嗯..</div><div class="busuanzi"><script async="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/lib/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a target="_blank" rel="noopener" href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div><script src="/bundle.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script></body></html>

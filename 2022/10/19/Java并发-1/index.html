@@ -1,0 +1,149 @@
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="Java并发 1"><meta name="keywords" content="Java并发"><meta name="author" content="YN"><meta name="copyright" content="YN"><title>Java并发 1 | uwupu Blog</title><link rel="shortcut icon" href="/melody-favicon.ico"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="manifest" href="/manifest.json"><link rel="manifest" href="/manifest.json"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容:${query}"}},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  hexoVersion: '6.2.0'
+} </script><meta name="generator" content="Hexo 6.2.0"><link rel="alternate" href="/atom.xml" title="uwupu Blog" type="application/atom+xml">
+<script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.9.1');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.9.1"></noscript></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="切换文章详情">切换站点概览</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%87%8D%E6%8E%92%E5%BA%8F"><span class="toc-number">1.</span> <span class="toc-text">重排序</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Java%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98%EF%BC%9AJMM%EF%BC%88Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%EF%BC%89"><span class="toc-number">2.</span> <span class="toc-text">Java如何解决并发问题：JMM（Java内存模型）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E5%AD%90%E6%80%A7"><span class="toc-number">2.1.</span> <span class="toc-text">原子性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%AF%E8%A7%81%E6%80%A7"><span class="toc-number">2.2.</span> <span class="toc-text">可见性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%89%E5%BA%8F%E6%80%A7"><span class="toc-number">2.3.</span> <span class="toc-text">有序性</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Happens-Before%E8%A7%84%E5%88%99"><span class="toc-number">3.</span> <span class="toc-text">Happens-Before规则</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E4%B8%8D%E6%98%AF%E4%B8%80%E4%B8%AA%E9%9D%9E%E7%9C%9F%E5%8D%B3%E5%81%87%E7%9A%84%E5%91%BD%E9%A2%98"><span class="toc-number">4.</span> <span class="toc-text">线程安全不是一个非真即假的命题</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-number">5.</span> <span class="toc-text">线程安全的实现</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%92%E6%96%A5%E5%90%8C%E6%AD%A5"><span class="toc-number">5.1.</span> <span class="toc-text">互斥同步</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9D%9E%E9%98%BB%E5%A1%9E%E5%90%8C%E6%AD%A5"><span class="toc-number">5.2.</span> <span class="toc-text">非阻塞同步</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#AtomicInteger%E4%B8%AD%E7%9A%84CAS"><span class="toc-number">5.2.1.</span> <span class="toc-text">AtomicInteger中的CAS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ABA%E9%97%AE%E9%A2%98"><span class="toc-number">5.2.2.</span> <span class="toc-text">ABA问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%97%A0%E5%90%8C%E6%AD%A5%E6%96%B9%E6%A1%88"><span class="toc-number">5.3.</span> <span class="toc-text">无同步方案</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%B6%E4%BB%96"><span class="toc-number">6.</span> <span class="toc-text">其他</span></a></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="/img/avatar.png"></div><div class="author-info__name text-center">YN</div><div class="author-info__description text-center">一个包含有学习日记的博客</div><div class="follow-button"><a target="_blank" rel="noopener" href="https://uwupu.tk/">Follow Me</a></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">文章</span><span class="pull-right">99</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">标签</span><span class="pull-right">24</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">Links</div><a class="author-info-links__name text-center" target="_blank" rel="noopener" href="https://uwupu.tk/">uwupuBlog</a></div></div></div><div id="content-outer"><div class="plain" id="top-container"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">uwupu Blog</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">诶嘿</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a><a class="site-page" href="/categories">Categories</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> 搜索</span></a></span></div></div><div class="layout" id="content-inner"><article id="post"><div class="plain" id="post-title">Java并发 1</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2022-10-19</time><span class="post-meta__separator">|</span><span class="post-meta-wordcount"><span>字数总计: </span><span class="word-count">2.2k</span><span class="post-meta__separator">|</span><span>阅读时长: 7 分钟</span></span></div><div class="article-container" id="post-content"><p><a target="_blank" rel="noopener" href="https://www.pdai.tech/md/java/thread/java-thread-x-theorty.html">https://www.pdai.tech/md/java/thread/java-thread-x-theorty.html</a></p>
+<p>不想看书，这个文章是基于上面文章的再总结。</p>
+<h1 id="重排序"><a href="#重排序" class="headerlink" title="重排序"></a>重排序</h1><p><strong>三种类型</strong>：编译器优化的重排序，指令级并行的重排序，内存系统的重排序。</p>
+<p><strong>编译器优化的重排序</strong>：编译器在不改变单线程程序语义的前提下，可以重新安排语句的执行顺序；</p>
+<p><strong>指令级并行的重排序</strong>：现代处理器都有采用指令集秉性技术（ILP），这种技术<strong>将多条指令重叠执行</strong>。如果不存在数据依赖性，处理器可以改变语句对应机器指令的执行顺序；</p>
+<p><strong>内存系统的重排序</strong>：由于处理器<strong>使用缓存和读写缓冲区</strong>，使得加载和存储操作可能在乱序执行。</p>
+<p>从Java源代码到最终实际执行指令序列，会经历三种重排序。</p>
+<p><img src="/2022/10/19/Java%E5%B9%B6%E5%8F%91-1/%E6%8C%87%E4%BB%A4%E9%87%8D%E6%8E%92%E5%BA%8F.svg" alt="指令重排序"></p>
+<p>JMM的编译器重排序规则会禁止特定类型的编译器重排序；</p>
+<p>JMM的处理器重排序规则会要求Java再生成指令序列时，插入特定的<strong>内存屏障</strong>（memory barriers，Intel为memory fence）指令，通过内存屏障指令来禁止特定类型的处理器重排序。</p>
+<h1 id="Java如何解决并发问题：JMM（Java内存模型）"><a href="#Java如何解决并发问题：JMM（Java内存模型）" class="headerlink" title="Java如何解决并发问题：JMM（Java内存模型）"></a>Java如何解决并发问题：JMM（Java内存模型）</h1><p><strong>JMM本质</strong>：Java内存模型规范了JVM如何提供按需禁用缓存和编译优化的方法。</p>
+<ul>
+<li><p>理解1：</p>
+<ul>
+<li><p>volatile，synchronized和final；</p>
+</li>
+<li><p>Happens-Before规则。</p>
+</li>
+</ul>
+</li>
+<li><p>理解2：可见性、有序性、原子性。</p>
+</li>
+</ul>
+<h2 id="原子性"><a href="#原子性" class="headerlink" title="原子性"></a>原子性</h2><p>即，不可再分的操作</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">x = <span class="number">10</span>; <span class="comment">// 将10赋值给x  为原子性操作</span></span><br><span class="line">y = x;  <span class="comment">//1. 读取x的值   2. 将值赋值给y</span></span><br><span class="line">x++;    <span class="comment">//1. 读取x的值   2.将值进行+1操作  3. 将值赋值给x</span></span><br><span class="line">x = x + <span class="number">1</span>;<span class="comment">// 同上一行</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="可见性"><a href="#可见性" class="headerlink" title="可见性"></a>可见性</h2><p>在程序运行过程中，对于一个变量：</p>
+<p>使用时，将变量从“主存”放到“工作内存”，<strong>访问/赋值操作</strong>优先对<strong>工作内存</strong>的值进行操作，而不是<strong>主存</strong>。</p>
+<p>在多线程下，不同线程使用不同的工作内存，可能导致变量的更新无法及时同步导致错误。</p>
+<p>在java中，将变量用volatile修饰，可以实现变量的可见性。</p>
+<h2 id="有序性"><a href="#有序性" class="headerlink" title="有序性"></a>有序性</h2><p>即，代码有序执行，禁止指令重排。</p>
+<h1 id="Happens-Before规则"><a href="#Happens-Before规则" class="headerlink" title="Happens-Before规则"></a>Happens-Before规则</h1><p>JMM规定了先行发生原则。（即，定义了一些需要正确执行的规则）</p>
+<ol>
+<li><p>单一线程原则 Single Thread Rule</p>
+<p>在一个线程内，程序前面的操作先行于发生于后面的操作；</p>
+</li>
+<li><p>管程锁定规则 Monitor Lock Rule</p>
+<p>一个<strong>unlock操作</strong>先于对<strong>同一个锁</strong>的<strong>lock操作</strong>；</p>
+</li>
+<li><p>volatile变量规则 Volatile Variable Rule</p>
+<p>对于一个Volatile变量，写操作先于读操作执行。</p>
+</li>
+<li><p>线程启动规则 Thread Start Rule</p>
+<p>Thread对象的start()方法调用先于此线程的每一个动作。</p>
+</li>
+<li><p>线程加入规则 Thread Join Rule</p>
+<p>Thread对象的结束先于join()方法返回。</p>
+<p><strong>线程的结束</strong>先于<strong>对线程对象的join()方法返回</strong>。</p>
+</li>
+<li><p>线程中断规则 Thread Interruption Rule</p>
+<p>对线程的<strong>interrupt()方法</strong>先于<strong>线程对中断的检测</strong>；</p>
+<p>也就是interrupt()先于interrupted()</p>
+</li>
+<li><p>对象终结规则 Finalizer Rule</p>
+<p>一个对象的构造函数执行先于finalize()方法。</p>
+</li>
+<li><p>传递性 Transitivity</p>
+<p>若操作A先于操作B，操作B先于操作C，则操作A先于操作B。</p>
+</li>
+</ol>
+<h1 id="线程安全不是一个非真即假的命题"><a href="#线程安全不是一个非真即假的命题" class="headerlink" title="线程安全不是一个非真即假的命题"></a>线程安全不是一个非真即假的命题</h1><p>线程安全不是一个非真即假的命题，按照共享数据安全强弱顺序可以分为：不可变、绝对线程安全、相对线程安全、线程兼容和线程对立。</p>
+<ol>
+<li><p>不可变</p>
+<p>不可变的对象一定是线程安全的。多线程环境下，尽量使对象不可变，来满足线程安全。</p>
+<p>实现不可变：</p>
+<ul>
+<li><p>final、String、枚举类型</p>
+</li>
+<li><p><code>Nubmer</code>部分子类，如Long和Double等，<code>BigInteger</code>和<code>BigDecimal</code>等；</p>
+</li>
+<li><p>注意：<code>AtomicInteger</code>和<code>AtomicLong</code>是可变的。</p>
+</li>
+<li><p>对于集合类型，可以使用<code>Collections.unmodifiableXXX()</code>方法来实现一个不可变集合。</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UnmodifiableMap</span> {</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> {</span><br><span class="line">        Map&lt;String,String&gt; map = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;String,String&gt;(){{</span><br><span class="line">            put(<span class="string">"name"</span>,<span class="string">"ZHangsan"</span>);put(<span class="string">"age"</span>,<span class="string">"12"</span>);</span><br><span class="line">        }};</span><br><span class="line">        Map&lt;String,String&gt; unmodifiableMap = Collections.unmodifiableMap(map);</span><br><span class="line">        unmodifiableMap.put(<span class="string">"height"</span>,<span class="string">"195"</span>);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Exception in thread "main" java.lang.UnsupportedOperationException</span><br><span class="line">	at java.util.Collections$UnmodifiableMap.put(Collections.java:1457)</span><br><span class="line">	at com.yn.UnmodifiableMap.main(UnmodifiableMap.java:13)</span><br><span class="line"></span><br><span class="line">Process finished with exit code 1</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+</li>
+<li><p>绝对线程安全</p>
+<p>不论运行环境如何，调用者都无需做额外的操作；</p>
+</li>
+<li><p>相对线程安全</p>
+<p>相对线程安全要求保证对这个对象<strong>单独的操作</strong>是线程安全的，而对于一系列<strong>连续的操作</strong>需要额外的同步手段来保证正确性。</p>
+<p>如：对于Vector的使用，若其中有10个对象，此时有一个线程对Vector进行遍历，另一个线程进行remove，对于第一个线程就会出现<code>ArrayIndexOutOfBoundsException</code>错误。</p>
+<p>此时就需要额外的同步手段来保证正确性。</p>
+</li>
+<li><p>线程兼容</p>
+<p><strong>对象本身不是线程安全</strong>的，但可以通过<strong>调用端正确的使用同步手段</strong>来保证对象在并发环境中可以安全的使用。</p>
+</li>
+<li><p>线程对立</p>
+<p>线程对立指的是不论调用端如何采取同步措施，都无法在多线程环境中并发使用的代码。</p>
+</li>
+</ol>
+<h1 id="线程安全的实现"><a href="#线程安全的实现" class="headerlink" title="线程安全的实现"></a>线程安全的实现</h1><h2 id="互斥同步"><a href="#互斥同步" class="headerlink" title="互斥同步"></a>互斥同步</h2><p><code>synchronized</code>和<code>ReentrantLock</code></p>
+<p>互斥同步最主要的问题就是线程阻塞和唤醒带来的<strong>性能问题</strong>，因此互斥同步也称为<strong>阻塞同步</strong>。</p>
+<p>互斥同步是一种悲观的并发策略，无论共享数据是否会真的出现竞争，它都要进行加锁。</p>
+<h2 id="非阻塞同步"><a href="#非阻塞同步" class="headerlink" title="非阻塞同步"></a>非阻塞同步</h2><p>非阻塞同步，也就是CAS。Compare-And-Swap,CAS,比较并交换。</p>
+<p>随着硬件指令集的发展，硬件开始支持一些原子性操作，如：CAS，比较并交换。CAS指令需要有3个操作数，分别是<strong>内存地址V，预期值A和新值B</strong>，当执行操作时，当V<strong>等于</strong>A，则将V的值更新为B，否则不断尝试。</p>
+<p>非阻塞同步是一种基于冲突监测的乐观并发策略。在多线程下，需要进行操作时，先进行操作，如果没有其他线程争用共享数据，则操作成功，否则不断尝试，直到成功为止。</p>
+<h3 id="AtomicInteger中的CAS"><a href="#AtomicInteger中的CAS" class="headerlink" title="AtomicInteger中的CAS"></a><code>AtomicInteger</code>中的CAS</h3><p>在JUC包下有<code>AtomicInteger</code>就使用了Unsafe类的CAS操作。</p>
+<p>首先是使用：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> {</span><br><span class="line">    AtomicInteger atomicInteger;</span><br><span class="line">    atomicInteger = <span class="keyword">new</span> <span class="title class_">AtomicInteger</span>(<span class="number">0</span>);</span><br><span class="line">    atomicInteger.getAndIncrement();<span class="comment">//自增，这是一个原子性操作</span></span><br><span class="line">    atomicInteger.compareAndSet(<span class="number">2</span>,<span class="number">3</span>);<span class="comment">//期待值 目标值</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="type">int</span> <span class="title function_">getAndIncrement</span><span class="params">()</span> {</span><br><span class="line">    <span class="keyword">return</span> unsafe.getAndAddInt(<span class="built_in">this</span>, valueOffset, <span class="number">1</span>);</span><br><span class="line">}</span><br><span class="line"><span class="comment">//AtomicInteger中的getAndIncrement用到了Unsafe类的方法</span></span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//获得并设置 var1为变量 var2为期望值，var4为目标值</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="type">int</span> <span class="title function_">getAndSetInt</span><span class="params">(Object var1, <span class="type">long</span> var2, <span class="type">int</span> var4)</span> {</span><br><span class="line">    <span class="type">int</span> var5;</span><br><span class="line">    <span class="keyword">do</span> {</span><br><span class="line">        var5 = <span class="built_in">this</span>.getIntVolatile(var1, var2);</span><br><span class="line">    } <span class="keyword">while</span>(!<span class="built_in">this</span>.compareAndSwapInt(var1, var2, var5, var4));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> var5;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">native</span> <span class="type">boolean</span> <span class="title function_">compareAndSwapInt</span><span class="params">(Object var1, <span class="type">long</span> var2, <span class="type">int</span> var4, <span class="type">int</span> var5)</span>;</span><br><span class="line"><span class="comment">//这是一个native方法</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="ABA问题"><a href="#ABA问题" class="headerlink" title="ABA问题"></a>ABA问题</h3><p>如果一个变量在初次读取的时候是A值，<strong>此时另一个线程将值改为B，又改为A</strong>，CAS操作就会认为<strong>该值</strong>并没有被改变过，这样就会影响CAS操作的正确性。</p>
+<p>JUC提供了一个带有标记的原子引用类AtomicStampedReference来解决这个问题，AtomicStampedReference为变量添加了版本功能，当值发生改变，版本就会更新，通过检测版本，就可以观察到变量是否被改变。</p>
+<p>在现实中<strong>大部分</strong>情况下，ABA问题都不会影响并发的正确性，</p>
+<p><strong>如果要解决ABA问题，改用传统的互斥同步可能比原子类更高效</strong>。</p>
+<h2 id="无同步方案"><a href="#无同步方案" class="headerlink" title="无同步方案"></a>无同步方案</h2><p>要保证线程安全，并不是一定就要同步。</p>
+<p>如果方法本来就不涉及共享数据，则不需要同步措施去保证正确性。</p>
+<ol>
+<li><p>栈封闭</p>
+<p>局部变量线程私有，多个线程访问同一个方法的局部变量，不会出现线程安全问题。</p>
+</li>
+<li><p>线程本地存储</p>
+<p><code>java.lang.ThreadLocal</code>可以为每个线程实现线程本地存储功能，每个线程访问<code>ThreadLocal</code>中的对象都会调用到只属于当前线程的对象。</p>
+<p>ThreadLocal理论上并不是用来解决多线程并发问题的。</p>
+<p>其他注意事项：ThreadLocal有内存泄漏情况，应该尽可能在每次使用ThreadLocal后手动调用remove()，以避免出现ThreadLocal内存泄露风险。</p>
+</li>
+<li><p>可重入代码</p>
+<p>若一个程序或子程序可以安全地被并行执行，则称为<strong>可重入</strong>。</p>
+<p>（e..栈封闭？）</p>
+</li>
+</ol>
+<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><ol>
+<li>虚拟机会优化掉很大一部分不必要的加锁、用户态核心态转换、维护锁计数器和检查是否有被阻塞的线程的需要唤醒等操作。</li>
+</ol>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">YN</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://zswh33.github.io/2022/10/19/Java并发-1/">http://zswh33.github.io/2022/10/19/Java并发-1/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://zswh33.github.io">uwupu Blog</a>！</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Java%E5%B9%B6%E5%8F%91/">Java并发</a></div><nav id="pagination"><div class="prev-post pull-left"><a href="/2022/10/20/Java%E5%B9%B6%E5%8F%91-2/"><i class="fa fa-chevron-left">  </i><span>Java并发 2</span></a></div><div class="next-post pull-right"><a href="/2022/10/18/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"><span>数据结构</span><i class="fa fa-chevron-right"></i></a></div></nav></div></div><footer><div class="layout" id="footer"><div class="copyright">©2019 - 2023 By YN</div><div class="framework-info"><span>驱动 - </span><a target="_blank" rel="noopener" href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 - </span><a target="_blank" rel="noopener" href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div><div class="footer_custom_text">哇！感谢你来到这个Blog，虽然没有什么内容...嗯..</div><div class="busuanzi"><script async="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/lib/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a target="_blank" rel="noopener" href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div><script src="/bundle.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script></body></html>

@@ -1,0 +1,459 @@
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="Day16 SpringBoot 3 全局配置文件如何生效 静态资源 thymeleaf简述"><meta name="keywords" content="SpringBoot"><meta name="author" content="YN"><meta name="copyright" content="YN"><title>Day16 SpringBoot 3 全局配置文件如何生效 静态资源 thymeleaf简述 | uwupu Blog</title><link rel="shortcut icon" href="/melody-favicon.ico"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="manifest" href="/manifest.json"><link rel="manifest" href="/manifest.json"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容:${query}"}},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  hexoVersion: '6.2.0'
+} </script><meta name="generator" content="Hexo 6.2.0"><link rel="alternate" href="/atom.xml" title="uwupu Blog" type="application/atom+xml">
+<script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.9.1');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.9.1"></noscript></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="切换文章详情">切换站点概览</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE%E5%8E%9F%E7%90%86%EF%BC%9A%E5%85%A8%E5%B1%80%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E5%A6%82%E4%BD%95%E7%94%9F%E6%95%88"><span class="toc-number">1.</span> <span class="toc-text">自动配置原理：全局配置文件如何生效</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Conditional%E6%B4%BE%E7%94%9F%E6%B3%A8%E8%A7%A3"><span class="toc-number">1.1.</span> <span class="toc-text">@Conditional派生注解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%87%AA%E5%8A%A8%E8%A3%85%E9%85%8D"><span class="toc-number">1.2.</span> <span class="toc-text">自动装配</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#SpringBoot%E7%9A%84%E8%B0%83%E8%AF%95"><span class="toc-number">2.</span> <span class="toc-text">SpringBoot的调试</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#SpringBoot-Web%E5%BC%80%E5%8F%91-%E8%B5%84%E6%BA%90%E8%B7%AF%E5%BE%84"><span class="toc-number">3.</span> <span class="toc-text">SpringBoot Web开发 资源路径</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9D%99%E6%80%81%E8%B5%84%E6%BA%90"><span class="toc-number">3.1.</span> <span class="toc-text">静态资源</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9D%99%E6%80%81%E8%B5%84%E6%BA%90%E6%94%BE%E5%9C%A8%E5%93%AA%E9%87%8C"><span class="toc-number">3.1.1.</span> <span class="toc-text">静态资源放在哪里</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E9%9D%99%E6%80%81%E8%B5%84%E6%BA%90%E4%BD%8D%E7%BD%AE"><span class="toc-number">3.1.2.</span> <span class="toc-text">自定义静态资源位置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BA%90%E7%A0%81%E8%A7%A3%E9%87%8A"><span class="toc-number">3.1.3.</span> <span class="toc-text">源码解释</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#webjars"><span class="toc-number">3.1.3.1.</span> <span class="toc-text">webjars</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%A6%96%E9%A1%B5%E9%85%8D%E7%BD%AE"><span class="toc-number">4.</span> <span class="toc-text">首页配置</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BA%90%E7%A0%81%E8%A7%A3%E9%87%8A-1"><span class="toc-number">4.1.</span> <span class="toc-text">源码解释</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%BE%E6%A0%87%E9%85%8D%E7%BD%AE"><span class="toc-number">5.</span> <span class="toc-text">图标配置</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#thymeleaf%E6%A8%A1%E6%9D%BF%E5%BC%95%E6%93%8E"><span class="toc-number">6.</span> <span class="toc-text">thymeleaf模板引擎</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BE%9D%E8%B5%96"><span class="toc-number">6.1.</span> <span class="toc-text">依赖</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8"><span class="toc-number">6.2.</span> <span class="toc-text">使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E4%B8%AA%E7%A8%8B%E5%BA%8F"><span class="toc-number">6.2.1.</span> <span class="toc-text">第一个程序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#html%E4%B8%AD%E4%BD%BF%E7%94%A8"><span class="toc-number">6.2.2.</span> <span class="toc-text">html中使用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%9C%E7%94%A8"><span class="toc-number">6.3.</span> <span class="toc-text">作用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BA%90%E7%A0%81"><span class="toc-number">6.4.</span> <span class="toc-text">源码</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#thymeleaf%E6%A8%A1%E6%9D%BF%E5%BC%95%E6%93%8E%E8%AF%AD%E6%B3%95"><span class="toc-number">7.</span> <span class="toc-text">thymeleaf模板引擎语法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Springboot%E4%B8%AD%E7%9A%84%E4%B8%80%E4%BA%9B%E9%85%8D%E7%BD%AE"><span class="toc-number">7.1.</span> <span class="toc-text">Springboot中的一些配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E4%BA%9B%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="toc-number">7.2.</span> <span class="toc-text">一些表达式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E4%BA%9B%E5%B1%9E%E6%80%A7"><span class="toc-number">7.3.</span> <span class="toc-text">一些属性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%90%E7%AE%97%E7%AC%A6%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-number">7.4.</span> <span class="toc-text">运算符的使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E4%BA%9B%E6%96%B9%E6%B3%95%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-number">7.5.</span> <span class="toc-text">一些方法的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#dates-format"><span class="toc-number">7.5.1.</span> <span class="toc-text">dates.format</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E4%BA%9B%E5%B1%9E%E6%80%A7%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-number">7.6.</span> <span class="toc-text">一些属性的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#th-text%EF%BC%8Cth-utext"><span class="toc-number">7.6.1.</span> <span class="toc-text">th:text，th:utext</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#th-each"><span class="toc-number">7.6.2.</span> <span class="toc-text">th:each</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#th-href-%E5%92%8C-x2F-js-x2F-jquery-js"><span class="toc-number">7.6.3.</span> <span class="toc-text">th:href 和 @{/js/jquery.js}</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A6%82%E6%9E%9C%E9%93%BE%E6%8E%A5%E6%98%AF%E6%A0%B9%E7%9B%AE%E5%BD%95-x2F-qwe-js"><span class="toc-number">7.6.3.1.</span> <span class="toc-text">如果链接是根目录(/qwe.js)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A6%82%E6%9E%9C%E9%93%BE%E6%8E%A5%E6%98%AF%E7%9B%B8%E5%AF%B9%E7%9B%AE%E5%BD%95-qwe-js"><span class="toc-number">7.6.3.2.</span> <span class="toc-text">如果链接是相对目录(qwe.js)</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#th-fragment%EF%BC%8Cth-insert%EF%BC%8Cth-replace"><span class="toc-number">7.6.4.</span> <span class="toc-text">th:fragment，th:insert，th:replace</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#th-fragment"><span class="toc-number">7.6.4.1.</span> <span class="toc-text">th:fragment</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#th-insert"><span class="toc-number">7.6.4.2.</span> <span class="toc-text">th:insert</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#th-replace"><span class="toc-number">7.6.4.3.</span> <span class="toc-text">th:replace</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0"><span class="toc-number">7.6.4.4.</span> <span class="toc-text">传递参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">7.6.4.5.</span> <span class="toc-text">使用场景</span></a></li></ol></li></ol></li></ol></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="/img/avatar.png"></div><div class="author-info__name text-center">YN</div><div class="author-info__description text-center">一个包含有学习日记的博客</div><div class="follow-button"><a target="_blank" rel="noopener" href="https://uwupu.tk/">Follow Me</a></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">文章</span><span class="pull-right">99</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">标签</span><span class="pull-right">24</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">Links</div><a class="author-info-links__name text-center" target="_blank" rel="noopener" href="https://uwupu.tk/">uwupuBlog</a></div></div></div><div id="content-outer"><div class="plain" id="top-container"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">uwupu Blog</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">诶嘿</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a><a class="site-page" href="/categories">Categories</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> 搜索</span></a></span></div></div><div class="layout" id="content-inner"><article id="post"><div class="plain" id="post-title">Day16 SpringBoot 3 全局配置文件如何生效 静态资源 thymeleaf简述</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2022-09-08</time><span class="post-meta__separator">|</span><span class="post-meta-wordcount"><span>字数总计: </span><span class="word-count">3.6k</span><span class="post-meta__separator">|</span><span>阅读时长: 16 分钟</span></span></div><div class="article-container" id="post-content"><h1 id="自动配置原理：全局配置文件如何生效"><a href="#自动配置原理：全局配置文件如何生效" class="headerlink" title="自动配置原理：全局配置文件如何生效"></a>自动配置原理：全局配置文件如何生效</h1><h2 id="Conditional派生注解"><a href="#Conditional派生注解" class="headerlink" title="@Conditional派生注解"></a>@Conditional派生注解</h2><p>当@Conditional指定的条件达成时，被@Conditional注解的类才能生效。</p>
+<p>注解在类上，在注解的参数中可以指定一些条件，当条件达成时，被注解的类的内容才能生效，否则不生效。</p>
+<table>
+<thead>
+<tr>
+<th>@Conditional扩展注解</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>@ConditionalOnJava</td>
+<td>系统Java版本是否符合要求</td>
+</tr>
+<tr>
+<td>@ConditionalOnBean</td>
+<td>容器中存在指定Bean</td>
+</tr>
+<tr>
+<td>@ConditionalOnMissingBean</td>
+<td>容器中不存在指定Bean</td>
+</tr>
+<tr>
+<td>@ConditionalOnExpression</td>
+<td>满足SpEL表达式指定</td>
+</tr>
+<tr>
+<td>@ConditionalOnClass</td>
+<td>系统中有指定的类</td>
+</tr>
+<tr>
+<td>@ConditionalOnMissingClass</td>
+<td>系统中没有指定的类</td>
+</tr>
+<tr>
+<td>@ConditionalOnSingleCandidate</td>
+<td>容器中只有一个指定的Bean，或者这个Bean是首选Bean</td>
+</tr>
+<tr>
+<td>@ConditionalOnProperty</td>
+<td>系统中有指定的属性是否有指定的值</td>
+</tr>
+<tr>
+<td>@ConditionalOnResource</td>
+<td>类路径下是否存在指定资源文件</td>
+</tr>
+<tr>
+<td>@ConditionalOnWebApplication</td>
+<td>当前是web环境</td>
+</tr>
+<tr>
+<td>@ConditionalOnNotWebApplication</td>
+<td>当前不是Web环境</td>
+</tr>
+<tr>
+<td>@ConditionalOnJndi</td>
+<td>JNDI存在指定项</td>
+</tr>
+</tbody></table>
+<h2 id="自动装配"><a href="#自动装配" class="headerlink" title="自动装配"></a>自动装配</h2><p><em>以WebMvc为例</em></p>
+<p>当SpringBoot启动时，会扫描需要自动配置的类，然后加载其配置类，使用全局配置文件覆盖需要替换的配置。</p>
+<ul>
+<li>自动配置类：xxxAutoConfiguration</li>
+<li>对应的配置类：xxxProperties</li>
+</ul>
+<ol>
+<li><p>SpringBoot为多个类提供了自动配置类，名为xxxAutoConfiguration，比如：WebMvcAutoConfiguration；</p>
+</li>
+<li><p>自动配置类中的注解。</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@AutoConfiguration(after = { DispatcherServletAutoConfiguration.class, TaskExecutionAutoConfiguration.class,</span></span><br><span class="line"><span class="meta">      ValidationAutoConfiguration.class })</span><span class="comment">//@AutoConfiguration表示这是一个自动配置类，这个注解的下面还有@Configuration注解表示这是一个Spring配置类。</span></span><br><span class="line"><span class="meta">@ConditionalOnWebApplication(type = Type.SERVLET)</span><span class="comment">//Conditional注解用于表示注解是否需要加载，这里表示如果项目为WebApplication。</span></span><br><span class="line"><span class="meta">@ConditionalOnClass({ Servlet.class, DispatcherServlet.class, WebMvcConfigurer.class })</span><span class="comment">//若存在以上几个类</span></span><br><span class="line"><span class="meta">@ConditionalOnMissingBean(WebMvcConfigurationSupport.class)</span><span class="comment">//容器中不存在指定Bean</span></span><br><span class="line"><span class="meta">@AutoConfigureOrder(Ordered.HIGHEST_PRECEDENCE + 10)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">WebMvcAutoConfiguration</span> {...}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>自动配置类中Conditional注解判断自动配置类是否需要加载。</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@EnableConfigurationProperties({ WebMvcProperties.class, WebProperties.class })</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>其中@EnableConfigurationProperties注解指向需要使用的配置类。这里是：WebMVCProperties和WebProperties。</p>
+</li>
+<li><p>xxxProperties类中配置了自动配置类的默认值，并调用@ConfigurationProperties允许在全局配置文件中修改默认值。</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//WebMvcProperties类</span></span><br><span class="line"><span class="meta">@ConfigurationProperties(prefix = "spring.mvc")</span><span class="comment">//可以在配置文件中使用spring.mvc前缀修改其中的值</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">WebMvcProperties</span> {</span><br><span class="line"></span><br><span class="line">   <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * Formatting strategy for message codes. For instance, 'PREFIX_ERROR_CODE'.</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="keyword">private</span> DefaultMessageCodesResolver.Format messageCodesResolverFormat;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">Format</span> <span class="variable">format</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Format</span>();<span class="comment">//下面测试这个对象的值</span></span><br><span class="line">...</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">//Format类</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">Format</span> {</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">		 * Date format to use, for example 'dd/MM/yyyy'.</span></span><br><span class="line"><span class="comment">		 */</span></span><br><span class="line">    <span class="keyword">private</span> String date;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">		 * Time format to use, for example 'HH:mm:ss'.</span></span><br><span class="line"><span class="comment">		 */</span></span><br><span class="line">    <span class="keyword">private</span> String time;</span><br><span class="line">...</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>比如像这样：</p>
+<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">mvc:</span></span><br><span class="line">    <span class="attr">format:</span></span><br><span class="line">      <span class="attr">date:</span> </span><br><span class="line">      <span class="attr">time:</span> </span><br></pre></td></tr></tbody></table></figure></li>
+</ol>
+<h1 id="SpringBoot的调试"><a href="#SpringBoot的调试" class="headerlink" title="SpringBoot的调试"></a>SpringBoot的调试</h1><p>在配置文件中添加debug=true打开调试模式。</p>
+<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 可以通过debug查看哪些自动配置类生效，哪些没有生效</span></span><br><span class="line"><span class="attr">debug:</span> <span class="literal">true</span></span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p>调试输出内容示例</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">============================</span><br><span class="line">CONDITIONS EVALUATION REPORT</span><br><span class="line">============================</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Positive matches:  //匹配并加载的类</span><br><span class="line">-----------------</span><br><span class="line">// 这里省略很多</span><br><span class="line">   WebMvcAutoConfiguration matched:</span><br><span class="line">      - @ConditionalOnClass found required classes 'javax.servlet.Servlet', 'org.springframework.web.servlet.DispatcherServlet', 'org.springframework.web.servlet.config.annotation.WebMvcConfigurer' (OnClassCondition)</span><br><span class="line">      - found 'session' scope (OnWebApplicationCondition)</span><br><span class="line">      - @ConditionalOnMissingBean (types: org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport; SearchStrategy: all) did not find any beans (OnBeanCondition)</span><br><span class="line"></span><br><span class="line">   WebMvcAutoConfiguration#formContentFilter matched:</span><br><span class="line">      - @ConditionalOnProperty (spring.mvc.formcontent.filter.enabled) matched (OnPropertyCondition)</span><br><span class="line">      - @ConditionalOnMissingBean (types: org.springframework.web.filter.FormContentFilter; SearchStrategy: all) did not find any beans (OnBeanCondition)</span><br><span class="line"></span><br><span class="line">   WebMvcAutoConfiguration.EnableWebMvcConfiguration#flashMapManager matched:</span><br><span class="line">      - @ConditionalOnMissingBean (names: flashMapManager; SearchStrategy: all) did not find any beans (OnBeanCondition)</span><br><span class="line">// 这里省略很多</span><br><span class="line"></span><br><span class="line">Negative matches: //不匹配不加载的类</span><br><span class="line">-----------------</span><br><span class="line">// 这里省略很多</span><br><span class="line">   WebSessionIdResolverAutoConfiguration:</span><br><span class="line">      Did not match:</span><br><span class="line">         - @ConditionalOnClass did not find required class 'reactor.core.publisher.Mono' (OnClassCondition)</span><br><span class="line"></span><br><span class="line">   WebSocketMessagingAutoConfiguration:</span><br><span class="line">      Did not match:</span><br><span class="line">         - @ConditionalOnClass did not find required class 'org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer' (OnClassCondition)</span><br><span class="line"></span><br><span class="line">   WebSocketReactiveAutoConfiguration:</span><br><span class="line">      Did not match:</span><br><span class="line">         - @ConditionalOnWebApplication did not find reactive web application classes (OnWebApplicationCondition)</span><br><span class="line">// 这里省略很多</span><br><span class="line"></span><br><span class="line">Exclusions:   //排除的类</span><br><span class="line">-----------</span><br><span class="line"></span><br><span class="line">    None</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Unconditional classes:  //不满足条件的类</span><br><span class="line">----------------------</span><br><span class="line"></span><br><span class="line">    org.springframework.boot.autoconfigure.context.ConfigurationPropertiesAutoConfiguration</span><br><span class="line"></span><br><span class="line">    org.springframework.boot.autoconfigure.context.LifecycleAutoConfiguration</span><br><span class="line"></span><br><span class="line">    org.springframework.boot.autoconfigure.context.PropertyPlaceholderAutoConfiguration</span><br><span class="line"></span><br><span class="line">    org.springframework.boot.autoconfigure.availability.ApplicationAvailabilityAutoConfiguration</span><br><span class="line"></span><br><span class="line">    org.springframework.boot.autoconfigure.info.ProjectInfoAutoConfiguration</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="SpringBoot-Web开发-资源路径"><a href="#SpringBoot-Web开发-资源路径" class="headerlink" title="SpringBoot Web开发 资源路径"></a>SpringBoot Web开发 资源路径</h1><h2 id="静态资源"><a href="#静态资源" class="headerlink" title="静态资源"></a>静态资源</h2><h3 id="静态资源放在哪里"><a href="#静态资源放在哪里" class="headerlink" title="静态资源放在哪里"></a>静态资源放在哪里</h3><p>静态资源可以放在以下几个目录：</p>
+<ol>
+<li>自定义的优先级最高</li>
+<li>classpath:/META-INF/resources/</li>
+<li>classpath:/resources/</li>
+<li>classpath:/static/  （默认）</li>
+<li>classpath:/public/</li>
+</ol>
+<p><span style="color:#aaaaaa">在templates下的页面只能通过controller来跳转。</span></p>
+<p>这几个目录会直接引用到页面的根目录。优先级依据上面的顺序执行。</p>
+<p>（很少使用webjars）/webjars/**指向由webjars依赖引入的静态文件，如：<a target="_blank" rel="noopener" href="http://127.0.0.1:8080/webjars/jquery/3.4.1/jquery.js">http://127.0.0.1:8080/webjars/jquery/3.4.1/jquery.js</a></p>
+<h3 id="自定义静态资源位置"><a href="#自定义静态资源位置" class="headerlink" title="自定义静态资源位置"></a>自定义静态资源位置</h3><figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">mvc:</span></span><br><span class="line">    <span class="attr">static-path-pattern:</span> <span class="string">/res/**</span></span><br><span class="line">    <span class="comment"># 映射路径，静态资源url访问时使用的路径</span></span><br><span class="line">  <span class="attr">web:</span></span><br><span class="line">    <span class="attr">resources:</span></span><br><span class="line">      <span class="attr">static-locations:</span></span><br><span class="line">        [ <span class="string">classpath:/yn/</span>]</span><br><span class="line">      <span class="comment"># 静态资源放哪里</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>静态资源访问url</strong>：使用spring.mvc.static-path-pattern来配置，如：/res/**，访问时使用<a target="_blank" rel="noopener" href="http://127.0.0.1:8080/res/1.js">http://127.0.0.1:8080/res/1.js</a></p>
+<p><strong>静态资源放在哪里</strong>：使用spring.web.resources.static-locations来配置，这里要写数组。如：[ classpath:/yn/]，资源要放在以下位置。</p>
+<p><img src="/2022/09/08/Day16-SpringBoot-3/image-20220909193247615.png" alt="image-20220909193247615"></p>
+<h3 id="源码解释"><a href="#源码解释" class="headerlink" title="源码解释"></a>源码解释</h3><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addResourceHandlers</span><span class="params">(ResourceHandlerRegistry registry)</span> {</span><br><span class="line">   <span class="keyword">if</span> (!<span class="built_in">this</span>.resourceProperties.isAddMappings()) {</span><br><span class="line">      logger.debug(<span class="string">"Default resource handling disabled"</span>);</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">   }</span><br><span class="line">   addResourceHandler(registry, <span class="string">"/webjars/**"</span>, <span class="string">"classpath:/META-INF/resources/webjars/"</span>);<span class="comment">//webjars 通过依赖添加jquery</span></span><br><span class="line">   addResourceHandler(registry, <span class="built_in">this</span>.mvcProperties.getStaticPathPattern(), (registration) -&gt; {</span><br><span class="line">      registration.addResourceLocations(<span class="built_in">this</span>.resourceProperties.getStaticLocations());</span><br><span class="line">      <span class="keyword">if</span> (<span class="built_in">this</span>.servletContext != <span class="literal">null</span>) {</span><br><span class="line">         <span class="type">ServletContextResource</span> <span class="variable">resource</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ServletContextResource</span>(<span class="built_in">this</span>.servletContext, SERVLET_LOCATION);</span><br><span class="line">         registration.addResourceLocations(resource);</span><br><span class="line">      }</span><br><span class="line">   });</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="webjars"><a href="#webjars" class="headerlink" title="webjars"></a>webjars</h4><p><em>很少使用webjars</em></p>
+<p>使用依赖可以加入一些js文件。</p>
+<p><img src="/2022/09/08/Day16-SpringBoot-3/image-20220909183935280.png" alt="Webjars里的jquery"></p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">addResourceHandler(registry, <span class="string">"/webjars/**"</span>, <span class="string">"classpath:/META-INF/resources/webjars/"</span>);</span><br></pre></td></tr></tbody></table></figure>
+
+<p>代码里指向的就是webjars依赖的位置。这里添加的是jquery.js。</p>
+<h1 id="首页配置"><a href="#首页配置" class="headerlink" title="首页配置"></a>首页配置</h1><p>默认位于资源目录下的index.html。</p>
+<p>可以使用controller自定义。</p>
+<h2 id="源码解释-1"><a href="#源码解释-1" class="headerlink" title="源码解释"></a>源码解释</h2><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> Resource <span class="title function_">getIndexHtml</span><span class="params">(Resource location)</span> {</span><br><span class="line">   <span class="keyword">try</span> {</span><br><span class="line">      <span class="type">Resource</span> <span class="variable">resource</span> <span class="operator">=</span> location.createRelative(<span class="string">"index.html"</span>);</span><br><span class="line">      <span class="keyword">if</span> (resource.exists() &amp;&amp; (resource.getURL() != <span class="literal">null</span>)) {</span><br><span class="line">         <span class="keyword">return</span> resource;</span><br><span class="line">      }</span><br><span class="line">   }</span><br><span class="line">   <span class="keyword">catch</span> (Exception ex) {</span><br><span class="line">   }</span><br><span class="line">   <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>通过这个方法得知，项目的首页默认指向为static下的index.html。</p>
+<h1 id="图标配置"><a href="#图标配置" class="headerlink" title="图标配置"></a>图标配置</h1><p>放在静态资源目录下就可。默认：/favicon.ico</p>
+<h1 id="thymeleaf模板引擎"><a href="#thymeleaf模板引擎" class="headerlink" title="thymeleaf模板引擎"></a>thymeleaf模板引擎</h1><p>thymeleaf是Java模板引擎之一。</p>
+<h2 id="依赖"><a href="#依赖" class="headerlink" title="依赖"></a>依赖</h2><p>SpringBoot里使用依赖spring-boot-starter-thymeleaf。</p>
+<figure class="highlight xml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-thymeleaf<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>thymeleaf官方的依赖使用</p>
+<table>
+<thead>
+<tr>
+<th align="left">Module</th>
+<th align="left">Group ID</th>
+<th align="left">Artifact ID</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Core library</td>
+<td align="left"><code>org.thymeleaf</code></td>
+<td align="left"><code>thymeleaf</code></td>
+</tr>
+<tr>
+<td align="left">Spring 3 integration</td>
+<td align="left"><code>org.thymeleaf</code></td>
+<td align="left"><code>thymeleaf-spring3</code></td>
+</tr>
+<tr>
+<td align="left">Spring 4 integration</td>
+<td align="left"><code>org.thymeleaf</code></td>
+<td align="left"><code>thymeleaf-spring4</code></td>
+</tr>
+<tr>
+<td align="left">Spring 5 integration</td>
+<td align="left"><code>org.thymeleaf</code></td>
+<td align="left"><code>thymeleaf-spring5</code></td>
+</tr>
+<tr>
+<td align="left">Testing library</td>
+<td align="left"><code>org.thymeleaf</code></td>
+<td align="left"><code>thymeleaf-testing</code></td>
+</tr>
+<tr>
+<td align="left">Spring Security 3 integration</td>
+<td align="left"><code>org.thymeleaf.extras</code></td>
+<td align="left"><code>thymeleaf-extras-springsecurity3</code></td>
+</tr>
+<tr>
+<td align="left">Spring Security 4 integration</td>
+<td align="left"><code>org.thymeleaf.extras</code></td>
+<td align="left"><code>thymeleaf-extras-springsecurity4</code></td>
+</tr>
+<tr>
+<td align="left">Java 8 Time API compatibility</td>
+<td align="left"><code>org.thymeleaf.extras</code></td>
+<td align="left"><code>thymeleaf-extras-java8time</code></td>
+</tr>
+<tr>
+<td align="left">Tiles 2 integration</td>
+<td align="left"><code>org.thymeleaf.extras</code></td>
+<td align="left"><code>thymeleaf-extras-tiles2</code></td>
+</tr>
+<tr>
+<td align="left">IE Conditional Comments support</td>
+<td align="left"><code>org.thymeleaf.extras</code></td>
+<td align="left"><code>thymeleaf-extras-conditionalcomments</code></td>
+</tr>
+</tbody></table>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="第一个程序"><a href="#第一个程序" class="headerlink" title="第一个程序"></a>第一个程序</h3><ol>
+<li><p>在templates创建html文件；</p>
+<p><img src="/2022/09/08/Day16-SpringBoot-3/image-20220909202505993.png" alt="image-20220909202505993"></p>
+</li>
+<li><p>在controller中返回字符串为html文件的文件名，不包含后缀。</p>
+</li>
+</ol>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">IndexController</span> {</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping("/test")</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">index</span><span class="params">()</span>{</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"test"</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="3">
+<li>测试运行</li>
+</ol>
+<p><img src="/2022/09/08/Day16-SpringBoot-3/image-20220909202535561.png" alt="image-20220909202535561"></p>
+<h3 id="html中使用"><a href="#html中使用" class="headerlink" title="html中使用"></a>html中使用</h3><ol>
+<li><p>需要头<code>&lt;html xmlns:th="http://www.thymeleaf.org"&gt;</code></p>
+</li>
+<li><p>在页面中使用表达式。表达式格式为<code>th:abc="xxx"</code>，abc表示内容类型，xxx表示内容。</p>
+<figure class="highlight html"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span> <span class="attr">xmlns:th</span>=<span class="string">"http://www.thymeleaf.org"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>一个Templates页面<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">一个Templates页面</span><br><span class="line"><span class="comment">&lt;!--所有的html元素可以被thymeleaf替换接管：  th:元素名--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">th:text</span>=<span class="string">"${msg}"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>text为内容，${msg}为引入的值。</p>
+</li>
+<li><p>在Controller中设置msg的值。</p>
+</li>
+</ol>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping("/test")</span></span><br><span class="line"><span class="keyword">public</span> String <span class="title function_">index</span><span class="params">(Model model)</span>{</span><br><span class="line">    model.addAttribute(<span class="string">"msg"</span>,<span class="string">"这是一个msg。"</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"test"</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="4">
+<li><p>测试运行</p>
+<p><img src="/2022/09/08/Day16-SpringBoot-3/image-20220909203631457.png" alt="image-20220909203631457"></p>
+</li>
+</ol>
+<h2 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h2><p><img src="/2022/09/08/Day16-SpringBoot-3/TemplateEngine%E6%89%A7%E8%A1%8C%E5%8E%9F%E7%90%86.svg" alt="TemplateEngine执行原理"></p>
+<p>可以使用表达式在页面中显示内容。</p>
+<h2 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h2><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ConfigurationProperties(prefix = "spring.thymeleaf")</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ThymeleafProperties</span> {</span><br><span class="line"></span><br><span class="line">   <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Charset</span> <span class="variable">DEFAULT_ENCODING</span> <span class="operator">=</span> StandardCharsets.UTF_8;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">DEFAULT_PREFIX</span> <span class="operator">=</span> <span class="string">"classpath:/templates/"</span>;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">DEFAULT_SUFFIX</span> <span class="operator">=</span> <span class="string">".html"</span>;</span><br><span class="line">...</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>得知：</p>
+<ol>
+<li>在配置中使用spring.thymeleaf前缀；</li>
+<li>默认模板前缀：classpath:/templates/</li>
+<li>默认模板后缀：.html</li>
+</ol>
+<h1 id="thymeleaf模板引擎语法"><a href="#thymeleaf模板引擎语法" class="headerlink" title="thymeleaf模板引擎语法"></a>thymeleaf模板引擎语法</h1><p>官方文档：<a target="_blank" rel="noopener" href="https://www.thymeleaf.org/doc/tutorials/3.0/">https://www.thymeleaf.org/doc/tutorials/3.0/</a></p>
+<h2 id="Springboot中的一些配置"><a href="#Springboot中的一些配置" class="headerlink" title="Springboot中的一些配置"></a>Springboot中的一些配置</h2><figure class="highlight properties"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 关闭模板引擎的缓存</span></span><br><span class="line"><span class="attr">spring.thymeleaf.cache</span>=<span class="string">false</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="一些表达式"><a href="#一些表达式" class="headerlink" title="一些表达式"></a>一些表达式</h2><ul>
+<li>Simple expressions:<ul>
+<li>Variable Expressions: <code>${...}</code>   //普通变量</li>
+<li>Selection Variable Expressions: <code>*{...}</code>   </li>
+<li>Message Expressions: <code>#{...} </code>  //国际化消息表达式</li>
+<li>Link URL Expressions: <code>@{...}</code> //表示URL</li>
+<li>Fragment Expressions: <code>~{...}</code> //片段表达式，可以提取网页片段作为一个模块，然后在另一个网页插入。</li>
+</ul>
+</li>
+<li>Literals<ul>
+<li>Text literals: <code>'one text'</code>, <code>'Another one!'</code>,…  //文本使用单引号，不能使用双引导</li>
+<li>Number literals: <code>0</code>, <code>34</code>, <code>3.0</code>, <code>12.3</code>,…   //数字直接写</li>
+<li>Boolean literals: <code>true</code>, <code>false</code>   //布尔值直接写</li>
+<li>Null literal: <code>null</code>  //null直接写</li>
+<li>Literal tokens: <code>one</code>, <code>sometext</code>, <code>main</code>,… //字符串文本，如果内容没有一些影响语法的符号（空格，符号），就可以直接写。<ul>
+<li>比如<code>&lt;div th:class="'content'"&gt;...&lt;/div&gt;</code>可以用<code>&lt;div th:class="content"&gt;...&lt;/div&gt;</code>表达。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Text operations:<ul>
+<li>String concatenation: <code>+</code> //文本操作</li>
+<li>Literal substitutions: <code>|The name is ${name}|</code></li>
+</ul>
+</li>
+<li>Arithmetic operations:<ul>
+<li>Binary operators: <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>%  </code>  </li>
+<li>Minus sign (unary operator): <code>-</code></li>
+</ul>
+</li>
+<li>Boolean operations:<ul>
+<li>Binary operators: <code>and</code>, <code>or</code>  //与 或 </li>
+<li>Boolean negation (unary operator): <code>!</code>, <code>not</code> //非</li>
+</ul>
+</li>
+<li>Comparisons and equality:<ul>
+<li>Comparators: <code>&gt;</code>, <code>&lt;</code>, <code>&gt;=</code>, <code>&lt;=</code> (<code>gt</code>, <code>lt</code>, <code>ge</code>, <code>le</code>)</li>
+<li>Equality operators: <code>==</code>, <code>!=</code> (<code>eq</code>, <code>ne</code>)</li>
+</ul>
+</li>
+<li>Conditional operators: //条件运算符<ul>
+<li>If-then: <code>(if) ? (then)</code></li>
+<li>If-then-else: <code>(if) ? (then) : (else)</code> //用这个代替前端的if-else</li>
+<li>Default: <code>(value) ?: (defaultvalue)</code></li>
+</ul>
+</li>
+<li>Special tokens:<ul>
+<li>No-Operation: <code>_</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="一些属性"><a href="#一些属性" class="headerlink" title="一些属性"></a>一些属性</h2><p>这是一些thymeleaf的属性，优先级从上到下依次降低。</p>
+<table>
+<thead>
+<tr>
+<th align="left">Order</th>
+<th align="left">Feature</th>
+<th align="left">Attributes</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1</td>
+<td align="left">Fragment inclusion</td>
+<td align="left"><code>th:insert</code> <code>th:replace</code></td>
+<td>包含，类似include</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left">Fragment iteration</td>
+<td align="left"><code>th:each</code></td>
+<td>循环</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left">Conditional evaluation</td>
+<td align="left"><code>th:if</code> <code>th:unless</code> <code>th:switch</code> <code>th:case</code></td>
+<td>判断</td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left">Local variable definition</td>
+<td align="left"><code>th:object</code> <code>th:with</code></td>
+<td></td>
+</tr>
+<tr>
+<td align="left">5</td>
+<td align="left">General attribute modification</td>
+<td align="left"><code>th:attr</code> <code>th:attrprepend</code> <code>th:attrappend</code></td>
+<td></td>
+</tr>
+<tr>
+<td align="left">6</td>
+<td align="left">Specific attribute modification</td>
+<td align="left"><code>th:value</code> <code>th:href</code> <code>th:src</code> <code>...</code></td>
+<td>属性</td>
+</tr>
+<tr>
+<td align="left">7</td>
+<td align="left">Text (tag body modification)</td>
+<td align="left"><code>th:text</code> <code>th:utext</code></td>
+<td><code>th:text</code> 不转义字符<br><code>th:utext</code>转义字符</td>
+</tr>
+<tr>
+<td align="left">8</td>
+<td align="left">Fragment specification</td>
+<td align="left"><code>th:fragment</code></td>
+<td>提取公共页面</td>
+</tr>
+<tr>
+<td align="left">9</td>
+<td align="left">Fragment removal</td>
+<td align="left"><code>th:remove</code></td>
+<td></td>
+</tr>
+</tbody></table>
+<h2 id="运算符的使用"><a href="#运算符的使用" class="headerlink" title="运算符的使用"></a>运算符的使用</h2><figure class="highlight html"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">th:href</span>=<span class="string">"@{/emp/delete/}+${emp.getId()}"</span>&gt;</span>删除<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="一些方法的使用"><a href="#一些方法的使用" class="headerlink" title="一些方法的使用"></a>一些方法的使用</h2><h3 id="dates-format"><a href="#dates-format" class="headerlink" title="dates.format"></a>dates.format</h3><p>可以格式化Date对象的格式。</p>
+<p>使用</p>
+<figure class="highlight html"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">td</span> <span class="attr">th:text</span>=<span class="string">"${#dates.format(emp.getBirth(),'yyyy-MM-dd HH:mm:ss')}"</span>&gt;</span>1,001<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>用”#”修饰，然后参数输入Date对象和格式’yyyy-MM-dd HH:mm:ss’。</p>
+<h2 id="一些属性的使用"><a href="#一些属性的使用" class="headerlink" title="一些属性的使用"></a>一些属性的使用</h2><h3 id="th-text，th-utext"><a href="#th-text，th-utext" class="headerlink" title="th:text，th:utext"></a>th:text，th:utext</h3><p>th:text下的字符不会进行html转义，th:utext下的字符会进行html转义。</p>
+<p>th:text有另一种写法<strong>（这个写法一般不用）</strong>：</p>
+<figure class="highlight html"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span>[[ ${msg} ]]<span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="comment">&lt;!-- 这个写法一般不用 --&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p>代码</p>
+</blockquote>
+<figure class="highlight html"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">th:text</span>=<span class="string">"${msg}"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span>[[ ${msg} ]]<span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="comment">&lt;!-- 这个写法一般不用 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">th:utext</span>=<span class="string">"${msg}"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping("/test")</span></span><br><span class="line"><span class="keyword">public</span> String <span class="title function_">index</span><span class="params">(Model model)</span>{</span><br><span class="line">    model.addAttribute(<span class="string">"msg"</span>,<span class="string">"&lt;h1&gt;这是一个msg。&lt;/h1&gt;"</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"test"</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p>运行</p>
+</blockquote>
+<p><img src="/2022/09/08/Day16-SpringBoot-3/image-20220910074159557.png" alt="image-20220910074159557"></p>
+<h3 id="th-each"><a href="#th-each" class="headerlink" title="th:each"></a>th:each</h3><p>可以用来遍历一个数组，使用方法：</p>
+<ol>
+<li><p>在属性中添加<code>th:each="user:{$users}"</code>；</p>
+<figure class="highlight html"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">h3</span> <span class="attr">th:each</span>=<span class="string">"user:${users}"</span>&gt;</span><span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>遍历users，类似for(User user : users){}</p>
+</li>
+<li><p>通过另一个属性值使用这个值<code>th:text="${user}"</code>。</p>
+<figure class="highlight html"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">h3</span> <span class="attr">th:each</span>=<span class="string">"user:${users}"</span> <span class="attr">th:text</span>=<span class="string">"${user}"</span>&gt;</span><span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>会出现多个元素，分别对应遍历的一个效果，表现如下：</p>
+<figure class="highlight html"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">h3</span>&gt;</span>张三<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h3</span>&gt;</span>李四<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h3</span>&gt;</span>王五<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure></li>
+</ol>
+<blockquote>
+<p>代码</p>
+</blockquote>
+<p>Controller中</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">thyleaf_for_each</span> {</span><br><span class="line">    <span class="meta">@RequestMapping("/test2")</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">test2</span><span class="params">(Model model)</span>{</span><br><span class="line">        model.addAttribute(<span class="string">"users"</span>, Arrays.asList(<span class="string">"zhangsan"</span>,<span class="string">"lisi"</span>,<span class="string">"wangwu"</span>));</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"test2"</span>;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>html中</p>
+<figure class="highlight html"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">h3</span> <span class="attr">th:each</span>=<span class="string">"user:${users}"</span> <span class="attr">th:text</span>=<span class="string">"${user}"</span>&gt;</span><span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>运行结果</p>
+<p><img src="/2022/09/08/Day16-SpringBoot-3/image-20220910073838414.png" alt="image-20220910073838414"></p>
+<h3 id="th-href-和-x2F-js-x2F-jquery-js"><a href="#th-href-和-x2F-js-x2F-jquery-js" class="headerlink" title="th:href 和 @{/js/jquery.js}"></a>th:href 和 @{/js/jquery.js}</h3><ul>
+<li><p>th:href修改html元素中的href属性值</p>
+</li>
+<li><p>可以根据server.servlet.context-path的配置自动在链接前添加内容。</p>
+</li>
+<li><p>@{/js/jquery.js}一般用在表示链接</p>
+</li>
+</ul>
+<h4 id="如果链接是根目录-x2F-qwe-js"><a href="#如果链接是根目录-x2F-qwe-js" class="headerlink" title="如果链接是根目录(/qwe.js)"></a>如果链接是根目录(/qwe.js)</h4><figure class="highlight html"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">th:href</span>=<span class="string">"@{/css/bootstrap.min.css}"</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">th:href</span>=<span class="string">"@{/css/signin.css}"</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>在springBoot配置中添加servlet目录</p>
+<figure class="highlight properties"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">server.servlet.context-path</span>=<span class="string">/yn</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>在HTML中的表现</p>
+<figure class="highlight html"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">href</span>=<span class="string">"/yn/css/bootstrap.min.css"</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">href</span>=<span class="string">"/yn/css/signin.css"</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="如果链接是相对目录-qwe-js"><a href="#如果链接是相对目录-qwe-js" class="headerlink" title="如果链接是相对目录(qwe.js)"></a>如果链接是相对目录(qwe.js)</h4><figure class="highlight html"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">th:href</span>=<span class="string">"@{css/bootstrap.min.css}"</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">th:href</span>=<span class="string">"@{css/signin.css}"</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>表现效果：</p>
+<figure class="highlight html"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">href</span>=<span class="string">"css/bootstrap.min.css"</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">href</span>=<span class="string">"css/signin.css"</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>若设置server.servlet.context-path后，这个表现效果不会改变。</p>
+<h3 id="th-fragment，th-insert，th-replace"><a href="#th-fragment，th-insert，th-replace" class="headerlink" title="th:fragment，th:insert，th:replace"></a>th:fragment，th:insert，th:replace</h3><p>分别代表：声明当前区域  插入 替换</p>
+<h4 id="th-fragment"><a href="#th-fragment" class="headerlink" title="th:fragment"></a>th:fragment</h4><p>th:fragment放在html元素属性中，用于为当前元素声明一个名字。</p>
+<figure class="highlight html"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- common.html --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">nav</span> <span class="attr">th:fragment</span>=<span class="string">"header"</span>&gt;</span>asd<span class="tag">&lt;/<span class="name">nav</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>声明时不需要~{…}表达式括住。</p>
+<h4 id="th-insert"><a href="#th-insert" class="headerlink" title="th:insert"></a>th:insert</h4><p>th:insert也放在元素属性中，会将指定的fragment插入到元素中。</p>
+<figure class="highlight html"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- qwe.html --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">th:insert</span>=<span class="string">"~{common::header}"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>引用时需要使用~{…}表达式括住。内容为“模板名::元素声明的名字”</p>
+<p>表现效果</p>
+<figure class="highlight html"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">nav</span>&gt;</span>asd<span class="tag">&lt;/<span class="name">nav</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="th-replace"><a href="#th-replace" class="headerlink" title="th:replace"></a>th:replace</h4><p>th:replace将使用指定的fragment替代原来的元素。</p>
+<figure class="highlight html"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- asd.html --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">th:replace</span>=<span class="string">"~{common::header}"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>表现效果</p>
+<figure class="highlight html"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">nav</span>&gt;</span>asd<span class="tag">&lt;/<span class="name">nav</span>&gt;</span><span class="comment">&lt;!-- 原本的div被替代了 --&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="传递参数"><a href="#传递参数" class="headerlink" title="传递参数"></a>传递参数</h4><p>在insert和replace后面，可以直接加括号传参。</p>
+<p>格式：(参数名=’值’)</p>
+<p>使用：</p>
+<p>对于<strong>th:fragment</strong></p>
+<figure class="highlight html"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- commons.html 公共页面 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">th:fragment</span>=<span class="string">"sidebar"</span>&gt;</span><span class="comment">&lt;!-- 侧边栏 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">th:class</span>=<span class="string">"${action=='index'?'active':'inactive'}"</span>&gt;</span>主页<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">th:class</span>=<span class="string">"${action=='list'?'active':'inactive'}"</span>&gt;</span>员工管理页面<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>对于<strong>th:replace</strong></p>
+<figure class="highlight html"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- list.html 假定：员工管理页面 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">th:replace</span>=<span class="string">"~{commons::sidebar(action='list')}"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 表现效果 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">th:class</span>=<span class="string">"inactive"</span>&gt;</span>主页<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">th:class</span>=<span class="string">"active"</span>&gt;</span>员工管理页面<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight html"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- list.html 假定：主页 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">th:replace</span>=<span class="string">"~{commons::sidebar(action='index')}"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 表现效果 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">th:class</span>=<span class="string">"active"</span>&gt;</span>主页<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">th:class</span>=<span class="string">"inactive"</span>&gt;</span>员工管理页面<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h4><p>这个一般用于多个页面有公共部分时，可以将公共部分放在同一个页面中，然后在别的页面只需要引用就可以了。</p>
+<p><img src="/2022/09/08/Day16-SpringBoot-3/image-20220910164601698.png" alt="image-20220910164601698"></p>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">YN</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://zswh33.github.io/2022/09/08/Day16-SpringBoot-3/">http://zswh33.github.io/2022/09/08/Day16-SpringBoot-3/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://zswh33.github.io">uwupu Blog</a>！</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/SpringBoot/">SpringBoot</a></div><nav id="pagination"><div class="prev-post pull-left"><a href="/2022/09/10/Day18-SpringBoot-4/"><i class="fa fa-chevron-left">  </i><span>Day18 SpringBoot 4 MVC配置原理 扩展MVC</span></a></div><div class="next-post pull-right"><a href="/2022/09/07/Day15-SpringBoot-2/"><span>Day15 SpringBoot 2 配置文件 SPEL表达式 松散绑定 JSR303校验 yaml语法</span><i class="fa fa-chevron-right"></i></a></div></nav></div></div><footer><div class="layout" id="footer"><div class="copyright">©2019 - 2023 By YN</div><div class="framework-info"><span>驱动 - </span><a target="_blank" rel="noopener" href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 - </span><a target="_blank" rel="noopener" href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div><div class="footer_custom_text">哇！感谢你来到这个Blog，虽然没有什么内容...嗯..</div><div class="busuanzi"><script async="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/lib/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a target="_blank" rel="noopener" href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div><script src="/bundle.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script></body></html>

@@ -1,0 +1,216 @@
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="Job Study 2"><meta name="keywords" content="Java,Job"><meta name="author" content="YN"><meta name="copyright" content="YN"><title>Job Study 2 | uwupu Blog</title><link rel="shortcut icon" href="/melody-favicon.ico"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="manifest" href="/manifest.json"><link rel="manifest" href="/manifest.json"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容:${query}"}},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  hexoVersion: '6.2.0'
+} </script><meta name="generator" content="Hexo 6.2.0"><link rel="alternate" href="/atom.xml" title="uwupu Blog" type="application/atom+xml">
+<script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.9.1');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.9.1"></noscript></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="切换文章详情">切换站点概览</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE"><span class="toc-number">1.</span> <span class="toc-text">参考文献</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Java%E8%AF%AD%E8%A8%80%E7%89%B9%E7%82%B9"><span class="toc-number">2.</span> <span class="toc-text">Java语言特点</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JDK%E5%92%8CJRE%E5%8C%BA%E5%88%AB"><span class="toc-number">3.</span> <span class="toc-text">JDK和JRE区别</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Java%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-number">4.</span> <span class="toc-text">Java数据类型</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%87%AA%E5%8A%A8%E8%A3%85%E7%AE%B1%E6%8B%86%E7%AE%B1"><span class="toc-number">5.</span> <span class="toc-text">自动装箱拆箱</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%BF%E9%97%AE%E4%BF%AE%E9%A5%B0%E7%AC%A6"><span class="toc-number">6.</span> <span class="toc-text">访问修饰符</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95%EF%BC%8C%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F%E5%88%9D%E5%A7%8B%E5%8C%96%E4%BB%A5%E5%8F%8A%E9%9D%99%E6%80%81%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F%E4%B8%89%E8%80%85%E5%88%9D%E5%A7%8B%E5%8C%96%E9%A1%BA%E5%BA%8F"><span class="toc-number">7.</span> <span class="toc-text">构造方法，成员变量初始化以及静态成员变量三者初始化顺序</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E4%B8%89%E5%A4%A7%E7%89%B9%E5%BE%81"><span class="toc-number">8.</span> <span class="toc-text">面向对象三大特征</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Java%E5%A4%9A%E6%80%81"><span class="toc-number">9.</span> <span class="toc-text">Java多态</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Java%E6%8F%90%E4%BE%9B%E5%A4%9A%E6%80%81%E6%9C%BA%E5%88%B6"><span class="toc-number">10.</span> <span class="toc-text">Java提供多态机制</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%87%8D%E8%BD%BD%E5%92%8C%E9%87%8D%E5%86%99%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">11.</span> <span class="toc-text">重载和重写的区别</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8E%A5%E5%8F%A3%E5%92%8C%E6%8A%BD%E8%B1%A1%E7%B1%BB%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">12.</span> <span class="toc-text">接口和抽象类的区别</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%86%85%E9%83%A8%E7%B1%BB%E5%8F%8A%E5%85%B6%E4%BD%9C%E7%94%A8"><span class="toc-number">13.</span> <span class="toc-text">内部类及其作用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Java%E7%9A%84static"><span class="toc-number">14.</span> <span class="toc-text">Java的static</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88String%E8%A2%AB%E8%AE%BE%E8%AE%A1%E4%B8%BA%E4%B8%8D%E5%8F%AF%E5%8F%98"><span class="toc-number">15.</span> <span class="toc-text">为什么String被设计为不可变</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#String%EF%BC%8CStringBuffer%EF%BC%8CStringBuilder"><span class="toc-number">16.</span> <span class="toc-text">String，StringBuffer，StringBuilder</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Object%E7%B1%BB%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95"><span class="toc-number">17.</span> <span class="toc-text">Object类常用方法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Java%E4%B8%80%E7%BB%B4%E6%95%B0%E7%BB%84%E5%92%8C%E4%BA%8C%E7%BB%B4%E6%95%B0%E7%BB%84%E5%A3%B0%E6%98%8E%E6%96%B9%E5%BC%8F"><span class="toc-number">18.</span> <span class="toc-text">Java一维数组和二维数组声明方式</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Java%E5%BC%82%E5%B8%B8%E7%9A%84%E5%88%86%E7%B1%BB"><span class="toc-number">19.</span> <span class="toc-text">Java异常的分类</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#throw%E5%92%8Cthrows%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">20.</span> <span class="toc-text">throw和throws的区别</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#finally%E6%98%AF%E5%90%A6%E4%B8%80%E5%AE%9A%E4%BC%9A%E6%89%A7%E8%A1%8C"><span class="toc-number">21.</span> <span class="toc-text">finally是否一定会执行</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#final%EF%BC%8Cfinally%E5%92%8Cfinalize%E5%8C%BA%E5%88%AB"><span class="toc-number">22.</span> <span class="toc-text">final，finally和finalize区别</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B3%9B%E5%9E%8B"><span class="toc-number">23.</span> <span class="toc-text">泛型</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B3%9B%E5%9E%8B%E6%93%A6%E9%99%A4"><span class="toc-number">24.</span> <span class="toc-text">泛型擦除</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B3%A8%E8%A7%A3"><span class="toc-number">25.</span> <span class="toc-text">注解</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%83%E6%B3%A8%E8%A7%A3"><span class="toc-number">26.</span> <span class="toc-text">元注解</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Java%E7%9A%84Class%E5%AF%B9%E8%B1%A1"><span class="toc-number">27.</span> <span class="toc-text">Java的Class对象</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Java%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6"><span class="toc-number">28.</span> <span class="toc-text">Java反射机制</span></a></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="/img/avatar.png"></div><div class="author-info__name text-center">YN</div><div class="author-info__description text-center">一个包含有学习日记的博客</div><div class="follow-button"><a target="_blank" rel="noopener" href="https://uwupu.tk/">Follow Me</a></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">文章</span><span class="pull-right">99</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">标签</span><span class="pull-right">24</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">Links</div><a class="author-info-links__name text-center" target="_blank" rel="noopener" href="https://uwupu.tk/">uwupuBlog</a></div></div></div><div id="content-outer"><div class="plain" id="top-container"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">uwupu Blog</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">诶嘿</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a><a class="site-page" href="/categories">Categories</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> 搜索</span></a></span></div></div><div class="layout" id="content-inner"><article id="post"><div class="plain" id="post-title">Job Study 2</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2023-04-29</time><span class="post-meta__separator">|</span><span class="post-meta-wordcount"><span>字数总计: </span><span class="word-count">2.5k</span><span class="post-meta__separator">|</span><span>阅读时长: 7 分钟</span></span></div><div class="article-container" id="post-content"><h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><p>[1] <a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1872211">https://cloud.tencent.com/developer/article/1872211</a></p>
+<h1 id="Java语言特点"><a href="#Java语言特点" class="headerlink" title="Java语言特点"></a>Java语言特点</h1><ul>
+<li>纯面向对象的语言。</li>
+<li>具有平台无关性。</li>
+<li>解释型语言。（相对的是编译型语言）</li>
+<li>很多内置类库，如多线程支持，网络通信支持，垃圾回收器。</li>
+<li>较好的安全性和健壮性。提供异常处理和垃圾回收机制。</li>
+</ul>
+<h1 id="JDK和JRE区别"><a href="#JDK和JRE区别" class="headerlink" title="JDK和JRE区别"></a>JDK和JRE区别</h1><ul>
+<li>JDK：Java Development Kit，开发工具包，提供开发环境和运行环境。</li>
+<li>JRE：Java Runtime Environment，Java运行环境。</li>
+<li>JDK包含了JRE。</li>
+</ul>
+<h1 id="Java数据类型"><a href="#Java数据类型" class="headerlink" title="Java数据类型"></a>Java数据类型</h1><ul>
+<li><p>基本数据类型</p>
+<ul>
+<li><p>整数类型</p>
+<ul>
+<li>byte，1字节，-128 ~ 127。</li>
+<li>short，2字节，-32768 ~ 32767。</li>
+<li>int，4字节，-2^31 ~ 2^31-1</li>
+<li>long，8字节，-2^63 ~ 2^63-1</li>
+</ul>
+</li>
+<li><p>浮点数</p>
+<ul>
+<li>float，浮点数，32位，4字节</li>
+<li>double，浮点数，64位，8字节</li>
+</ul>
+</li>
+<li><p>布尔类型</p>
+<ul>
+<li>boolean：布尔，占用大小依据虚拟机不同有差异。<ul>
+<li>在规范上，没有要求boolean占用多大内存。</li>
+<li>在遵循规范的基础上，如果boolean是单独使用，boolean占用4字节。如果boolean以数组使用，则一个boolean占用1字节。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>字符类型</p>
+<ul>
+<li>char：2字节，16位。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>引用数据类型</p>
+<ul>
+<li>数组</li>
+<li>对象</li>
+</ul>
+</li>
+</ul>
+<h1 id="自动装箱拆箱"><a href="#自动装箱拆箱" class="headerlink" title="自动装箱拆箱"></a>自动装箱拆箱</h1><p>对于Java基础数据类型，都有其对象的包装类。</p>
+<p>装箱就是把基本数组类型封装为包装器类型。</p>
+<p>拆箱就是自动将包装器类型转换为基础数据类型。</p>
+<h1 id="访问修饰符"><a href="#访问修饰符" class="headerlink" title="访问修饰符"></a>访问修饰符</h1><ul>
+<li>default：默认修饰符，同一包内可见。</li>
+<li>private：同一类内可见</li>
+<li>protected：同一包内的类和所有子类可见，不能修饰类。</li>
+<li>public：所有类可见。</li>
+</ul>
+<h1 id="构造方法，成员变量初始化以及静态成员变量三者初始化顺序"><a href="#构造方法，成员变量初始化以及静态成员变量三者初始化顺序" class="headerlink" title="构造方法，成员变量初始化以及静态成员变量三者初始化顺序"></a>构造方法，成员变量初始化以及静态成员变量三者初始化顺序</h1><p>先后顺序：静态成员变量，成员变量，构造方法。</p>
+<p>详细先后顺序：</p>
+<ul>
+<li>父类静态变量，</li>
+<li>父类静态代码块，</li>
+<li>子类静态变量，</li>
+<li>子类静态代码块，</li>
+<li>父类成员变量，父类构造方法，子类成员变量，子类构造方法。</li>
+</ul>
+<h1 id="面向对象三大特征"><a href="#面向对象三大特征" class="headerlink" title="面向对象三大特征"></a>面向对象三大特征</h1><ul>
+<li><p>继承：对象新类可以从现有的类中派生，派生类可以从它的基类那继承方法和实例变量，且派生类可以修改或新增新的方法使之更适合特殊的需求。</p>
+</li>
+<li><p>封装：将客观事物抽象成类，每个类可以把自身数据和方法只让可信的类或对象操作，对不可信的类进行信息隐藏。</p>
+</li>
+<li><p>多态：允许不同类的对象对同一消息做出响应，不同对象调用相同方法即使参数也相同，最终表现行为是不一样的。</p>
+</li>
+</ul>
+<h1 id="Java多态"><a href="#Java多态" class="headerlink" title="Java多态"></a>Java多态</h1><p>Java多态分为编译时多态和运行时多态。</p>
+<p>编译时多态主要指方法的重载，即通过参数列表的不同来区分不同的方法。</p>
+<p>运行时多态主要指继承父类和实现接口时，可以使用父类引用指向子类对象。</p>
+<p>运行时多态表现：主要依靠方法表，放发表最先存放Object类的方法，接下来是该类父类的方法，最后是该类本身的方法。若子类改写了父类的方法，则子类和父类同名方法共享一个方法表项，都被认作是父类的方法。因此可以实现运行时多态。</p>
+<h1 id="Java提供多态机制"><a href="#Java提供多态机制" class="headerlink" title="Java提供多态机制"></a>Java提供多态机制</h1><p>重载，同一个类有多个同名的方法，方法有不同的参数，在编译期间可以确定调用哪个方法。</p>
+<p>覆盖：派生类重写基类的方法。父类引用指向子类对象，在运行时可以确定要调用的方法。</p>
+<h1 id="重载和重写的区别"><a href="#重载和重写的区别" class="headerlink" title="重载和重写的区别"></a>重载和重写的区别</h1><ul>
+<li>重写是父类与子类的关系。重载是同一类中方法之间的关系。</li>
+</ul>
+<h1 id="接口和抽象类的区别"><a href="#接口和抽象类的区别" class="headerlink" title="接口和抽象类的区别"></a>接口和抽象类的区别</h1><ul>
+<li>相同<ul>
+<li>都不能被实例化</li>
+<li>接口的实现类或抽象类的子类需实现接口或抽象类中相应的方法才能被实例化。</li>
+</ul>
+</li>
+<li>不同<ul>
+<li>接口只能有方法定义，不能有方法实现。抽象类可以有方法的定义和实现。</li>
+<li>实现接口implement，继承抽象类使用extends。只能“单继承，多实现“。</li>
+<li>对于应用<ul>
+<li>抽象类：当子类和父类之间存在逻辑上的层次接口，建议用抽象类。</li>
+<li>接口类：当功能不需要，希望支持差别较大的两个或更多对象间的特定交互行为。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="内部类及其作用"><a href="#内部类及其作用" class="headerlink" title="内部类及其作用"></a>内部类及其作用</h1><ul>
+<li>成员内部类：<ul>
+<li>成员内部类可以访问private及以上外部类的属性和方法。</li>
+<li>外部类想要访问内部类属性或方法时，必须创建一个内部类对象，然后通过该对象访问内部类的属性或方法。</li>
+<li>外部类也可以访问private修饰的内部类属性。</li>
+</ul>
+</li>
+<li>局部内部类：<ul>
+<li>存在于放啊中的内部类，访问权限类似局部变量，只能访问外部类的final变量。</li>
+</ul>
+</li>
+<li>匿名内部类：<ul>
+<li>只能用一次，没有类名，只能访问外部类的final变量。</li>
+</ul>
+</li>
+<li>静态内部类<ul>
+<li>类似类的静态成员变量。</li>
+</ul>
+</li>
+</ul>
+<h1 id="Java的static"><a href="#Java的static" class="headerlink" title="Java的static"></a>Java的static</h1><ul>
+<li>修饰成员变量</li>
+<li>修饰常用方法</li>
+<li>修饰代码块</li>
+<li>修饰内部类</li>
+</ul>
+<h1 id="为什么String被设计为不可变"><a href="#为什么String被设计为不可变" class="headerlink" title="为什么String被设计为不可变"></a>为什么String被设计为不可变</h1><ul>
+<li>节省空间：字符串常量存储在JVM的字符串池中可以被用户共享。</li>
+<li>提高效率：String可以被不同线程共享，是线程安全的。在涉及多线程操作中不需要同步操作。</li>
+<li><del>安全：String常用于用户名，密码，文件名使用，由于其不可变，可避免黑客行为对其恶意修改</del>（什么胡言乱语）</li>
+</ul>
+<h1 id="String，StringBuffer，StringBuilder"><a href="#String，StringBuffer，StringBuilder" class="headerlink" title="String，StringBuffer，StringBuilder"></a>String，StringBuffer，StringBuilder</h1><p>String类：不可变。</p>
+<p>StringBuilder：采用无final修饰的字符数组保存，可变，效率高，线程不安全。</p>
+<p>StringBuffer：采用无final修饰的字符数组保存，可变，效率低，线程安全。</p>
+<ul>
+<li>StringBuilder和StringBuffer原理上的区别：StringBuffer的所有方法都有synchronized修饰，所以线程安全。</li>
+</ul>
+<h1 id="Object类常用方法"><a href="#Object类常用方法" class="headerlink" title="Object类常用方法"></a>Object类常用方法</h1><ul>
+<li>hashCode：通过对象计算散列码。常用于map和equals。</li>
+<li>equals：判断两个对象是否一致。若equals相同，则hashCode也必须相同。</li>
+<li>toString：用String表示该对象。</li>
+<li>clone：深拷贝一个对象。</li>
+</ul>
+<h1 id="Java一维数组和二维数组声明方式"><a href="#Java一维数组和二维数组声明方式" class="headerlink" title="Java一维数组和二维数组声明方式"></a>Java一维数组和二维数组声明方式</h1><p>一维数组</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">type[] arrayName;</span><br><span class="line">type arrayName[];</span><br></pre></td></tr></tbody></table></figure>
+
+<p>二维数组</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">type[][] arrayName;</span><br><span class="line">type arrayName[][];</span><br><span class="line">type[] arrayName[];</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="Java异常的分类"><a href="#Java异常的分类" class="headerlink" title="Java异常的分类"></a>Java异常的分类</h1><p>Error：程序无法处理的错误</p>
+<p>Exception：程序可以处理的异常</p>
+<p>Error常见的有StackOverFlowError，OutOfMemoryError。</p>
+<p>Exception分为运行时异常和非运行时异常。对于运行时异常，可以用try，catch处理，也可不处理。对于非运行时异常，则无法通过编译。</p>
+<h1 id="throw和throws的区别"><a href="#throw和throws的区别" class="headerlink" title="throw和throws的区别"></a>throw和throws的区别</h1><ul>
+<li>throw一般用在方法体内部，用于抛出异常</li>
+<li>throws用在方法声明上，代表该方法可能会抛出异常的列表。</li>
+</ul>
+<h1 id="finally是否一定会执行"><a href="#finally是否一定会执行" class="headerlink" title="finally是否一定会执行"></a>finally是否一定会执行</h1><ul>
+<li>在try语句之前出现异常。</li>
+<li>程序在try中出现程序强制退出，如System.exit(0)等方法，finally不会执行。</li>
+<li>其他<ul>
+<li>当try/catch/finally时，若try中存在return，finally语句会在return之前执行。若try/catch/finally中都有return语句，finally语句中的return语句会覆盖try/catch中的return语句。</li>
+</ul>
+</li>
+</ul>
+<h1 id="final，finally和finalize区别"><a href="#final，finally和finalize区别" class="headerlink" title="final，finally和finalize区别"></a>final，finally和finalize区别</h1><ul>
+<li>final，用于声明属性、方法和类，分别表示属性不可变，方法不可重写，类不可继承。</li>
+<li>finally作为异常处理的一部分，只能在try/catch中使用，finally语句在try/catch后一定会被执行，一般用于释放资源。</li>
+<li>finalize时Object类的一个方法，在垃圾收集器要回收对象时，会先调用finalize方法，并在下次垃圾回收动作时真正回收对象占用的内存。</li>
+</ul>
+<h1 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h1><p>即“参数化类型”，解决不确定对象具体类型的问题。</p>
+<p>在编译阶段有效，操作的数据类型被指定为一个参数，这种参数类型在类中成为泛型类，接口中称为泛型接口，方法称为泛型方法。</p>
+<h1 id="泛型擦除"><a href="#泛型擦除" class="headerlink" title="泛型擦除"></a>泛型擦除</h1><p>Java编译器生成的字节码不包含泛型西悉尼，泛型类型信息将在编译处理阶段擦除。</p>
+<h1 id="注解"><a href="#注解" class="headerlink" title="注解"></a>注解</h1><p>Java注解用于为Java代码提供元数据。作为元数据，注解不直接影响代码执行，有些类型的注解可以用于这个目的。</p>
+<p>可以用于提供信息给编译器，在编译阶段时给软件提供信息进行相关的处理，在运行时处理写相应代码，做对应操作。</p>
+<h1 id="元注解"><a href="#元注解" class="headerlink" title="元注解"></a>元注解</h1><p>元注解可以理解为注解的注解，即在注解中使用，实现想要的功能，具体有：</p>
+<ul>
+<li>@Retention：表示注解存在阶段。包括：保留在源码，在字节码（类加载），还是在运行期间。</li>
+<li>@Target，注解作用范围。</li>
+<li>@Document，将注解元素包含到Javadoc中。</li>
+<li>@Inherited：一个被@Inherited注解了的注解修饰一个父类，若子类没有被其他注解修饰，则子类继承父类注解。</li>
+<li>@Repeatable：被这个元注解修饰的注解可以同时作用一个对象多次，但每次作用注解又可以表示不同的含义。</li>
+</ul>
+<h1 id="Java的Class对象"><a href="#Java的Class对象" class="headerlink" title="Java的Class对象"></a>Java的Class对象</h1><p>Jav中对象可分为实例对象和Class对象，每个类都有一个Class对象，其包含了与该类相关的信息。</p>
+<p>获取Class对象的方法。</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Class.forName(<span class="string">"类的全限定名"</span>);</span><br><span class="line">实例对象.getClass();</span><br><span class="line">类名.class</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="Java反射机制"><a href="#Java反射机制" class="headerlink" title="Java反射机制"></a>Java反射机制</h1><p>Java反射机制是指程序在运行过程中可以构造任意一个类的对象，获取任意一个类的成员变量和成员方法，获取任意一个对象所属的类信息，调用任意一个对象的属性和方法。反射机制使得Java具有动态获取程序信息和动态调用对象放啊的能力。可以通过以下类调用反射API。</p>
+<ul>
+<li>Class类：可以获得类属性方法</li>
+<li>Field：可以获得类的成员信息</li>
+<li>Method：类的方法信息</li>
+<li>Construct：类的构造方法等信息。</li>
+</ul>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">YN</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://zswh33.github.io/2023/04/29/Job-Study-2/">http://zswh33.github.io/2023/04/29/Job-Study-2/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://zswh33.github.io">uwupu Blog</a>！</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Java/">Java</a><a class="post-meta__tags" href="/tags/Job/">Job</a></div><nav id="pagination"><div class="prev-post pull-left"><a href="/2023/04/29/Job-Study-3-String/"><i class="fa fa-chevron-left">  </i><span>Job Study 3 String</span></a></div><div class="next-post pull-right"><a href="/2023/04/28/Job-Study-1/"><span>Job Study 1 Java</span><i class="fa fa-chevron-right"></i></a></div></nav></div></div><footer><div class="layout" id="footer"><div class="copyright">©2019 - 2023 By YN</div><div class="framework-info"><span>驱动 - </span><a target="_blank" rel="noopener" href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 - </span><a target="_blank" rel="noopener" href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div><div class="footer_custom_text">哇！感谢你来到这个Blog，虽然没有什么内容...嗯..</div><div class="busuanzi"><script async="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/lib/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a target="_blank" rel="noopener" href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div><script src="/bundle.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script></body></html>
