@@ -1,0 +1,857 @@
+<!DOCTYPE html><html lang="zh-Hans"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="一个包含有学习日记的博客">
+    <meta name="author" content="uwupu">
+    
+    <title>
+        
+            openEuler 6 任务管理 |
+        
+        uwupu 学习日志
+    </title>
+    
+
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+    
+    
+    
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"zswh33.github.io","root":"/","language":"zh-Hans","path":"search.json"}
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":true,"init_open":true,"layout":"right"},"style":{"primary_color":"#F099BC","logo":"/images/logo.svg","favicon":"/images/logo.svg","avatar":"/images/avatar.svg","first_screen":{"enable":false,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"scroll":{"progress_bar":false,"percent":false}},"local_search":{"enable":true,"preload":true},"code_block":{"tools":{"enable":true,"style":"mac"},"highlight_theme":"obsidian"},"pjax":{"enable":true},"lazyload":{"enable":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.21"},"waline":{"server_url":null,"reaction":false,"version":2},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false}},"post":{"author_label":{"enable":true,"auto":false,"custom_label_list":["啦啦啦啦啦"]},"word_count":{"wordcount":true,"min2read":true},"datetime_format":"YYYY-MM-DD HH:mm","copyright_info":true,"share":false,"reward":{"enable":false,"img_link":null,"text":null}},"website_count":{"busuanzi_count":{"enable":true,"site_uv":true,"site_pv":true,"page_pv":true}},"version":"3.8.6"}
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
+    KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
+    KEEP.language_copy_copyright = {"copy":"Copy copyright info","copied":"Copied","title":"Original article title","author":"Original article author","link":"Original article link"}
+  </script>
+<meta name="generator" content="Hexo 6.2.0"><link rel="alternate" href="/atom.xml" title="uwupu Blog" type="application/atom+xml">
+<script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/fontawesome.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/regular.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/solid.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/brands.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/fontawesome.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/regular.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/solid.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/brands.min.css"></noscript></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <i class="pjax-progress-icon fas fa-circle-notch fa-spin"></i>
+    
+</div>
+
+
+<main class="page-container border-box">
+
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.svg">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               uwupu 学习日志
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class="" href="/">
+                                首頁
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/archives">
+                                歸檔
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/tags">
+                                標籤
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/categories">
+                                分類
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/links">
+                                友鏈
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/about">
+                                關於
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/">首頁</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/archives">歸檔</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/tags">標籤</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/categories">分類</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/links">友鏈</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/about">關於</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+
+                
+
+                    <div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+
+        <div class="article-content-container border-box">
+
+            
+
+            <div class="article-content-bottom border-box">
+                
+                    <div class="article-title">
+                        openEuler 6 任务管理
+                    </div>
+                
+
+                
+                    <div class="article-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/avatar.svg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author">
+                                <span class="name">uwupu</span>
+                                
+                                    <span class="author-label">啦啦啦啦啦</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="article-meta-info-container border-box post">
+    <div class="article-meta-info border-box">
+        
+
+
+        
+            <span class="meta-info-item article-create-date">
+                <i class="icon fa-solid fa-calendar-check"></i>&nbsp;
+                <span class="pc">2022-11-28 15:33</span>
+                <span class="mobile">2022-11-28 15:33</span>
+            </span>
+
+            <span class="meta-info-item article-update-date">
+                <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                <span class="pc" data-updated="Fri Nov 10 2023 23:13:59 GMT+0800">2023-11-10 23:13</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item article-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="article-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/Linux/">Linux</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="article-tag meta-info-item border-box">
+                <i class="icon fas fa-tags"></i>&nbsp;
+                <ul class="article-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Linux/">Linux</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/openEuler/">openEuler</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+            <span class="meta-info-item article-wordcount">
+                <i class="icon fas fa-file-word"></i>&nbsp;<span>1.6k 字數</span>
+            </span>
+        
+        
+            <span class="meta-info-item article-min2read">
+                <i class="icon fas fa-clock"></i>&nbsp;<span>6 分鐘</span>
+            </span>
+        
+        
+            <span class="meta-info-item article-pv">
+                <i class="icon fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="article-content keep-markdown-body">
+                    
+
+                    <h1 id="任务管理"><a href="#任务管理" class="headerlink" title="任务管理"></a>任务管理</h1><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><ul>
+<li>在系统运维过程中，可能需要在某个预设的时间执行特定任务</li>
+<li>如：定时发送邮件、备份并清空日志文件等任务；</li>
+<li>任务的内容可以看做是一系列命令或一个脚本，我们需要在特定时间去执行；</li>
+<li>at语法<ul>
+<li>at [-V] [-q 队列] [-f 文件名] [-mldbv] 时间</li>
+<li>at -c 作业[作业…]</li>
+</ul>
+</li>
+</ul>
+<h2 id="类型"><a href="#类型" class="headerlink" title="类型"></a>类型</h2><p>计划执行，在特定时间运行一次：<strong>at</strong></p>
+<p>定期执行，按周期执行多次：<strong>cron</strong></p>
+<h2 id="计划执行at"><a href="#计划执行at" class="headerlink" title="计划执行at"></a>计划执行at</h2><p>at命令可以指定Linux在特定时刻运行脚本；</p>
+<p>atd是at的守护进程，在系统启动时会以后台模式运行；</p>
+<p>atd定期检查系统上<code>/var/spool/at</code>目录中，通过at命令写入的任务；</p>
+<p>这个命令至少需要指定一个命令和一个执行时间；</p>
+<p>时间上，at命令可以只指定时间，也可以时间日期一起指定；</p>
+<h3 id="指定时间的方式有两种"><a href="#指定时间的方式有两种" class="headerlink" title="指定时间的方式有两种"></a>指定时间的方式有两种</h3><p><strong>绝对计时和相对计时</strong></p>
+<h4 id="绝对计时"><a href="#绝对计时" class="headerlink" title="绝对计时"></a>绝对计时</h4><p>格式：<code>at 时间 日期</code></p>
+<ul>
+<li>当前的时间：<code>hh:mm</code>，如果时间已经过去，则会在第二天执行；</li>
+<li>使用midnight、noon、teatime来指定时间；<ul>
+<li>teatime饮茶时间，一般指下午4点；</li>
+</ul>
+</li>
+<li>采用12小时计时制，即在时间后面加上AM或PM来说明是上午还是下午；</li>
+<li>指定命令执行的具体日期，格式为：<code>month day</code> 或 <code>mm/dd/yy</code> 或 <code>dd.mm.yy</code> 。指定日期必须在指定时间的后面；</li>
+<li>也可以用<code>today</code>和<code>tommorrow</code>表示今天或明天；</li>
+</ul>
+<h4 id="相对计时"><a href="#相对计时" class="headerlink" title="相对计时"></a>相对计时</h4><p>格式：<code>at now+数量 单位</code></p>
+<ul>
+<li>格式为<code>now+count time-units </code>，<ul>
+<li>now就是当前时间</li>
+<li>time-units是时间单位；<ul>
+<li>这里可以是<ul>
+<li>minutes</li>
+<li>hours</li>
+<li>days</li>
+<li>weeks</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>count是时间的数量，<ul>
+<li>可以用数字，表示几天、几个小时等；</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>可以使用<code>today</code>或<code>tomorrow</code>来表示日期；</p>
+<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><p>假定目前时间为 <strong>12:30 2020年6月7日</strong>，要在今天<strong>16:30</strong>执行某个命令，命令如下：</p>
+<ul>
+<li><p>绝对计时</p>
+<ul>
+<li>at 16:30</li>
+<li>at 4:30pm</li>
+<li>at 16:30 today</li>
+<li>at 16:30 7.6.20</li>
+<li>at 16:30 6/7/20</li>
+<li>at 16:30 Jun 7</li>
+</ul>
+</li>
+<li><p>相对计时</p>
+<ul>
+<li><p>at now+240 minutes</p>
+</li>
+<li><p>at now+4 hours</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="执行权限"><a href="#执行权限" class="headerlink" title="执行权限"></a>执行权限</h3><p>对于at命令，需要定时执行的命令来自<strong>标准输入</strong>或者<strong>使用-f指定文件</strong>中读取执行；</p>
+<p>如果at命令是su切换到用户shell执行的，那么当前用户会被认为是执行用户，所有错误和输出结果都会返回给这个用户；</p>
+<p>对于其他用户，是否允许被使用at命令，主要在于<code>/etc/at.allow</code>和<code>/etc/at.deny</code>文件中指定；</p>
+<p><code>at.allow</code>的优先级高于<code>at.deny</code>。</p>
+<h3 id="其他管理命令"><a href="#其他管理命令" class="headerlink" title="其他管理命令"></a>其他管理命令</h3><p><code>at TIME</code>：增加任务</p>
+<p><code>atq</code>：查询所有任务</p>
+<p><code>atq -c &lt;id&gt;</code>：查询任务详细信息</p>
+<p><code>atrm &lt;id&gt;</code>：删除指定任务</p>
+<blockquote>
+<p>使用</p>
+</blockquote>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">添加一个定时事件</span></span><br><span class="line">[root@localhost tmp]# at now+3hours</span><br><span class="line">warning: commands will be executed using /bin/sh</span><br><span class="line">at Mon Nov 28 23:24:00 2022</span><br><span class="line"><span class="meta prompt_">at&gt; </span><span class="language-bash"><span class="built_in">echo</span> <span class="string">"zzzcszczcs"</span> &gt; /tmp/aaw.log</span></span><br><span class="line"><span class="meta prompt_">at&gt; </span><span class="language-bash">&lt;EOT&gt;</span></span><br><span class="line">job 6 at Mon Nov 28 23:24:00 2022</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查询定时事件</span></span><br><span class="line">[root@localhost tmp]# atq</span><br><span class="line">6       Mon Nov 28 23:24:00 2022 a root</span><br><span class="line">4       Mon Nov 28 21:23:00 2022 a root</span><br><span class="line">5       Mon Nov 28 22:23:00 2022 a root</span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">详细查询指定定时事件</span></span><br><span class="line">[root@localhost tmp]# at -c 6</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/sh</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">atrun uid=0 gid=0</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">mail root 0</span></span><br><span class="line">umask 22</span><br><span class="line">SHELL=/bin/bash; export SHELL</span><br><span class="line">HISTCONTROL=ignoredups; export HISTCONTROL</span><br><span class="line">HISTSIZE=1000; export HISTSIZE</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="周期性执行cron"><a href="#周期性执行cron" class="headerlink" title="周期性执行cron"></a>周期性执行<code>cron</code></h2><p>周期性重复执行一些命令，使用cron；</p>
+<ul>
+<li>cron会搜索<code>/var/spool/cron</code>目录，寻找以<code>/etc/passwd</code>文件中用户名命名的crontab文件，然后将crontab文件装入内存，即<strong>用户cron时间表</strong>；</li>
+<li>cron还将搜索<code>/etc/crontab</code>文件，即<strong>系统cron时间表</strong>；</li>
+<li>cron启动后，先检查是否存在需要运行的crontab文件；<ul>
+<li>若没有则转入睡眠状态，释放系统资源；</li>
+<li>之后<strong>每分钟</strong>唤醒一次，查看当前是否有需要运行的命令。</li>
+</ul>
+</li>
+</ul>
+<h3 id="crontab管理cron进程表格"><a href="#crontab管理cron进程表格" class="headerlink" title="crontab管理cron进程表格"></a>crontab管理cron进程表格</h3><p>crontab用于安装、删除或打印用于驱动cron后台进程的表格；</p>
+<p>用户把需要执行的命令序列放到crontab文件中执行，每个用户都拥有自己的crontab文件；</p>
+<p>crontab命令：</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">crontab -u # 设置指定用户的cron服务</span><br><span class="line">crontab -l # 列出指定用户的cron服务详细内容</span><br><span class="line">crontab -r # 删除指定用户的cron服务</span><br><span class="line">crontab -e # 编辑指定用户的cron服务</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="crontab文件中的时间表"><a href="#crontab文件中的时间表" class="headerlink" title="crontab文件中的时间表"></a>crontab文件中的时间表</h3><p>在crontab文件中指定需要执行的命令和执行时间；</p>
+<p>文件每行有6个域，前5个域指定命令执行的时间，最后一个是要执行的命令，格式如下：</p>
+<h4 id="格式"><a href="#格式" class="headerlink" title="格式"></a>格式</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">minute hour day-of-month month-of-year day-of-week commands</span><br></pre></td></tr></tbody></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>minute</td>
+<td>分钟 0~59</td>
+</tr>
+<tr>
+<td>hour</td>
+<td>小时 0~23</td>
+</tr>
+<tr>
+<td>day-of-month</td>
+<td>一个月的第几天 1-31</td>
+</tr>
+<tr>
+<td>month-of-year</td>
+<td>一年的第几个月 1~12</td>
+</tr>
+<tr>
+<td>day-of-week</td>
+<td>一周的周几  0 ~ 6</td>
+</tr>
+<tr>
+<td>commands</td>
+<td>执行的命令</td>
+</tr>
+</tbody></table>
+<p>如：每周一上午8:00执行命令</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">00 08 * * 1 commands</span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>*</td>
+<td>所有取值范围内的数字</td>
+</tr>
+<tr>
+<td>/</td>
+<td>每，如“*/5”指的是每5个单位；</td>
+</tr>
+<tr>
+<td>-</td>
+<td>从 一个数字 到另一个数字</td>
+</tr>
+<tr>
+<td>,</td>
+<td>离散的数字</td>
+</tr>
+</tbody></table>
+<p>如：晚上11点到早上8点之间每过2小时，在/tmp/test.txt文件中加入sleepy文本：</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0 23-8/2 * * * echo "sleepy" &gt;&gt; /tmp/test.txt </span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="crontab文件-x2F-etc-x2F-ctontab"><a href="#crontab文件-x2F-etc-x2F-ctontab" class="headerlink" title="crontab文件 /etc/ctontab"></a>crontab文件 /etc/ctontab</h3><p>这个配置文件针对系统的任务。</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">SHELL=/bin/sh</span><br><span class="line">PATH=/usr/bin:/usr/sbin:/bin:/usr/lib/news/bin</span><br><span class="line">MAILTO=root # 如果出现错误，或有数据输出，数据作为邮件发给这个账号</span><br><span class="line">HOME=/</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">run-parts01</span></span><br><span class="line">* * * * root run-parts /etc/cron.hourly # 每小时执行一次/etc/cron.hourly里的脚本</span><br><span class="line">02 4 * * * root run-parts /etc/cron.daily # 每天执行一次cron.daily文件里的脚本</span><br><span class="line">22 4 * * 0 root run-parts /etc/cron.weekly</span><br><span class="line">42 4 1 * * root run-parts /etc/cron.monthly</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="crontab使用"><a href="#crontab使用" class="headerlink" title="crontab使用"></a>crontab使用</h3><ul>
+<li><p><code>crontab -l</code>：查询当前定时事件；</p>
+</li>
+<li><p><code>crontab -e</code>：编辑一个定时任务；</p>
+<ul>
+<li>将打开一个vim编辑器页面，然后使用上面的表达式可以创建任务；</li>
+</ul>
+</li>
+</ul>
+<ol>
+<li><p><code>crontab -e</code> 编辑一个定时任务；</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost tmp]# crontab -e</span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">*/1 * * * * echo "qqqqq" &gt; /tmp/q.txt</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>查看当前定时任务</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost tmp]# crontab -l</span><br><span class="line">*/1 * * * * echo "qqqqq" &gt; /tmp/q.txt</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>删除定时任务</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost tmp]# crontab -r</span><br></pre></td></tr></tbody></table></figure></li>
+</ol>
+
+                </div>
+
+                
+                        
+<div class="article-copyright-info-container border-box">
+    <div class="copyright-info-content border-box">
+        <div class="copyright-info-top border-box">
+            <div class="post-title border-box text-ellipsis">
+                openEuler 6 任务管理
+            </div>
+
+            <div class="post-link border-box text-ellipsis">
+                2022/11/28/openEuler/openEuler-6/
+            </div>
+        </div>
+
+        <div class="copyright-info-bottom border-box">
+            <div class="post-author bottom-item">
+                <div class="type">
+                    作者
+                </div>
+                <div class="content">uwupu</div>
+            </div>
+
+            <div class="post-time bottom-item">
+                <div class="type">
+                    發布于
+                </div>
+                <div class="content">2022-11-28 15:33</div>
+            </div>
+
+
+            <div class="post-license bottom-item">
+                <div class="type">
+                    許可
+                </div>
+                <div class="content tooltip" data-tooltip-content="CC BY-NC-SA 4.0">
+                    <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed">
+                        <i class="fa-brands fa-creative-commons"></i>
+                        <i class="fa-brands fa-creative-commons-by"></i>
+                        <i class="fa-brands fa-creative-commons-nc"></i>
+                        <i class="fa-brands fa-creative-commons-sa"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <i class="copyright-bg fa-solid fa-copyright"></i>
+    </div>
+    <div class="copy-copyright-info flex-center tooltip" data-tooltip-content="復製版權信息" data-tooltip-offset-y="-2px">
+        <i class="fa-solid fa-copy"></i>
+    </div>
+</div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Linux/">Linux</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/openEuler/">openEuler</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="article-nav">
+                        
+                            <div class="article-prev">
+                                <a class="prev" rel="prev" href="/2022/11/28/openEuler/openEuler-7/" title="openEuler 7">
+                                    <span class="left arrow-icon flex-center">
+                                      <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                            <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">openEuler 7</span>
+                                        <span class="post-nav-item">上一篇</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="article-next">
+                                <a class="next" rel="next" href="/2022/11/27/openEuler/openEuler-5/" title="openEuler 5 文件系统 磁盘 磁盘分区 LVM">
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">openEuler 5 文件系统 磁盘 磁盘分区 LVM</span>
+                                        <span class="post-nav-item">下一篇</span>
+                                    </span>
+                                            <span class="right arrow-icon flex-center">
+                                      <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%BB%E5%8A%A1%E7%AE%A1%E7%90%86"><span class="nav-number">1.</span> <span class="nav-text">任务管理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.2.</span> <span class="nav-text">类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A1%E5%88%92%E6%89%A7%E8%A1%8Cat"><span class="nav-number">1.3.</span> <span class="nav-text">计划执行at</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E5%AE%9A%E6%97%B6%E9%97%B4%E7%9A%84%E6%96%B9%E5%BC%8F%E6%9C%89%E4%B8%A4%E7%A7%8D"><span class="nav-number">1.3.1.</span> <span class="nav-text">指定时间的方式有两种</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%9D%E5%AF%B9%E8%AE%A1%E6%97%B6"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">绝对计时</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%9B%B8%E5%AF%B9%E8%AE%A1%E6%97%B6"><span class="nav-number">1.3.1.2.</span> <span class="nav-text">相对计时</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">1.3.2.</span> <span class="nav-text">其他</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B"><span class="nav-number">1.3.3.</span> <span class="nav-text">示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%A7%E8%A1%8C%E6%9D%83%E9%99%90"><span class="nav-number">1.3.4.</span> <span class="nav-text">执行权限</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E7%AE%A1%E7%90%86%E5%91%BD%E4%BB%A4"><span class="nav-number">1.3.5.</span> <span class="nav-text">其他管理命令</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%91%A8%E6%9C%9F%E6%80%A7%E6%89%A7%E8%A1%8Ccron"><span class="nav-number">1.4.</span> <span class="nav-text">周期性执行cron</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#crontab%E7%AE%A1%E7%90%86cron%E8%BF%9B%E7%A8%8B%E8%A1%A8%E6%A0%BC"><span class="nav-number">1.4.1.</span> <span class="nav-text">crontab管理cron进程表格</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#crontab%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E6%97%B6%E9%97%B4%E8%A1%A8"><span class="nav-number">1.4.2.</span> <span class="nav-text">crontab文件中的时间表</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A0%BC%E5%BC%8F"><span class="nav-number">1.4.2.1.</span> <span class="nav-text">格式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%82%E6%95%B0"><span class="nav-number">1.4.2.2.</span> <span class="nav-text">参数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#crontab%E6%96%87%E4%BB%B6-x2F-etc-x2F-ctontab"><span class="nav-number">1.4.3.</span> <span class="nav-text">crontab文件 /etc/ctontab</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#crontab%E4%BD%BF%E7%94%A8"><span class="nav-number">1.4.4.</span> <span class="nav-text">crontab使用</span></a></li></ol></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="border-box website-info-box default">
+        
+            <div class="copyright-info info-item default">
+                ©&nbsp;<span>2020</span>&nbsp;-&nbsp;2023
+                
+                    &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">uwupu</a>
+                
+            </div>
+
+            <div class="theme-info info-item default">
+                <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;框架&nbsp;&amp;&nbsp;主題&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a>
+            </div>
+
+            
+
+            
+        
+
+        <div class="count-item info-item default">
+            
+                <span class="count-box border-box word">
+                    <span class="item-type border-box">總字數</span>
+                    <span class="item-value border-box word">161.4k</span>
+                </span>
+            
+
+            
+                <span class="count-box border-box uv">
+                    <span class="item-type border-box">讀者</span>
+                    <span class="item-value border-box uv" id="busuanzi_value_site_uv"></span>
+                </span>
+            
+
+            
+                <span class="count-box border-box pv">
+                    <span class="item-type border-box">閱覽</span>
+                    <span class="item-value border-box pv" id="busuanzi_value_site_pv"></span>
+                </span>
+            
+        </div>
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="tools-list border-box">
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="搜尋..." spellcheck="false" type="search" class="search-input">
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%BB%E5%8A%A1%E7%AE%A1%E7%90%86"><span class="nav-number">1.</span> <span class="nav-text">任务管理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.2.</span> <span class="nav-text">类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A1%E5%88%92%E6%89%A7%E8%A1%8Cat"><span class="nav-number">1.3.</span> <span class="nav-text">计划执行at</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E5%AE%9A%E6%97%B6%E9%97%B4%E7%9A%84%E6%96%B9%E5%BC%8F%E6%9C%89%E4%B8%A4%E7%A7%8D"><span class="nav-number">1.3.1.</span> <span class="nav-text">指定时间的方式有两种</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%9D%E5%AF%B9%E8%AE%A1%E6%97%B6"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">绝对计时</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%9B%B8%E5%AF%B9%E8%AE%A1%E6%97%B6"><span class="nav-number">1.3.1.2.</span> <span class="nav-text">相对计时</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">1.3.2.</span> <span class="nav-text">其他</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B"><span class="nav-number">1.3.3.</span> <span class="nav-text">示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%A7%E8%A1%8C%E6%9D%83%E9%99%90"><span class="nav-number">1.3.4.</span> <span class="nav-text">执行权限</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E7%AE%A1%E7%90%86%E5%91%BD%E4%BB%A4"><span class="nav-number">1.3.5.</span> <span class="nav-text">其他管理命令</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%91%A8%E6%9C%9F%E6%80%A7%E6%89%A7%E8%A1%8Ccron"><span class="nav-number">1.4.</span> <span class="nav-text">周期性执行cron</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#crontab%E7%AE%A1%E7%90%86cron%E8%BF%9B%E7%A8%8B%E8%A1%A8%E6%A0%BC"><span class="nav-number">1.4.1.</span> <span class="nav-text">crontab管理cron进程表格</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#crontab%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E6%97%B6%E9%97%B4%E8%A1%A8"><span class="nav-number">1.4.2.</span> <span class="nav-text">crontab文件中的时间表</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A0%BC%E5%BC%8F"><span class="nav-number">1.4.2.1.</span> <span class="nav-text">格式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%82%E6%95%B0"><span class="nav-number">1.4.2.2.</span> <span class="nav-text">参数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#crontab%E6%96%87%E4%BB%B6-x2F-etc-x2F-ctontab"><span class="nav-number">1.4.3.</span> <span class="nav-text">crontab文件 /etc/ctontab</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#crontab%E4%BD%BF%E7%94%A8"><span class="nav-number">1.4.4.</span> <span class="nav-text">crontab使用</span></a></li></ol></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+<!-- common -->
+<script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/utils.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/header-shrink.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/back2top.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/dark-light-toggle.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/main.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/libs/anime.min.js"></script>
+
+<!-- local-search -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/local-search.js"></script>
+
+
+<!-- code-block -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/code-block.js"></script>
+
+
+<!-- lazyload -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/lazyload.js"></script>
+
+
+<div class="pjax">
+    
+        <!-- post-helper -->
+        <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/post-helper.js"></script>
+
+        <!-- toc -->
+        
+            <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/toc.js"></script>
+        
+
+        <!-- copyright-info -->
+        
+            <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/copyright-info.js"></script>
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- category-page -->
+    
+
+    <!-- links-page -->
+    
+</div>
+
+<!-- mermaid -->
+
+
+<!-- pjax -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/libs/pjax.min.js"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax'
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            KEEP.utils.pjaxProgressBarStart()
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            KEEP.utils.pjaxProgressBarEnd()
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'))
+            KEEP.initExecute()
+        });
+    });
+</script>
+
+
+
+
+
+
+</body></html>

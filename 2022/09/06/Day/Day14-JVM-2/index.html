@@ -1,0 +1,783 @@
+<!DOCTYPE html><html lang="zh-Hans"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="一个包含有学习日记的博客">
+    <meta name="author" content="uwupu">
+    
+    <title>
+        
+            Day14 JVM 2 GC 垃圾回收机制 |
+        
+        uwupu 学习日志
+    </title>
+    
+
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+    
+    
+    
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"zswh33.github.io","root":"/","language":"zh-Hans","path":"search.json"}
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":true,"init_open":true,"layout":"right"},"style":{"primary_color":"#F099BC","logo":"/images/logo.svg","favicon":"/images/logo.svg","avatar":"/images/avatar.svg","first_screen":{"enable":false,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"scroll":{"progress_bar":false,"percent":false}},"local_search":{"enable":true,"preload":true},"code_block":{"tools":{"enable":true,"style":"mac"},"highlight_theme":"obsidian"},"pjax":{"enable":true},"lazyload":{"enable":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.21"},"waline":{"server_url":null,"reaction":false,"version":2},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false}},"post":{"author_label":{"enable":true,"auto":false,"custom_label_list":["啦啦啦啦啦"]},"word_count":{"wordcount":true,"min2read":true},"datetime_format":"YYYY-MM-DD HH:mm","copyright_info":true,"share":false,"reward":{"enable":false,"img_link":null,"text":null}},"website_count":{"busuanzi_count":{"enable":true,"site_uv":true,"site_pv":true,"page_pv":true}},"version":"3.8.6"}
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
+    KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
+    KEEP.language_copy_copyright = {"copy":"Copy copyright info","copied":"Copied","title":"Original article title","author":"Original article author","link":"Original article link"}
+  </script>
+<meta name="generator" content="Hexo 6.2.0"><link rel="alternate" href="/atom.xml" title="uwupu Blog" type="application/atom+xml">
+<script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/fontawesome.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/regular.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/solid.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/brands.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/fontawesome.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/regular.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/solid.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/brands.min.css"></noscript></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <i class="pjax-progress-icon fas fa-circle-notch fa-spin"></i>
+    
+</div>
+
+
+<main class="page-container border-box">
+
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.svg">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               uwupu 学习日志
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class="" href="/">
+                                首頁
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/archives">
+                                歸檔
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/tags">
+                                標籤
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/categories">
+                                分類
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/links">
+                                友鏈
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/about">
+                                關於
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/">首頁</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/archives">歸檔</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/tags">標籤</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/categories">分類</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/links">友鏈</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/about">關於</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+
+                
+
+                    <div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+
+        <div class="article-content-container border-box">
+
+            
+
+            <div class="article-content-bottom border-box">
+                
+                    <div class="article-title">
+                        Day14 JVM 2 GC 垃圾回收机制
+                    </div>
+                
+
+                
+                    <div class="article-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/avatar.svg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author">
+                                <span class="name">uwupu</span>
+                                
+                                    <span class="author-label">啦啦啦啦啦</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="article-meta-info-container border-box post">
+    <div class="article-meta-info border-box">
+        
+
+
+        
+            <span class="meta-info-item article-create-date">
+                <i class="icon fa-solid fa-calendar-check"></i>&nbsp;
+                <span class="pc">2022-09-06 14:24</span>
+                <span class="mobile">2022-09-06 14:24</span>
+            </span>
+
+            <span class="meta-info-item article-update-date">
+                <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                <span class="pc" data-updated="Fri Nov 10 2023 23:09:54 GMT+0800">2023-11-10 23:09</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item article-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="article-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/Day/">Day</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="article-tag meta-info-item border-box">
+                <i class="icon fas fa-tags"></i>&nbsp;
+                <ul class="article-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Java/">Java</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+            <span class="meta-info-item article-wordcount">
+                <i class="icon fas fa-file-word"></i>&nbsp;<span>1.7k 字數</span>
+            </span>
+        
+        
+            <span class="meta-info-item article-min2read">
+                <i class="icon fas fa-clock"></i>&nbsp;<span>5 分鐘</span>
+            </span>
+        
+        
+            <span class="meta-info-item article-pv">
+                <i class="icon fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="article-content keep-markdown-body">
+                    
+
+                    <h1 id="GC：垃圾回收机制"><a href="#GC：垃圾回收机制" class="headerlink" title="GC：垃圾回收机制"></a>GC：垃圾回收机制</h1><p>GC作用区：Heap 和 方法区；</p>
+<p>JVM在进行GC时，大部分时候，回收的都是新生代。</p>
+<h2 id="类型"><a href="#类型" class="headerlink" title="类型"></a>类型</h2><ul>
+<li>轻GC（GC），大部分时候清理新生代，偶尔幸存区</li>
+<li>重GC（全局GC），</li>
+</ul>
+<h2 id="如何判断哪些对象需要被回收"><a href="#如何判断哪些对象需要被回收" class="headerlink" title="如何判断哪些对象需要被回收"></a>如何判断哪些对象需要被回收</h2><p>Java 垃圾回收判断哪些对象需要被回收有两种方法：<strong>引用计数法</strong>和<strong>可达性分析算法</strong>。</p>
+<h2 id="可达性分析算法"><a href="#可达性分析算法" class="headerlink" title="可达性分析算法"></a>可达性分析算法</h2><p>通过一系列称为“<strong>GC Roots</strong>”的对象作为起始点，从这些节点开始向下搜索，搜索走过的路径称为<strong>引用链（Reference Chain）</strong>，当一个对象到GC Roots没有任何引用链相连时，则证明此对象是不可用的。</p>
+<h3 id="GC-Roots"><a href="#GC-Roots" class="headerlink" title="GC Roots"></a>GC Roots</h3><p>GC Roots，tracking GC的根集合，是<strong>一组必须活跃的引用</strong>。</p>
+<p>可以作为GC Roots的对象包括下面几种：</p>
+<ol>
+<li>在<strong>虚拟机栈中引用的对象</strong>，譬如各个线程被调用的方法堆栈中使用到的参数、局部变量、临时变量等；</li>
+<li>在<strong>方法区中类静态属性引用的对象</strong>，譬如Java类的引用类型静态变量；</li>
+<li>在<strong>方法区中常量引用的对象</strong>，譬如字符串常量池里的引用；</li>
+<li><strong>本地方法栈中JNI（Native方法）引用的对象</strong>；</li>
+<li><strong>Java虚拟机内部的引用</strong>，如基本数据类型对应的CLass对象，一些常驻的异常对象（比如NullPointException，OutOfMemoryError）等，还有系统类加载器；</li>
+<li><strong>所有被同步锁（synchronized关键字）持有</strong>的对象；</li>
+<li><strong>反映Java虚拟机内部情况的JMXBean、JVMTI中注册的回调、本地代码缓存</strong>等；</li>
+<li>根据用户所选用的垃圾收集器以及当前回收的内存区域不同，“临时性”地加入的其他对象。</li>
+</ol>
+<h3 id="Tracing-GC"><a href="#Tracing-GC" class="headerlink" title="Tracing GC"></a>Tracing GC</h3><blockquote>
+<p>根本思路</p>
+</blockquote>
+<p>给定一个集合的引用作为根出发，通过引用关系遍历对象图，能被遍历到的（可达到的）对象就判定为存活，其余对象（没有被遍历到的）就自然判定为死亡。</p>
+<p><strong>注意：</strong>tracing GC的本质是通过找出所有活对象来吧其余空间认定为“无用”，而不是找出所有死掉的对象并回收他们占用的空间。</p>
+<blockquote>
+<p>GC Roots引用例子</p>
+</blockquote>
+<p><img lazyload="" alt="image" data-src="/Day14-JVM-2/GCRoots%E5%BC%95%E7%94%A8%E5%9B%BE%E8%A7%A3.svg"></p>
+<p>在上图中，reference1、reference2、reference3都是GC Roots；</p>
+<p>其中：</p>
+<ul>
+<li>reference1 -&gt; 对象实例1</li>
+<li>reference2 -&gt; 对象实例2</li>
+<li>reference3 -&gt; 对象实例4 -&gt; 对象实例6</li>
+</ul>
+<p>可以得出对象实例1、2、4、6都具有GC Roots可达性、也就是存活对象，不会被GC回收的对象；</p>
+<p>而对于3、5是GC Roots不可达对象，是需要被GC回收的对象。</p>
+<blockquote>
+<p>不可达的对象处理</p>
+</blockquote>
+<p>不可达的对象将暂时处于“缓刑”阶段，要真正宣告一个对象死亡，至少要经历两次标记过程：</p>
+<ol>
+<li><p>当对象变成GC Roots不可达时，GC会判断该对象是否有重写finalize方法，若没有，则直接回收，若有，进入第二步</p>
+</li>
+<li><p>若对象执行过finalize方法，则进行回收；若对象未执行过finalize方法，将其放入F-Queue队列，虚拟机会稍后建立一个低优先级线程Finalizer去执行该队列中对象的finalize方法，执行finalize方法结束后，GC会再次判断该对象是否科大，若不可达，则进行回收，若可达，则对象列为存活对象。</p>
+<p>![未被GC Roots引用的对象](Day14-JVM-2/未被GC Roots引用的对象.svg)</p>
+<p>这里的执行表示虚拟机会执行该方法，但不承诺等待它运行结束。</p>
+</li>
+</ol>
+<h2 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h2><h3 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h3><p>标记清除法，标记整理，复制算法，引用计数器。</p>
+<h4 id="引用计数法"><a href="#引用计数法" class="headerlink" title="引用计数法"></a>引用计数法</h4><p><img lazyload="" alt="image" data-src="/Day14-JVM-2/%E5%BC%95%E7%94%A8%E8%AE%A1%E6%95%B0%E6%B3%95.svg"></p>
+<h4 id="复制算法"><a href="#复制算法" class="headerlink" title="复制算法"></a>复制算法</h4><p><em>复制 + 清除垃圾</em></p>
+<p>复制算法主要体现在新生区的幸存区。</p>
+<blockquote>
+<p>过程</p>
+</blockquote>
+<p>为表明算法过程，先将幸存区分成两个区：A区和B区</p>
+<ol>
+<li>新生对象会被分配到A区的<strong>未使用内存</strong>中，当A区内存满了，就把A区存活对象复制到B区；</li>
+<li>然后清理A区所有对象；</li>
+<li>新生对象会被分配到B区未使用的内存中，当B区满了，就把B区存活对象复制到A区；</li>
+<li>清理B区所有对象；</li>
+<li>按照上面的过程循环</li>
+</ol>
+<p>在Java里，一般将空的内存称为to区，当前正在使用的内存称为from区。（第二步结束时候，A为to区，B为from区；在第4步结束时候，B成为to区，A为from区）</p>
+<blockquote>
+<p>特点</p>
+</blockquote>
+<ul>
+<li>好处：没有内存碎片</li>
+<li>坏处：浪费了内存空间（to永远为空）</li>
+</ul>
+<p>复制算法最佳使用场景：对象存活度较低的时候。</p>
+<h4 id="标记清除算法"><a href="#标记清除算法" class="headerlink" title="标记清除算法"></a>标记清除算法</h4><p>每经历一次GC，会进行可达性分析，标记GC Roots可达的对象，清理没有被标记的对象。</p>
+<blockquote>
+<p>特点</p>
+</blockquote>
+<p>优点：不需要额外的空间。</p>
+<p>缺点：两次扫描，严重浪费时间，会产生内存碎片。</p>
+<p><img lazyload="" alt="image" data-src="/Day14-JVM-2/%E6%A0%87%E8%AE%B0%E7%AE%97%E6%B3%95.svg"></p>
+<h4 id="标记压缩算法"><a href="#标记压缩算法" class="headerlink" title="标记压缩算法"></a>标记压缩算法</h4><p>标记清除算法的优化版本，每经历几次GC，会进行一次扫描，然后将对象移动到内存的一端，防止内存碎片产生。</p>
+<h2 id="GC总结"><a href="#GC总结" class="headerlink" title="GC总结"></a>GC总结</h2><p>内存效率最高（时间复杂度）：复制算法 &gt; 标记清除算法 &gt; 标记压缩算法 </p>
+<p>内存整齐度：复制算法 &gt; 标记压缩算法 = 标记清除算法</p>
+<p>内存利用率：标记压缩算法 = 标记清除算法 &gt; 复制算法</p>
+<p>没有最好的算法，只有最合适的算法。</p>
+<p>GC：分代收集算法</p>
+<blockquote>
+<p>结论</p>
+</blockquote>
+<p>年轻代：存活率低 —&gt;复制算法</p>
+<p>老年代：区域大，存活率高 —&gt; 标记清除（内存碎片不是太多） + 标记压缩 混合实现</p>
+<blockquote>
+<p>书籍</p>
+</blockquote>
+<p>《深入理解JVM》</p>
+<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><h2 id="从文章中删除的内容"><a href="#从文章中删除的内容" class="headerlink" title="从文章中删除的内容"></a>从文章中删除的内容</h2><blockquote>
+<p>对象的标记</p>
+</blockquote>
+<p>对象由两种状态，涉及到两类状态空间：</p>
+<ul>
+<li>一个是<strong>终结动态空间</strong>F = {unfinalized，finalizable，finalized}</li>
+<li>一个是<strong>可达状态空间</strong>R = {reachable，finalizer-reachable，unreachable}。</li>
+</ul>
+<p>各状态含义如下：</p>
+<ul>
+<li><p>unfinalized：GC未准备执行其finalize方法，新建对象会先进入此状态；</p>
+</li>
+<li><p>finalizable：表示可以执行finalizable方法，GC已检测到对象不可达；</p>
+</li>
+<li><p>finalized：表示GC已对对象执行过finalize方法；</p>
+</li>
+<li><p>reachable：表示GC Roots引用可达；</p>
+</li>
+<li><p>finalizer-reachable（f-reachable）：表示不是reachable，但通过某个finalizable对象可达；</p>
+</li>
+<li><p>unreachable：对象不可通过上面两种途经可达；</p>
+</li>
+</ul>
+<p>执行过程：</p>
+<ol>
+<li>新建对象首先处于{reachable，unfinalized}状态；</li>
+<li>若引用关系消失，从reachable变为f-reachable或unreachable状态；</li>
+<li>若JVM….Delete</li>
+</ol>
+
+                </div>
+
+                
+                        
+<div class="article-copyright-info-container border-box">
+    <div class="copyright-info-content border-box">
+        <div class="copyright-info-top border-box">
+            <div class="post-title border-box text-ellipsis">
+                Day14 JVM 2 GC 垃圾回收机制
+            </div>
+
+            <div class="post-link border-box text-ellipsis">
+                2022/09/06/Day/Day14-JVM-2/
+            </div>
+        </div>
+
+        <div class="copyright-info-bottom border-box">
+            <div class="post-author bottom-item">
+                <div class="type">
+                    作者
+                </div>
+                <div class="content">uwupu</div>
+            </div>
+
+            <div class="post-time bottom-item">
+                <div class="type">
+                    發布于
+                </div>
+                <div class="content">2022-09-06 14:24</div>
+            </div>
+
+
+            <div class="post-license bottom-item">
+                <div class="type">
+                    許可
+                </div>
+                <div class="content tooltip" data-tooltip-content="CC BY-NC-SA 4.0">
+                    <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed">
+                        <i class="fa-brands fa-creative-commons"></i>
+                        <i class="fa-brands fa-creative-commons-by"></i>
+                        <i class="fa-brands fa-creative-commons-nc"></i>
+                        <i class="fa-brands fa-creative-commons-sa"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <i class="copyright-bg fa-solid fa-copyright"></i>
+    </div>
+    <div class="copy-copyright-info flex-center tooltip" data-tooltip-content="復製版權信息" data-tooltip-offset-y="-2px">
+        <i class="fa-solid fa-copy"></i>
+    </div>
+</div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Java/">Java</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="article-nav">
+                        
+                            <div class="article-prev">
+                                <a class="prev" rel="prev" href="/2022/09/07/Day/Day15-Red-Black-Tree/" title="Day15 红黑树">
+                                    <span class="left arrow-icon flex-center">
+                                      <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                            <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Day15 红黑树</span>
+                                        <span class="post-nav-item">上一篇</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="article-next">
+                                <a class="next" rel="next" href="/2022/09/04/Day/Day12-JVM-1/" title="Day12 JVM 1 JVM体系结构 类加载器 沙箱安全机制 Native 栈 堆 JProfiler">
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Day12 JVM 1 JVM体系结构 类加载器 沙箱安全机制 Native 栈 堆 JProfiler</span>
+                                        <span class="post-nav-item">下一篇</span>
+                                    </span>
+                                            <span class="right arrow-icon flex-center">
+                                      <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#GC%EF%BC%9A%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6"><span class="nav-number">1.</span> <span class="nav-text">GC：垃圾回收机制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.1.</span> <span class="nav-text">类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%88%A4%E6%96%AD%E5%93%AA%E4%BA%9B%E5%AF%B9%E8%B1%A1%E9%9C%80%E8%A6%81%E8%A2%AB%E5%9B%9E%E6%94%B6"><span class="nav-number">1.2.</span> <span class="nav-text">如何判断哪些对象需要被回收</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%AF%E8%BE%BE%E6%80%A7%E5%88%86%E6%9E%90%E7%AE%97%E6%B3%95"><span class="nav-number">1.3.</span> <span class="nav-text">可达性分析算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#GC-Roots"><span class="nav-number">1.3.1.</span> <span class="nav-text">GC Roots</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tracing-GC"><span class="nav-number">1.3.2.</span> <span class="nav-text">Tracing GC</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%97%E6%B3%95"><span class="nav-number">1.4.</span> <span class="nav-text">算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E7%B1%BB"><span class="nav-number">1.4.1.</span> <span class="nav-text">分类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BC%95%E7%94%A8%E8%AE%A1%E6%95%B0%E6%B3%95"><span class="nav-number">1.4.1.1.</span> <span class="nav-text">引用计数法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%8D%E5%88%B6%E7%AE%97%E6%B3%95"><span class="nav-number">1.4.1.2.</span> <span class="nav-text">复制算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A0%87%E8%AE%B0%E6%B8%85%E9%99%A4%E7%AE%97%E6%B3%95"><span class="nav-number">1.4.1.3.</span> <span class="nav-text">标记清除算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A0%87%E8%AE%B0%E5%8E%8B%E7%BC%A9%E7%AE%97%E6%B3%95"><span class="nav-number">1.4.1.4.</span> <span class="nav-text">标记压缩算法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GC%E6%80%BB%E7%BB%93"><span class="nav-number">1.5.</span> <span class="nav-text">GC总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">2.</span> <span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8E%E6%96%87%E7%AB%A0%E4%B8%AD%E5%88%A0%E9%99%A4%E7%9A%84%E5%86%85%E5%AE%B9"><span class="nav-number">2.1.</span> <span class="nav-text">从文章中删除的内容</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="border-box website-info-box default">
+        
+            <div class="copyright-info info-item default">
+                ©&nbsp;<span>2020</span>&nbsp;-&nbsp;2023
+                
+                    &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">uwupu</a>
+                
+            </div>
+
+            <div class="theme-info info-item default">
+                <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;框架&nbsp;&amp;&nbsp;主題&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a>
+            </div>
+
+            
+
+            
+        
+
+        <div class="count-item info-item default">
+            
+                <span class="count-box border-box word">
+                    <span class="item-type border-box">總字數</span>
+                    <span class="item-value border-box word">161.4k</span>
+                </span>
+            
+
+            
+                <span class="count-box border-box uv">
+                    <span class="item-type border-box">讀者</span>
+                    <span class="item-value border-box uv" id="busuanzi_value_site_uv"></span>
+                </span>
+            
+
+            
+                <span class="count-box border-box pv">
+                    <span class="item-type border-box">閱覽</span>
+                    <span class="item-value border-box pv" id="busuanzi_value_site_pv"></span>
+                </span>
+            
+        </div>
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="tools-list border-box">
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="搜尋..." spellcheck="false" type="search" class="search-input">
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#GC%EF%BC%9A%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6"><span class="nav-number">1.</span> <span class="nav-text">GC：垃圾回收机制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.1.</span> <span class="nav-text">类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%88%A4%E6%96%AD%E5%93%AA%E4%BA%9B%E5%AF%B9%E8%B1%A1%E9%9C%80%E8%A6%81%E8%A2%AB%E5%9B%9E%E6%94%B6"><span class="nav-number">1.2.</span> <span class="nav-text">如何判断哪些对象需要被回收</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%AF%E8%BE%BE%E6%80%A7%E5%88%86%E6%9E%90%E7%AE%97%E6%B3%95"><span class="nav-number">1.3.</span> <span class="nav-text">可达性分析算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#GC-Roots"><span class="nav-number">1.3.1.</span> <span class="nav-text">GC Roots</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tracing-GC"><span class="nav-number">1.3.2.</span> <span class="nav-text">Tracing GC</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%97%E6%B3%95"><span class="nav-number">1.4.</span> <span class="nav-text">算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E7%B1%BB"><span class="nav-number">1.4.1.</span> <span class="nav-text">分类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BC%95%E7%94%A8%E8%AE%A1%E6%95%B0%E6%B3%95"><span class="nav-number">1.4.1.1.</span> <span class="nav-text">引用计数法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%8D%E5%88%B6%E7%AE%97%E6%B3%95"><span class="nav-number">1.4.1.2.</span> <span class="nav-text">复制算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A0%87%E8%AE%B0%E6%B8%85%E9%99%A4%E7%AE%97%E6%B3%95"><span class="nav-number">1.4.1.3.</span> <span class="nav-text">标记清除算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A0%87%E8%AE%B0%E5%8E%8B%E7%BC%A9%E7%AE%97%E6%B3%95"><span class="nav-number">1.4.1.4.</span> <span class="nav-text">标记压缩算法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GC%E6%80%BB%E7%BB%93"><span class="nav-number">1.5.</span> <span class="nav-text">GC总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">2.</span> <span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8E%E6%96%87%E7%AB%A0%E4%B8%AD%E5%88%A0%E9%99%A4%E7%9A%84%E5%86%85%E5%AE%B9"><span class="nav-number">2.1.</span> <span class="nav-text">从文章中删除的内容</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+<!-- common -->
+<script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/utils.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/header-shrink.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/back2top.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/dark-light-toggle.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/main.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/libs/anime.min.js"></script>
+
+<!-- local-search -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/local-search.js"></script>
+
+
+<!-- code-block -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/code-block.js"></script>
+
+
+<!-- lazyload -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/lazyload.js"></script>
+
+
+<div class="pjax">
+    
+        <!-- post-helper -->
+        <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/post-helper.js"></script>
+
+        <!-- toc -->
+        
+            <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/toc.js"></script>
+        
+
+        <!-- copyright-info -->
+        
+            <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/copyright-info.js"></script>
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- category-page -->
+    
+
+    <!-- links-page -->
+    
+</div>
+
+<!-- mermaid -->
+
+
+<!-- pjax -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/libs/pjax.min.js"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax'
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            KEEP.utils.pjaxProgressBarStart()
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            KEEP.utils.pjaxProgressBarEnd()
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'))
+            KEEP.initExecute()
+        });
+    });
+</script>
+
+
+
+
+
+
+</body></html>

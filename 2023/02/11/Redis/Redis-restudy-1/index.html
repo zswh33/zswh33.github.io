@@ -1,0 +1,888 @@
+<!DOCTYPE html><html lang="zh-Hans"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="一个包含有学习日记的博客">
+    <meta name="author" content="uwupu">
+    
+    <title>
+        
+            Redis restudy 1 NoSQL |
+        
+        uwupu 学习日志
+    </title>
+    
+
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+    
+    
+    
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"zswh33.github.io","root":"/","language":"zh-Hans","path":"search.json"}
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":true,"init_open":true,"layout":"right"},"style":{"primary_color":"#F099BC","logo":"/images/logo.svg","favicon":"/images/logo.svg","avatar":"/images/avatar.svg","first_screen":{"enable":false,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"scroll":{"progress_bar":false,"percent":false}},"local_search":{"enable":true,"preload":true},"code_block":{"tools":{"enable":true,"style":"mac"},"highlight_theme":"obsidian"},"pjax":{"enable":true},"lazyload":{"enable":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.21"},"waline":{"server_url":null,"reaction":false,"version":2},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false}},"post":{"author_label":{"enable":true,"auto":false,"custom_label_list":["啦啦啦啦啦"]},"word_count":{"wordcount":true,"min2read":true},"datetime_format":"YYYY-MM-DD HH:mm","copyright_info":true,"share":false,"reward":{"enable":false,"img_link":null,"text":null}},"website_count":{"busuanzi_count":{"enable":true,"site_uv":true,"site_pv":true,"page_pv":true}},"version":"3.8.6"}
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
+    KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
+    KEEP.language_copy_copyright = {"copy":"Copy copyright info","copied":"Copied","title":"Original article title","author":"Original article author","link":"Original article link"}
+  </script>
+<meta name="generator" content="Hexo 6.2.0"><link rel="alternate" href="/atom.xml" title="uwupu Blog" type="application/atom+xml">
+<script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/fontawesome.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/regular.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/solid.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/brands.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/fontawesome.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/regular.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/solid.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/brands.min.css"></noscript></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <i class="pjax-progress-icon fas fa-circle-notch fa-spin"></i>
+    
+</div>
+
+
+<main class="page-container border-box">
+
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.svg">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               uwupu 学习日志
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class="" href="/">
+                                首頁
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/archives">
+                                歸檔
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/tags">
+                                標籤
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/categories">
+                                分類
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/links">
+                                友鏈
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/about">
+                                關於
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/">首頁</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/archives">歸檔</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/tags">標籤</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/categories">分類</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/links">友鏈</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/about">關於</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+
+                
+
+                    <div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+
+        <div class="article-content-container border-box">
+
+            
+
+            <div class="article-content-bottom border-box">
+                
+                    <div class="article-title">
+                        Redis restudy 1 NoSQL
+                    </div>
+                
+
+                
+                    <div class="article-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/avatar.svg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author">
+                                <span class="name">uwupu</span>
+                                
+                                    <span class="author-label">啦啦啦啦啦</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="article-meta-info-container border-box post">
+    <div class="article-meta-info border-box">
+        
+
+
+        
+            <span class="meta-info-item article-create-date">
+                <i class="icon fa-solid fa-calendar-check"></i>&nbsp;
+                <span class="pc">2023-02-11 13:17</span>
+                <span class="mobile">2023-02-11 13:17</span>
+            </span>
+
+            <span class="meta-info-item article-update-date">
+                <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                <span class="pc" data-updated="Fri Nov 10 2023 23:15:06 GMT+0800">2023-11-10 23:15</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item article-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="article-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="article-tag meta-info-item border-box">
+                <i class="icon fas fa-tags"></i>&nbsp;
+                <ul class="article-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Redis/">Redis</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+            <span class="meta-info-item article-wordcount">
+                <i class="icon fas fa-file-word"></i>&nbsp;<span>1.4k 字數</span>
+            </span>
+        
+        
+            <span class="meta-info-item article-min2read">
+                <i class="icon fas fa-clock"></i>&nbsp;<span>4 分鐘</span>
+            </span>
+        
+        
+            <span class="meta-info-item article-pv">
+                <i class="icon fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="article-content keep-markdown-body">
+                    
+
+                    <h1 id="NoSQL概述"><a href="#NoSQL概述" class="headerlink" title="NoSQL概述"></a>NoSQL概述</h1><p>为什么要用Nosql：大数据</p>
+<h2 id="发展"><a href="#发展" class="headerlink" title="发展"></a>发展</h2><blockquote>
+<ol>
+<li>单机MySQL年代</li>
+</ol>
+</blockquote>
+<p><img lazyload="" alt="image" data-src="/Redis-restudy-1/%E5%8D%95%E6%9C%BASQL.svg"></p>
+<p>网站瓶颈：</p>
+<ol>
+<li>数据量太大，一个机器放不下；</li>
+<li>数据索引（B+ Tree）一个机器内存放不下；</li>
+<li>访问量太大；</li>
+</ol>
+<blockquote>
+<ol start="2">
+<li>Memcached（缓存） + MySQL + 垂直拆分</li>
+</ol>
+</blockquote>
+<p>优化发展过程：</p>
+<ol>
+<li>优化数据结构和索引；</li>
+<li>文件缓存（IO）；</li>
+<li><strong>Memcached</strong>。（当时最热门的技术）</li>
+</ol>
+<p><img lazyload="" alt="image" data-src="/Redis-restudy-1/Memcached.svg"></p>
+<ul>
+<li>网站80%的情况都是在读，每次到数据库查询非常麻烦；为减轻数据库压力，可以设置<strong>缓存</strong>。</li>
+</ul>
+<p><img lazyload="" alt="image" data-src="/Redis-restudy-1/3.svg"></p>
+<blockquote>
+<ol start="3">
+<li>分库分表：水平拆分</li>
+</ol>
+</blockquote>
+<p>水平拆分：Mysql集群。</p>
+<p><img lazyload="" alt="image" data-src="/Redis-restudy-1/4.svg"></p>
+<h2 id="为什么要用NoSQL"><a href="#为什么要用NoSQL" class="headerlink" title="为什么要用NoSQL"></a>为什么要用NoSQL</h2><p>用户个人信息，社交网络，地理位置。用户自己产生的数据，用户日志等等爆发式的增长！</p>
+<p>NoSQL可以很好地处理以上的情况；</p>
+<h2 id="什么是NoSQL"><a href="#什么是NoSQL" class="headerlink" title="什么是NoSQL"></a>什么是NoSQL</h2><p>NoSQL = Not Only SQL （不仅仅是SQL）</p>
+<p>泛指：非关系型数据库</p>
+<p>随着Web2.0互联网的诞生，传统的关系型数据库已难以应付，尤其是超大规模的高并发的社区！</p>
+<p>很多数据类型用户的个人信息，社交网络，地理位置。这些数据类型的存储不需要一个固定的格式。不需要多余的操作就可以横向扩展的。使用键值对来控制。</p>
+<h2 id="NoSQL特点"><a href="#NoSQL特点" class="headerlink" title="NoSQL特点"></a>NoSQL特点</h2><ol>
+<li>方便扩展（数据之间没有关系，扩展方便！）</li>
+<li>大数据量高性能（Redis 一秒可以写8万次）</li>
+<li>数据类型多样型</li>
+<li>传统RDBMS与NoSQL区别<ul>
+<li>RDBMS<ul>
+<li>结构化组织</li>
+<li>SQL</li>
+<li>数据和关系都存储在单独的表中 row col</li>
+<li>数据操作语言，数据定义语言</li>
+<li>严格的一致性</li>
+<li>基础的事务操作</li>
+<li>…</li>
+</ul>
+</li>
+<li>NoSQL<ul>
+<li>不仅仅是数据</li>
+<li>没有固定查询语言</li>
+<li>多种存储方式：键值对存储，列存储，文档存储，图形数据库（社交关系）</li>
+<li>最终一致性</li>
+<li>CAP定理和BASE理论 （异地多活！）</li>
+<li>高性能，高可用，高可扩展性</li>
+<li>…</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h1 id="大数据时代的3V-3高"><a href="#大数据时代的3V-3高" class="headerlink" title="大数据时代的3V+3高"></a>大数据时代的3V+3高</h1><p>3V：用来描述问题</p>
+<ul>
+<li>海量Volume，多样Variety，实时Velocity</li>
+</ul>
+<p>3高：对程序的要求</p>
+<ul>
+<li>高并发</li>
+<li>高可扩（随时水平拆分，随时扩展机器）</li>
+<li>高性能（保证用户体验和性能）</li>
+</ul>
+<h1 id="数据架构"><a href="#数据架构" class="headerlink" title="数据架构"></a>数据架构</h1><ol>
+<li>商品的基本信息<ul>
+<li>名称、价格、商家信息</li>
+<li>使用<strong>关系型数据库</strong>；</li>
+</ul>
+</li>
+<li>商品的描述，评论（文字比较多的情况）<ul>
+<li>使用<strong>文档型数据库</strong>，MongoDB</li>
+</ul>
+</li>
+<li>图片<ul>
+<li>分布式文件系统，FastDFS；</li>
+<li>淘宝自己的：TFS</li>
+<li>Google：GFS</li>
+<li>Hadoop：HDFS</li>
+<li>阿里云： OSS</li>
+</ul>
+</li>
+<li>商品的关键字（用来搜索）<ul>
+<li>搜索引擎 solr，elasticsearch</li>
+<li>淘宝用的：ISearch</li>
+</ul>
+</li>
+<li>商品的热门波段信息<ul>
+<li>内存数据库 Redis，Tair，Memcache…</li>
+</ul>
+</li>
+<li>商品的交易，外部的支付接口<ul>
+<li>三方应用。</li>
+</ul>
+</li>
+</ol>
+<h1 id="大型互联网的应用问题"><a href="#大型互联网的应用问题" class="headerlink" title="大型互联网的应用问题"></a>大型互联网的应用问题</h1><ul>
+<li>数据类型太多了</li>
+<li>数据源繁多，经常重构</li>
+<li>数据要改造，需要大面积改造</li>
+</ul>
+<p><strong>解决方案</strong>：UDSL（统一的数据服务层）。</p>
+<p><img lazyload="" alt="image" data-src="/Redis-restudy-1/image-20230211170032442.png"></p>
+<p><img lazyload="" alt="image" data-src="/Redis-restudy-1/image-20230211170242014.png"></p>
+<h1 id="NoSQL四大分类"><a href="#NoSQL四大分类" class="headerlink" title="NoSQL四大分类"></a>NoSQL四大分类</h1><ul>
+<li><p>KV键值对：</p>
+<ul>
+<li><p>新浪：Redis</p>
+</li>
+<li><p>美团：Redis + Tair</p>
+</li>
+<li><p>阿里、百度：Redis + memcache</p>
+</li>
+</ul>
+</li>
+<li><p>文档型数据库（bson格式，与JSON一样）</p>
+<ul>
+<li>MongoDB<ul>
+<li>MongoDB（一般必须要掌握）：基于分布式文件存储的数据库，用C++编写，主要用来处理大量的文档。</li>
+<li>MongoDB是一个介于关系型数据库和非关系型数据库中间的产品。</li>
+<li>MongoDB是非关系型数据库中功能最丰富最像关系型数据库的。</li>
+</ul>
+</li>
+<li>ConthDB</li>
+</ul>
+</li>
+<li><p>列存储数据库</p>
+<ul>
+<li>HBase</li>
+<li>分布式文件系统</li>
+</ul>
+</li>
+<li><p>图形关系数据库</p>
+<ul>
+<li>不是用来存图形的</li>
+<li>存储<strong>关系</strong>，比如：朋友圈社交网络，广告推荐。</li>
+<li>Neo4j，infoGrid</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>分类</th>
+<th>举例</th>
+<th>典型应用场景</th>
+<th>数据模型</th>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>键值对</td>
+<td>Redis，Oracle BDB</td>
+<td>内容缓存，主要用于存储大量数据的高访问负载，也用于一些日志系统等等</td>
+<td>Key指向Value的键值对，通常用hash table实现</td>
+<td>查找速度快</td>
+<td>数据无结构化，通常只被当做字符串或二进制数据。</td>
+</tr>
+<tr>
+<td>列存储数据库</td>
+<td>Cassandra，HBase</td>
+<td>分布式文件系统</td>
+<td>以列簇式存储，将同一列数据存在一起</td>
+<td>查找速度快，可扩展性强，更容易进行分布式扩展</td>
+<td>功能相对局限</td>
+</tr>
+<tr>
+<td>文档型数据库</td>
+<td>CouchDB,MongoDB</td>
+<td>Web应用（与Key-Value类似，Value是结构化的，不同的是数据库能够了解Value的内容）</td>
+<td>Key-Value对应的键值对，Value为结构化数据</td>
+<td>数据结构要求不严格，表结构可变，不需要像关系数据库一样需要预先定义表结构</td>
+<td>查询性能不高，而且缺乏统一的查询语法</td>
+</tr>
+<tr>
+<td>图形数据库</td>
+<td>Neo4J，InfoGrid，Infinite Graph</td>
+<td>社交网络，推荐系统等，专注于构建关系图谱</td>
+<td>图结构</td>
+<td>利用图结构相关算法，比如最短路径寻址，N度关系查找等</td>
+<td>很多时候需要对整个图做计算才能得出需要的信息，而且这种结构不太好做分布式的集群方案</td>
+</tr>
+</tbody></table>
+<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><h2 id="垂直拆分：读写分离"><a href="#垂直拆分：读写分离" class="headerlink" title="垂直拆分：读写分离"></a>垂直拆分：读写分离</h2><p><img lazyload="" alt="image" data-src="/Redis-restudy-1/Memcached-1676095243317-1.svg"></p>
+<p>三个mysql服务器，</p>
+<p>可以设定，<strong>第二个</strong>负责写，<strong>其他两个</strong>负责读；</p>
+<p>写数据到2，读数据到1和3；1和3随时同步来自2的数据。</p>
+<h2 id="水平拆分：Mysql集群"><a href="#水平拆分：Mysql集群" class="headerlink" title="水平拆分：Mysql集群"></a>水平拆分：Mysql集群</h2><h3 id="Mysql引擎"><a href="#Mysql引擎" class="headerlink" title="Mysql引擎"></a>Mysql引擎</h3><p>早些年MyISAM：表锁（读写锁整个表，十分影响效率，高并发会有严重的问题）</p>
+<p>现在Innodb：行锁（读写锁一行）。</p>
+<h2 id="Redis数据类型"><a href="#Redis数据类型" class="headerlink" title="Redis数据类型"></a>Redis数据类型</h2><ul>
+<li><p>五大基础数据类型</p>
+<ul>
+<li><p>String</p>
+</li>
+<li><p>List</p>
+</li>
+<li><p>Set</p>
+</li>
+<li><p>Hash</p>
+</li>
+<li><p>Zset</p>
+</li>
+</ul>
+</li>
+<li><p>三种特殊数据类型</p>
+<ul>
+<li>geo</li>
+<li>hyperloglog</li>
+<li>bitmap</li>
+</ul>
+</li>
+</ul>
+<h2 id="要学的"><a href="#要学的" class="headerlink" title="要学的"></a>要学的</h2><p>Redis，MongoDB，HBase，Neo4j</p>
+
+                </div>
+
+                
+                        
+<div class="article-copyright-info-container border-box">
+    <div class="copyright-info-content border-box">
+        <div class="copyright-info-top border-box">
+            <div class="post-title border-box text-ellipsis">
+                Redis restudy 1 NoSQL
+            </div>
+
+            <div class="post-link border-box text-ellipsis">
+                2023/02/11/Redis/Redis-restudy-1/
+            </div>
+        </div>
+
+        <div class="copyright-info-bottom border-box">
+            <div class="post-author bottom-item">
+                <div class="type">
+                    作者
+                </div>
+                <div class="content">uwupu</div>
+            </div>
+
+            <div class="post-time bottom-item">
+                <div class="type">
+                    發布于
+                </div>
+                <div class="content">2023-02-11 13:17</div>
+            </div>
+
+
+            <div class="post-license bottom-item">
+                <div class="type">
+                    許可
+                </div>
+                <div class="content tooltip" data-tooltip-content="CC BY-NC-SA 4.0">
+                    <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed">
+                        <i class="fa-brands fa-creative-commons"></i>
+                        <i class="fa-brands fa-creative-commons-by"></i>
+                        <i class="fa-brands fa-creative-commons-nc"></i>
+                        <i class="fa-brands fa-creative-commons-sa"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <i class="copyright-bg fa-solid fa-copyright"></i>
+    </div>
+    <div class="copy-copyright-info flex-center tooltip" data-tooltip-content="復製版權信息" data-tooltip-offset-y="-2px">
+        <i class="fa-solid fa-copy"></i>
+    </div>
+</div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Redis/">Redis</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="article-nav">
+                        
+                            <div class="article-prev">
+                                <a class="prev" rel="prev" href="/2023/02/11/Redis/Redis-restudy-2/" title="Redis restudy 2 基础 Redis-key String">
+                                    <span class="left arrow-icon flex-center">
+                                      <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                            <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Redis restudy 2 基础 Redis-key String</span>
+                                        <span class="post-nav-item">上一篇</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="article-next">
+                                <a class="next" rel="next" href="/2023/01/04/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E5%AD%A6%E4%B9%A0/" title="动态规划学习">
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">动态规划学习</span>
+                                        <span class="post-nav-item">下一篇</span>
+                                    </span>
+                                            <span class="right arrow-icon flex-center">
+                                      <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#NoSQL%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">NoSQL概述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%91%E5%B1%95"><span class="nav-number">1.1.</span> <span class="nav-text">发展</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%94%A8NoSQL"><span class="nav-number">1.2.</span> <span class="nav-text">为什么要用NoSQL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFNoSQL"><span class="nav-number">1.3.</span> <span class="nav-text">什么是NoSQL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NoSQL%E7%89%B9%E7%82%B9"><span class="nav-number">1.4.</span> <span class="nav-text">NoSQL特点</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%97%B6%E4%BB%A3%E7%9A%843V-3%E9%AB%98"><span class="nav-number">2.</span> <span class="nav-text">大数据时代的3V+3高</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%9E%B6%E6%9E%84"><span class="nav-number">3.</span> <span class="nav-text">数据架构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%A7%E5%9E%8B%E4%BA%92%E8%81%94%E7%BD%91%E7%9A%84%E5%BA%94%E7%94%A8%E9%97%AE%E9%A2%98"><span class="nav-number">4.</span> <span class="nav-text">大型互联网的应用问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#NoSQL%E5%9B%9B%E5%A4%A7%E5%88%86%E7%B1%BB"><span class="nav-number">5.</span> <span class="nav-text">NoSQL四大分类</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">6.</span> <span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9E%82%E7%9B%B4%E6%8B%86%E5%88%86%EF%BC%9A%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB"><span class="nav-number">6.1.</span> <span class="nav-text">垂直拆分：读写分离</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B0%B4%E5%B9%B3%E6%8B%86%E5%88%86%EF%BC%9AMysql%E9%9B%86%E7%BE%A4"><span class="nav-number">6.2.</span> <span class="nav-text">水平拆分：Mysql集群</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Mysql%E5%BC%95%E6%93%8E"><span class="nav-number">6.2.1.</span> <span class="nav-text">Mysql引擎</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="nav-number">6.3.</span> <span class="nav-text">Redis数据类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A6%81%E5%AD%A6%E7%9A%84"><span class="nav-number">6.4.</span> <span class="nav-text">要学的</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="border-box website-info-box default">
+        
+            <div class="copyright-info info-item default">
+                ©&nbsp;<span>2020</span>&nbsp;-&nbsp;2023
+                
+                    &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">uwupu</a>
+                
+            </div>
+
+            <div class="theme-info info-item default">
+                <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;框架&nbsp;&amp;&nbsp;主題&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a>
+            </div>
+
+            
+
+            
+        
+
+        <div class="count-item info-item default">
+            
+                <span class="count-box border-box word">
+                    <span class="item-type border-box">總字數</span>
+                    <span class="item-value border-box word">161.4k</span>
+                </span>
+            
+
+            
+                <span class="count-box border-box uv">
+                    <span class="item-type border-box">讀者</span>
+                    <span class="item-value border-box uv" id="busuanzi_value_site_uv"></span>
+                </span>
+            
+
+            
+                <span class="count-box border-box pv">
+                    <span class="item-type border-box">閱覽</span>
+                    <span class="item-value border-box pv" id="busuanzi_value_site_pv"></span>
+                </span>
+            
+        </div>
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="tools-list border-box">
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="搜尋..." spellcheck="false" type="search" class="search-input">
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#NoSQL%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">NoSQL概述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%91%E5%B1%95"><span class="nav-number">1.1.</span> <span class="nav-text">发展</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%94%A8NoSQL"><span class="nav-number">1.2.</span> <span class="nav-text">为什么要用NoSQL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFNoSQL"><span class="nav-number">1.3.</span> <span class="nav-text">什么是NoSQL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NoSQL%E7%89%B9%E7%82%B9"><span class="nav-number">1.4.</span> <span class="nav-text">NoSQL特点</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%97%B6%E4%BB%A3%E7%9A%843V-3%E9%AB%98"><span class="nav-number">2.</span> <span class="nav-text">大数据时代的3V+3高</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%9E%B6%E6%9E%84"><span class="nav-number">3.</span> <span class="nav-text">数据架构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%A7%E5%9E%8B%E4%BA%92%E8%81%94%E7%BD%91%E7%9A%84%E5%BA%94%E7%94%A8%E9%97%AE%E9%A2%98"><span class="nav-number">4.</span> <span class="nav-text">大型互联网的应用问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#NoSQL%E5%9B%9B%E5%A4%A7%E5%88%86%E7%B1%BB"><span class="nav-number">5.</span> <span class="nav-text">NoSQL四大分类</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">6.</span> <span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9E%82%E7%9B%B4%E6%8B%86%E5%88%86%EF%BC%9A%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB"><span class="nav-number">6.1.</span> <span class="nav-text">垂直拆分：读写分离</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B0%B4%E5%B9%B3%E6%8B%86%E5%88%86%EF%BC%9AMysql%E9%9B%86%E7%BE%A4"><span class="nav-number">6.2.</span> <span class="nav-text">水平拆分：Mysql集群</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Mysql%E5%BC%95%E6%93%8E"><span class="nav-number">6.2.1.</span> <span class="nav-text">Mysql引擎</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="nav-number">6.3.</span> <span class="nav-text">Redis数据类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A6%81%E5%AD%A6%E7%9A%84"><span class="nav-number">6.4.</span> <span class="nav-text">要学的</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+<!-- common -->
+<script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/utils.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/header-shrink.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/back2top.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/dark-light-toggle.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/main.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/libs/anime.min.js"></script>
+
+<!-- local-search -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/local-search.js"></script>
+
+
+<!-- code-block -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/code-block.js"></script>
+
+
+<!-- lazyload -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/lazyload.js"></script>
+
+
+<div class="pjax">
+    
+        <!-- post-helper -->
+        <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/post-helper.js"></script>
+
+        <!-- toc -->
+        
+            <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/toc.js"></script>
+        
+
+        <!-- copyright-info -->
+        
+            <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/copyright-info.js"></script>
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- category-page -->
+    
+
+    <!-- links-page -->
+    
+</div>
+
+<!-- mermaid -->
+
+
+<!-- pjax -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/libs/pjax.min.js"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax'
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            KEEP.utils.pjaxProgressBarStart()
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            KEEP.utils.pjaxProgressBarEnd()
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'))
+            KEEP.initExecute()
+        });
+    });
+</script>
+
+
+
+
+
+
+</body></html>

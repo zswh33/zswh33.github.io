@@ -1,0 +1,781 @@
+<!DOCTYPE html><html lang="zh-Hans"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="一个包含有学习日记的博客">
+    <meta name="author" content="uwupu">
+    
+    <title>
+        
+            Redis restudy 4 Zset Geospatial Hyperloglog Bitmaps |
+        
+        uwupu 学习日志
+    </title>
+    
+
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+    
+    
+    
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"zswh33.github.io","root":"/","language":"zh-Hans","path":"search.json"}
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":true,"init_open":true,"layout":"right"},"style":{"primary_color":"#F099BC","logo":"/images/logo.svg","favicon":"/images/logo.svg","avatar":"/images/avatar.svg","first_screen":{"enable":false,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"scroll":{"progress_bar":false,"percent":false}},"local_search":{"enable":true,"preload":true},"code_block":{"tools":{"enable":true,"style":"mac"},"highlight_theme":"obsidian"},"pjax":{"enable":true},"lazyload":{"enable":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.21"},"waline":{"server_url":null,"reaction":false,"version":2},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false}},"post":{"author_label":{"enable":true,"auto":false,"custom_label_list":["啦啦啦啦啦"]},"word_count":{"wordcount":true,"min2read":true},"datetime_format":"YYYY-MM-DD HH:mm","copyright_info":true,"share":false,"reward":{"enable":false,"img_link":null,"text":null}},"website_count":{"busuanzi_count":{"enable":true,"site_uv":true,"site_pv":true,"page_pv":true}},"version":"3.8.6"}
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
+    KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
+    KEEP.language_copy_copyright = {"copy":"Copy copyright info","copied":"Copied","title":"Original article title","author":"Original article author","link":"Original article link"}
+  </script>
+<meta name="generator" content="Hexo 6.2.0"><link rel="alternate" href="/atom.xml" title="uwupu Blog" type="application/atom+xml">
+<script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/fontawesome.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/regular.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/solid.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/brands.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/fontawesome.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/regular.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/solid.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/brands.min.css"></noscript></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <i class="pjax-progress-icon fas fa-circle-notch fa-spin"></i>
+    
+</div>
+
+
+<main class="page-container border-box">
+
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.svg">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               uwupu 学习日志
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class="" href="/">
+                                首頁
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/archives">
+                                歸檔
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/tags">
+                                標籤
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/categories">
+                                分類
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/links">
+                                友鏈
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/about">
+                                關於
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/">首頁</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/archives">歸檔</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/tags">標籤</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/categories">分類</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/links">友鏈</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/about">關於</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+
+                
+
+                    <div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+
+        <div class="article-content-container border-box">
+
+            
+
+            <div class="article-content-bottom border-box">
+                
+                    <div class="article-title">
+                        Redis restudy 4 Zset Geospatial Hyperloglog Bitmaps
+                    </div>
+                
+
+                
+                    <div class="article-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/avatar.svg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author">
+                                <span class="name">uwupu</span>
+                                
+                                    <span class="author-label">啦啦啦啦啦</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="article-meta-info-container border-box post">
+    <div class="article-meta-info border-box">
+        
+
+
+        
+            <span class="meta-info-item article-create-date">
+                <i class="icon fa-solid fa-calendar-check"></i>&nbsp;
+                <span class="pc">2023-02-13 10:00</span>
+                <span class="mobile">2023-02-13 10:00</span>
+            </span>
+
+            <span class="meta-info-item article-update-date">
+                <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                <span class="pc" data-updated="Fri Nov 10 2023 23:15:13 GMT+0800">2023-11-10 23:15</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item article-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="article-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="article-tag meta-info-item border-box">
+                <i class="icon fas fa-tags"></i>&nbsp;
+                <ul class="article-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Redis/">Redis</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+            <span class="meta-info-item article-wordcount">
+                <i class="icon fas fa-file-word"></i>&nbsp;<span>1.8k 字數</span>
+            </span>
+        
+        
+            <span class="meta-info-item article-min2read">
+                <i class="icon fas fa-clock"></i>&nbsp;<span>8 分鐘</span>
+            </span>
+        
+        
+            <span class="meta-info-item article-pv">
+                <i class="icon fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="article-content keep-markdown-body">
+                    
+
+                    <h1 id="Zset（有序集合）"><a href="#Zset（有序集合）" class="headerlink" title="Zset（有序集合）"></a>Zset（有序集合）</h1><p>与set基本一致，在zset里，元素是有序的；</p>
+<p>对于每一个元素，都有一个score，来表现其排序先后。</p>
+<h2 id="zadd-zrange"><a href="#zadd-zrange" class="headerlink" title="zadd, zrange"></a>zadd, zrange</h2><p><code>zadd key score member [score member ...]</code>：score为优先级，会影响排序顺序。</p>
+<p><code>zrange key start stop</code>：查询索引为start-stop的所有值</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; zadd z1 1 one  <span class="comment"># 添加值</span></span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; zadd z1 3 three 2 two <span class="comment">#添加多个值</span></span><br><span class="line">(<span class="built_in">integer</span>) 2</span><br><span class="line">127.0.0.1:6379&gt; zrange z1 0 -1  <span class="comment">#查询范围</span></span><br><span class="line">1) <span class="string">"one"</span></span><br><span class="line">2) <span class="string">"two"</span></span><br><span class="line">3) <span class="string">"three"</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="zrangebyscore-zrevrange"><a href="#zrangebyscore-zrevrange" class="headerlink" title="zrangebyscore, zrevrange"></a>zrangebyscore, zrevrange</h2><p>zrangebyscore key min max [WITHSCORES] [LIMIT offset count]：排序查询set内值，升序排序</p>
+<ul>
+<li>min，max：最小值，最大值<ul>
+<li>可以为 <code>-inf</code> <code>+inf</code>，无穷小，无穷大</li>
+</ul>
+</li>
+<li>WITHSCORES：返回结果包含score</li>
+<li><code>LIMIT offset count</code>：获取从指定位置开始的指定数量。</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; zadd salary 2500 ZhangSan</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; zadd salary 5000 Lisi</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; zadd salary 1234 yn</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; zrangebyscore salary -inf +inf withscores  <span class="comment"># 查询salary在-inf到+inf之间的值 并返回score</span></span><br><span class="line">1) <span class="string">"yn"</span></span><br><span class="line">2) <span class="string">"1234"</span></span><br><span class="line">3) <span class="string">"ZhangSan"</span></span><br><span class="line">4) <span class="string">"2500"</span></span><br><span class="line">5) <span class="string">"Lisi"</span></span><br><span class="line">6) <span class="string">"5000"</span></span><br><span class="line">127.0.0.1:6379&gt; zrangebyscore salary -inf 2600 withscores <span class="comment"># 查询salary在-inf到2600之间的值 并返回score</span></span><br><span class="line">1) <span class="string">"yn"</span></span><br><span class="line">2) <span class="string">"1234"</span></span><br><span class="line">3) <span class="string">"ZhangSan"</span></span><br><span class="line">4) <span class="string">"2500"</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p><code>zrevrange key start stop [WITHSCORES]</code>：查询有序集合中，降序排序之后，<strong>元素索引</strong>在start-stop之间的值。</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; ZREVRANGE salary 0 -1 withscores</span><br><span class="line">1) <span class="string">"Lisi"</span></span><br><span class="line">2) <span class="string">"5000"</span></span><br><span class="line">3) <span class="string">"ZhangSan"</span></span><br><span class="line">4) <span class="string">"2500"</span></span><br><span class="line">5) <span class="string">"yn"</span></span><br><span class="line">6) <span class="string">"1234"</span></span><br><span class="line">127.0.0.1:6379&gt; ZREVRANGE salary 1 -1 withscores</span><br><span class="line">1) <span class="string">"ZhangSan"</span></span><br><span class="line">2) <span class="string">"2500"</span></span><br><span class="line">3) <span class="string">"yn"</span></span><br><span class="line">4) <span class="string">"1234"</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="zrem"><a href="#zrem" class="headerlink" title="zrem"></a>zrem</h2><p><code>zrem salary value</code>：移除有序集合的指定元素</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; zrange salary 0 -1 withscores</span><br><span class="line">1) <span class="string">"yn"</span></span><br><span class="line">2) <span class="string">"1234"</span></span><br><span class="line">3) <span class="string">"ZhangSan"</span></span><br><span class="line">4) <span class="string">"2500"</span></span><br><span class="line">5) <span class="string">"Lisi"</span></span><br><span class="line">6) <span class="string">"5000"</span></span><br><span class="line">127.0.0.1:6379&gt; zrem salary yn</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; zrange salary 0 -1 withscores</span><br><span class="line">1) <span class="string">"ZhangSan"</span></span><br><span class="line">2) <span class="string">"2500"</span></span><br><span class="line">3) <span class="string">"Lisi"</span></span><br><span class="line">4) <span class="string">"5000"</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="zcard"><a href="#zcard" class="headerlink" title="zcard"></a>zcard</h2><p><code>zcard key</code>：获取有序集合元素个数</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; zcard salary</span><br><span class="line">(<span class="built_in">integer</span>) 2</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="zcount"><a href="#zcount" class="headerlink" title="zcount"></a>zcount</h2><p><code>zcount key min max</code>：获取score在min-max之间的值的数量。</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; zcount salary 2400 2600</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; zcount salary 2400 6000</span><br><span class="line">(<span class="built_in">integer</span>) 2</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h2><p>班级成绩表，工资表排序</p>
+<p>带权重消息列表</p>
+<p>排行榜</p>
+<h1 id="geospatial-地理位置"><a href="#geospatial-地理位置" class="headerlink" title="geospatial 地理位置"></a>geospatial 地理位置</h1><p><em>Redis 的 Geo</em></p>
+<p>特性：两级无法直接添加</p>
+<p>可以进行地理位置信息的计算，如两地之间的距离，方圆几里的人</p>
+<p>有效经度：-180~+180</p>
+<p>有效纬度：-85.05112878~+85.05112878</p>
+<p><code>geoadd, geodist, geohash, geopos, georaduis, georadiusbymember</code></p>
+<p>geo的底层实现是zset，可以使用zset的方式修改geo的元素。</p>
+<h2 id="geoadd"><a href="#geoadd" class="headerlink" title="geoadd"></a>geoadd</h2><p><code>geoadd key longitude latitude member [longitude latitude member ...]</code>：添加地理位置</p>
+<ul>
+<li>longitude，latitude：经度，纬度</li>
+<li>member：成员</li>
+</ul>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; geoadd china:city 116.40 39.90 BeiJing</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; geoadd china:city 121.47 31.23 ShangHai</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; geoadd china:city 106.50 29.53 ChongQing 114.05 22.52 ShenZhen</span><br><span class="line">(integer) 2</span><br><span class="line">127.0.0.1:6379&gt; geoadd china:city 120.15 30.28 ZheJiang</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; geoadd china:city 108.96 34.26 XiAn</span><br><span class="line">(integer) 1</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="geopos"><a href="#geopos" class="headerlink" title="geopos"></a>geopos</h2><p><code>geopos key member [member ...]</code>：查询值</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; geopos china:city BeiJing ChongQing</span><br><span class="line">1) 1) <span class="string">"116.39999896287918091"</span></span><br><span class="line">   2) <span class="string">"39.90000009167092543"</span></span><br><span class="line">2) 1) <span class="string">"106.49999767541885376"</span></span><br><span class="line">   2) <span class="string">"29.52999957900659211"</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="geodist"><a href="#geodist" class="headerlink" title="geodist"></a>geodist</h2><p><code>geodist key member1 member2 [m|km|ft|mi]</code>  获取两地之间距离</p>
+<ul>
+<li>m 米；km千米；ft英尺；mi英里</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; geodist china:city BeiJing ChongQing km  <span class="comment">#BeiJing到ChongQing距离</span></span><br><span class="line"><span class="string">"1464.0708"</span></span><br><span class="line">127.0.0.1:6379&gt; geodist china:city ShangHai ShenZhen km</span><br><span class="line"><span class="string">"1215.9224"</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="georadius"><a href="#georadius" class="headerlink" title="georadius"></a>georadius</h2><p>在指定的经度和纬度对应位置上，查询指定半径上的成员</p>
+<p><code>georadius key longitude latitude radius m|km|ft|mi [WITHCOORD] [WITHDIST] [WITHHASH] [COUNT count]</code></p>
+<ul>
+<li>radius，半径</li>
+<li>WITHCOORD：包含经度纬度</li>
+<li>WITHDIST：包含距离</li>
+<li>WITHHASH：包含hash值</li>
+<li>COUNT count：数量</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; georadius china:city 110 30 1000 km <span class="comment">#获取以经纬度为110,30位置为中心，查询1000km附近的城市</span></span><br><span class="line">1) <span class="string">"ChongQing"</span></span><br><span class="line">2) <span class="string">"XiAn"</span></span><br><span class="line">3) <span class="string">"ShenZhen"</span></span><br><span class="line">4) <span class="string">"ZheJiang"</span></span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; georadius china:city 110 30 500 km WITHCOORD WITHDIST WITHHASH count 1 <span class="comment">#获取500km，返回包含经纬度，距离和Hash，数量指定1.</span></span><br><span class="line">1) 1) <span class="string">"ChongQing"</span></span><br><span class="line">   2) <span class="string">"341.9374"</span></span><br><span class="line">   3) (<span class="built_in">integer</span>) 4026042091628984</span><br><span class="line">   4) 1) <span class="string">"106.49999767541885376"</span></span><br><span class="line">      2) <span class="string">"29.52999957900659211"</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="georadiusbymember"><a href="#georadiusbymember" class="headerlink" title="georadiusbymember"></a>georadiusbymember</h2><p><code>georadiusbymember key member radius m|km|ft|mi [WITHCOORD] [WITHDIST] [WITHHASH] [COUNT count]</code></p>
+<p>以member为中心，查询指定半径范围内的其他member。</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; georadiusbymember china:city ChongQing 1000 km</span><br><span class="line">1) <span class="string">"ChongQing"</span></span><br><span class="line">2) <span class="string">"XiAn"</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="geohash"><a href="#geohash" class="headerlink" title="geohash"></a>geohash</h2><p><code>geohash key member [member ...]</code>：查询member的geohash。</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; geohash china:city ChongQing BeiJing</span><br><span class="line">1) <span class="string">"wm5xzrybty0"</span>   <span class="comment">#11位</span></span><br><span class="line">2) <span class="string">"wx4fbxxfke0"</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>将二维的经纬度转换为一维的字符串。</p>
+<h2 id="zset相关"><a href="#zset相关" class="headerlink" title="zset相关"></a>zset相关</h2><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; zrange china:city 0 -1</span><br><span class="line">1) <span class="string">"ChongQing"</span></span><br><span class="line">2) <span class="string">"XiAn"</span></span><br><span class="line">3) <span class="string">"ShenZhen"</span></span><br><span class="line">4) <span class="string">"ZheJiang"</span></span><br><span class="line">5) <span class="string">"ShangHai"</span></span><br><span class="line">6) <span class="string">"BeiJing"</span></span><br><span class="line">127.0.0.1:6379&gt; zrem china:city BeiJing</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; zrange china:city 0 -1</span><br><span class="line">1) <span class="string">"ChongQing"</span></span><br><span class="line">2) <span class="string">"XiAn"</span></span><br><span class="line">3) <span class="string">"ShenZhen"</span></span><br><span class="line">4) <span class="string">"ZheJiang"</span></span><br><span class="line">5) <span class="string">"ShangHai"</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="Hyperloglog基数统计"><a href="#Hyperloglog基数统计" class="headerlink" title="Hyperloglog基数统计"></a>Hyperloglog基数统计</h1><h2 id="基数"><a href="#基数" class="headerlink" title="基数"></a>基数</h2><p><em>不重复的元素数量</em></p>
+<h2 id="应用场景-1"><a href="#应用场景-1" class="headerlink" title="应用场景"></a>应用场景</h2><p>不重复用户访问量</p>
+<h2 id="为什么使用Hyperloglog"><a href="#为什么使用Hyperloglog" class="headerlink" title="为什么使用Hyperloglog"></a>为什么使用Hyperloglog</h2><p>网站UV：一个用户访问算作一个访问量，UV指的是访问过的人数；</p>
+<p>在传统的实现方式中，使用set集合存放用户的id，然后以set集合的元素数量作为判断。</p>
+<p>但是，这个方法不好！因为这个功能的目的是为了<strong>实现计数</strong>，而不是保存用户ID；</p>
+<p>基数统计，统计的结果不一定准确，但不需要保存用户ID。</p>
+<h2 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h2><ul>
+<li>占用内存固定<ul>
+<li>如2^63不同的元素，这里只需要<strong>12KB内存</strong>；</li>
+</ul>
+</li>
+</ul>
+<h2 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h2><ul>
+<li>误差0.81%<ul>
+<li>若统计一些允许这样误差的信息，则是可以的。</li>
+</ul>
+</li>
+<li><strong>最大数量2^63，占用内容12KB</strong>。</li>
+</ul>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p><code>pfadd key element [element ...]</code>：向Hyperloglog的key中添加元素。</p>
+<p><code>pfcount key</code>：查询数量</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; pfadd p1 a b c d e f g h i j k l m n</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; pfcount p1</span><br><span class="line">(<span class="built_in">integer</span>) 14</span><br><span class="line">127.0.0.1:6379&gt; pfadd p1 a b c d e o p q</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; pfcount p1</span><br><span class="line">(<span class="built_in">integer</span>) 17</span><br></pre></td></tr></tbody></table></figure>
+
+<p><code>pfmerge destkey sourcekey [sourcekey ...]</code>：合并两个基数统计集合</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; pfadd p1 a b c d</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; pfadd p2 c d e f</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; pfmerge p3 p1 p2 <span class="comment"># 合并p1和p2，存放到p3</span></span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; pfcount p1</span><br><span class="line">(<span class="built_in">integer</span>) 4</span><br><span class="line">127.0.0.1:6379&gt; pfcount p2</span><br><span class="line">(<span class="built_in">integer</span>) 4</span><br><span class="line">127.0.0.1:6379&gt; pfcount p3</span><br><span class="line">(<span class="built_in">integer</span>) 6</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="Bitmaps"><a href="#Bitmaps" class="headerlink" title="Bitmaps"></a>Bitmaps</h1><p><em>位存储</em></p>
+<p>操作二进制位记录，只有0和1两个状态。</p>
+<h2 id="使用-1"><a href="#使用-1" class="headerlink" title="使用"></a>使用</h2><p><code>setbit key offset value</code>：设置key的offset位置的值为value；</p>
+<ul>
+<li>value只可以是0或1；</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; setbit sign 0 1</span><br><span class="line">(<span class="built_in">integer</span>) 0</span><br><span class="line">127.0.0.1:6379&gt; setbit sign 1 0</span><br><span class="line">(<span class="built_in">integer</span>) 0</span><br><span class="line">127.0.0.1:6379&gt; setbit sign 2 1</span><br><span class="line">(<span class="built_in">integer</span>) 0</span><br></pre></td></tr></tbody></table></figure>
+
+<p><code>getbit key offset</code>：获取key的offset位置的值；</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; getbit sign 0</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; getbit sign 1</span><br><span class="line">(<span class="built_in">integer</span>) 0</span><br><span class="line">127.0.0.1:6379&gt; getbit sign 2</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br></pre></td></tr></tbody></table></figure>
+
+<p><code>bitcount key [start end]</code>：查询位为start-end中1的数量</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; bitcount sign</span><br><span class="line">(<span class="built_in">integer</span>) 2</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="应用场景-2"><a href="#应用场景-2" class="headerlink" title="应用场景"></a>应用场景</h2><p>统计打卡天数；</p>
+<ul>
+<li>设sign为 010，表示 周一没打卡，周二打卡了，周三没打卡</li>
+<li><code>bitcount sign</code>：统计打卡天数。</li>
+</ul>
+
+                </div>
+
+                
+                        
+<div class="article-copyright-info-container border-box">
+    <div class="copyright-info-content border-box">
+        <div class="copyright-info-top border-box">
+            <div class="post-title border-box text-ellipsis">
+                Redis restudy 4 Zset Geospatial Hyperloglog Bitmaps
+            </div>
+
+            <div class="post-link border-box text-ellipsis">
+                2023/02/13/Redis/Redis-restudy-4/
+            </div>
+        </div>
+
+        <div class="copyright-info-bottom border-box">
+            <div class="post-author bottom-item">
+                <div class="type">
+                    作者
+                </div>
+                <div class="content">uwupu</div>
+            </div>
+
+            <div class="post-time bottom-item">
+                <div class="type">
+                    發布于
+                </div>
+                <div class="content">2023-02-13 10:00</div>
+            </div>
+
+
+            <div class="post-license bottom-item">
+                <div class="type">
+                    許可
+                </div>
+                <div class="content tooltip" data-tooltip-content="CC BY-NC-SA 4.0">
+                    <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed">
+                        <i class="fa-brands fa-creative-commons"></i>
+                        <i class="fa-brands fa-creative-commons-by"></i>
+                        <i class="fa-brands fa-creative-commons-nc"></i>
+                        <i class="fa-brands fa-creative-commons-sa"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <i class="copyright-bg fa-solid fa-copyright"></i>
+    </div>
+    <div class="copy-copyright-info flex-center tooltip" data-tooltip-content="復製版權信息" data-tooltip-offset-y="-2px">
+        <i class="fa-solid fa-copy"></i>
+    </div>
+</div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Redis/">Redis</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="article-nav">
+                        
+                            <div class="article-prev">
+                                <a class="prev" rel="prev" href="/2023/02/13/Redis/Redis-restudy-5/" title="Redis restudy 5 事务 监视Jedis SpringBootRedis">
+                                    <span class="left arrow-icon flex-center">
+                                      <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                            <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Redis restudy 5 事务 监视Jedis SpringBootRedis</span>
+                                        <span class="post-nav-item">上一篇</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="article-next">
+                                <a class="next" rel="next" href="/2023/02/11/Redis/Redis-restudy-3/" title="Redis restudy 3 List Set Hash">
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Redis restudy 3 List Set Hash</span>
+                                        <span class="post-nav-item">下一篇</span>
+                                    </span>
+                                            <span class="right arrow-icon flex-center">
+                                      <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Zset%EF%BC%88%E6%9C%89%E5%BA%8F%E9%9B%86%E5%90%88%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">Zset（有序集合）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#zadd-zrange"><span class="nav-number">1.1.</span> <span class="nav-text">zadd, zrange</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#zrangebyscore-zrevrange"><span class="nav-number">1.2.</span> <span class="nav-text">zrangebyscore, zrevrange</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#zrem"><span class="nav-number">1.3.</span> <span class="nav-text">zrem</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#zcard"><span class="nav-number">1.4.</span> <span class="nav-text">zcard</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#zcount"><span class="nav-number">1.5.</span> <span class="nav-text">zcount</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">1.6.</span> <span class="nav-text">应用场景</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#geospatial-%E5%9C%B0%E7%90%86%E4%BD%8D%E7%BD%AE"><span class="nav-number">2.</span> <span class="nav-text">geospatial 地理位置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#geoadd"><span class="nav-number">2.1.</span> <span class="nav-text">geoadd</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#geopos"><span class="nav-number">2.2.</span> <span class="nav-text">geopos</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#geodist"><span class="nav-number">2.3.</span> <span class="nav-text">geodist</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#georadius"><span class="nav-number">2.4.</span> <span class="nav-text">georadius</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#georadiusbymember"><span class="nav-number">2.5.</span> <span class="nav-text">georadiusbymember</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#geohash"><span class="nav-number">2.6.</span> <span class="nav-text">geohash</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#zset%E7%9B%B8%E5%85%B3"><span class="nav-number">2.7.</span> <span class="nav-text">zset相关</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Hyperloglog%E5%9F%BA%E6%95%B0%E7%BB%9F%E8%AE%A1"><span class="nav-number">3.</span> <span class="nav-text">Hyperloglog基数统计</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%95%B0"><span class="nav-number">3.1.</span> <span class="nav-text">基数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF-1"><span class="nav-number">3.2.</span> <span class="nav-text">应用场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8Hyperloglog"><span class="nav-number">3.3.</span> <span class="nav-text">为什么使用Hyperloglog</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%98%E7%82%B9"><span class="nav-number">3.4.</span> <span class="nav-text">优点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E6%80%A7"><span class="nav-number">3.5.</span> <span class="nav-text">特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8"><span class="nav-number">3.6.</span> <span class="nav-text">使用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Bitmaps"><span class="nav-number">4.</span> <span class="nav-text">Bitmaps</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-1"><span class="nav-number">4.1.</span> <span class="nav-text">使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF-2"><span class="nav-number">4.2.</span> <span class="nav-text">应用场景</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="border-box website-info-box default">
+        
+            <div class="copyright-info info-item default">
+                ©&nbsp;<span>2020</span>&nbsp;-&nbsp;2023
+                
+                    &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">uwupu</a>
+                
+            </div>
+
+            <div class="theme-info info-item default">
+                <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;框架&nbsp;&amp;&nbsp;主題&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a>
+            </div>
+
+            
+
+            
+        
+
+        <div class="count-item info-item default">
+            
+                <span class="count-box border-box word">
+                    <span class="item-type border-box">總字數</span>
+                    <span class="item-value border-box word">161.4k</span>
+                </span>
+            
+
+            
+                <span class="count-box border-box uv">
+                    <span class="item-type border-box">讀者</span>
+                    <span class="item-value border-box uv" id="busuanzi_value_site_uv"></span>
+                </span>
+            
+
+            
+                <span class="count-box border-box pv">
+                    <span class="item-type border-box">閱覽</span>
+                    <span class="item-value border-box pv" id="busuanzi_value_site_pv"></span>
+                </span>
+            
+        </div>
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="tools-list border-box">
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="搜尋..." spellcheck="false" type="search" class="search-input">
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Zset%EF%BC%88%E6%9C%89%E5%BA%8F%E9%9B%86%E5%90%88%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">Zset（有序集合）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#zadd-zrange"><span class="nav-number">1.1.</span> <span class="nav-text">zadd, zrange</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#zrangebyscore-zrevrange"><span class="nav-number">1.2.</span> <span class="nav-text">zrangebyscore, zrevrange</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#zrem"><span class="nav-number">1.3.</span> <span class="nav-text">zrem</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#zcard"><span class="nav-number">1.4.</span> <span class="nav-text">zcard</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#zcount"><span class="nav-number">1.5.</span> <span class="nav-text">zcount</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">1.6.</span> <span class="nav-text">应用场景</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#geospatial-%E5%9C%B0%E7%90%86%E4%BD%8D%E7%BD%AE"><span class="nav-number">2.</span> <span class="nav-text">geospatial 地理位置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#geoadd"><span class="nav-number">2.1.</span> <span class="nav-text">geoadd</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#geopos"><span class="nav-number">2.2.</span> <span class="nav-text">geopos</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#geodist"><span class="nav-number">2.3.</span> <span class="nav-text">geodist</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#georadius"><span class="nav-number">2.4.</span> <span class="nav-text">georadius</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#georadiusbymember"><span class="nav-number">2.5.</span> <span class="nav-text">georadiusbymember</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#geohash"><span class="nav-number">2.6.</span> <span class="nav-text">geohash</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#zset%E7%9B%B8%E5%85%B3"><span class="nav-number">2.7.</span> <span class="nav-text">zset相关</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Hyperloglog%E5%9F%BA%E6%95%B0%E7%BB%9F%E8%AE%A1"><span class="nav-number">3.</span> <span class="nav-text">Hyperloglog基数统计</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%95%B0"><span class="nav-number">3.1.</span> <span class="nav-text">基数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF-1"><span class="nav-number">3.2.</span> <span class="nav-text">应用场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8Hyperloglog"><span class="nav-number">3.3.</span> <span class="nav-text">为什么使用Hyperloglog</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%98%E7%82%B9"><span class="nav-number">3.4.</span> <span class="nav-text">优点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E6%80%A7"><span class="nav-number">3.5.</span> <span class="nav-text">特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8"><span class="nav-number">3.6.</span> <span class="nav-text">使用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Bitmaps"><span class="nav-number">4.</span> <span class="nav-text">Bitmaps</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-1"><span class="nav-number">4.1.</span> <span class="nav-text">使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF-2"><span class="nav-number">4.2.</span> <span class="nav-text">应用场景</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+<!-- common -->
+<script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/utils.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/header-shrink.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/back2top.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/dark-light-toggle.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/main.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/libs/anime.min.js"></script>
+
+<!-- local-search -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/local-search.js"></script>
+
+
+<!-- code-block -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/code-block.js"></script>
+
+
+<!-- lazyload -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/lazyload.js"></script>
+
+
+<div class="pjax">
+    
+        <!-- post-helper -->
+        <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/post-helper.js"></script>
+
+        <!-- toc -->
+        
+            <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/toc.js"></script>
+        
+
+        <!-- copyright-info -->
+        
+            <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/copyright-info.js"></script>
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- category-page -->
+    
+
+    <!-- links-page -->
+    
+</div>
+
+<!-- mermaid -->
+
+
+<!-- pjax -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/libs/pjax.min.js"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax'
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            KEEP.utils.pjaxProgressBarStart()
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            KEEP.utils.pjaxProgressBarEnd()
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'))
+            KEEP.initExecute()
+        });
+    });
+</script>
+
+
+
+
+
+
+</body></html>

@@ -1,0 +1,765 @@
+<!DOCTYPE html><html lang="zh-Hans"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="一个包含有学习日记的博客">
+    <meta name="author" content="uwupu">
+    
+    <title>
+        
+            RabbitMQ 5 交换机 死信队列 延时队列 |
+        
+        uwupu 学习日志
+    </title>
+    
+
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+    
+    
+    
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"zswh33.github.io","root":"/","language":"zh-Hans","path":"search.json"}
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":true,"init_open":true,"layout":"right"},"style":{"primary_color":"#F099BC","logo":"/images/logo.svg","favicon":"/images/logo.svg","avatar":"/images/avatar.svg","first_screen":{"enable":false,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"scroll":{"progress_bar":false,"percent":false}},"local_search":{"enable":true,"preload":true},"code_block":{"tools":{"enable":true,"style":"mac"},"highlight_theme":"obsidian"},"pjax":{"enable":true},"lazyload":{"enable":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.21"},"waline":{"server_url":null,"reaction":false,"version":2},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false}},"post":{"author_label":{"enable":true,"auto":false,"custom_label_list":["啦啦啦啦啦"]},"word_count":{"wordcount":true,"min2read":true},"datetime_format":"YYYY-MM-DD HH:mm","copyright_info":true,"share":false,"reward":{"enable":false,"img_link":null,"text":null}},"website_count":{"busuanzi_count":{"enable":true,"site_uv":true,"site_pv":true,"page_pv":true}},"version":"3.8.6"}
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
+    KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
+    KEEP.language_copy_copyright = {"copy":"Copy copyright info","copied":"Copied","title":"Original article title","author":"Original article author","link":"Original article link"}
+  </script>
+<meta name="generator" content="Hexo 6.2.0"><link rel="alternate" href="/atom.xml" title="uwupu Blog" type="application/atom+xml">
+<script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/fontawesome.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/regular.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/solid.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/brands.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/fontawesome.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/regular.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/solid.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/brands.min.css"></noscript></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <i class="pjax-progress-icon fas fa-circle-notch fa-spin"></i>
+    
+</div>
+
+
+<main class="page-container border-box">
+
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.svg">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               uwupu 学习日志
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class="" href="/">
+                                首頁
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/archives">
+                                歸檔
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/tags">
+                                標籤
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/categories">
+                                分類
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/links">
+                                友鏈
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/about">
+                                關於
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/">首頁</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/archives">歸檔</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/tags">標籤</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/categories">分類</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/links">友鏈</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/about">關於</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+
+                
+
+                    <div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+
+        <div class="article-content-container border-box">
+
+            
+
+            <div class="article-content-bottom border-box">
+                
+                    <div class="article-title">
+                        RabbitMQ 5 交换机 死信队列 延时队列
+                    </div>
+                
+
+                
+                    <div class="article-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/avatar.svg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author">
+                                <span class="name">uwupu</span>
+                                
+                                    <span class="author-label">啦啦啦啦啦</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="article-meta-info-container border-box post">
+    <div class="article-meta-info border-box">
+        
+
+
+        
+            <span class="meta-info-item article-create-date">
+                <i class="icon fa-solid fa-calendar-check"></i>&nbsp;
+                <span class="pc">2023-02-28 22:18</span>
+                <span class="mobile">2023-02-28 22:18</span>
+            </span>
+
+            <span class="meta-info-item article-update-date">
+                <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                <span class="pc" data-updated="Fri Nov 10 2023 23:14:48 GMT+0800">2023-11-10 23:14</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item article-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="article-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="article-tag meta-info-item border-box">
+                <i class="icon fas fa-tags"></i>&nbsp;
+                <ul class="article-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/RabbitMQ/">RabbitMQ</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+            <span class="meta-info-item article-wordcount">
+                <i class="icon fas fa-file-word"></i>&nbsp;<span>1.7k 字數</span>
+            </span>
+        
+        
+            <span class="meta-info-item article-min2read">
+                <i class="icon fas fa-clock"></i>&nbsp;<span>7 分鐘</span>
+            </span>
+        
+        
+            <span class="meta-info-item article-pv">
+                <i class="icon fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="article-content keep-markdown-body">
+                    
+
+                    <h1 id="RabbitMQ交换机"><a href="#RabbitMQ交换机" class="headerlink" title="RabbitMQ交换机"></a>RabbitMQ交换机</h1><p>消息路线：生产者 -&gt; 交换机 -&gt; 队列 -&gt; 消费者</p>
+<p>交换机接收生产者的消息，依据routingKey按照指定规则将消息转交给队列。</p>
+<p>类型：<code>     </code>，<code>direct</code>，<code>topic</code>，<code>headers</code>，<code>fanout</code> </p>
+<h2 id="默认交换机"><a href="#默认交换机" class="headerlink" title="默认交换机"></a>默认交换机</h2><p>即：<code> </code></p>
+<p>使用queueName代替routingKey，可以直接向队列中插入数据。</p>
+<h2 id="绑定关系"><a href="#绑定关系" class="headerlink" title="绑定关系"></a>绑定关系</h2><p>除了默认交换机，其他交换机都可将<strong>队列</strong>和<strong>RoutingKey</strong>进行绑定。</p>
+<p>交换机通过RoutingKey来匹配队列，将消息投递。</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">channel.queueBind(queueName,Exchange,RoutingKey)</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="Fanout交换机"><a href="#Fanout交换机" class="headerlink" title="Fanout交换机"></a>Fanout交换机</h2><p>将接收到的所有消息<strong>广播</strong>。</p>
+<p>队列与该交换机绑定不需要RoutingKey，</p>
+<p>只要绑定了该交换机，该交换机收到的消息都会被传递给绑定的队列。</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">*  exchangeName：交换机的名字</span></span><br><span class="line"><span class="comment">*  typeName：交换机类型，fanout等</span></span><br><span class="line"><span class="comment">* public enum BuiltinExchangeType {</span></span><br><span class="line"><span class="comment">*   DIRECT("direct"),FANOUT("fanout"),TOPIC("topic"), *   HEADERS("headers");</span></span><br><span class="line"><span class="comment">* }</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">channel.exchangeDeclare(exchangeName,BuiltinExchangeType.FANOUT);</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="Direct交换机"><a href="#Direct交换机" class="headerlink" title="Direct交换机"></a>Direct交换机</h2><p>将接收到的消息，按照RoutingKey完全匹配的队列进行消息投递。</p>
+<h2 id="Topic交换机"><a href="#Topic交换机" class="headerlink" title="Topic交换机"></a>Topic交换机</h2><p>支持RoutingKey模糊匹配。</p>
+<p>Topic交换机的RoutingKey不能随意写，必须是：一个单词列表，用<code>.</code>分割。</p>
+<p>如：quick.orange.rabbit</p>
+<ul>
+<li><p>其他规则：</p>
+<ul>
+<li><p><code>*</code>可以代替一个单词</p>
+</li>
+<li><p><code>#</code>可以代替0个或多个单词</p>
+</li>
+</ul>
+</li>
+<li><p>若匹配<code>RoutingKey</code>使用<code>#</code>，则匹配任意队列。</p>
+</li>
+</ul>
+<h1 id="临时队列"><a href="#临时队列" class="headerlink" title="临时队列"></a>临时队列</h1><p>可以指定让服务器创建一个临时队列，</p>
+<ul>
+<li>临时队列是一个随机名称的队列，</li>
+<li>一旦断开了消费者的连接，队列将被自动删除。</li>
+</ul>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">queueName</span> <span class="operator">=</span> channel.queueDeclare().getQueue()</span><br></pre></td></tr></tbody></table></figure>
+
+<p>这种队列有<code>AD</code>标志。AD，即AutoDelete。</p>
+<h1 id="死信队列"><a href="#死信队列" class="headerlink" title="死信队列"></a>死信队列</h1><p>死信，即无法被消费的信息。</p>
+<p>当Consumer从Queue取出消息进行消费，但由于某些原因使得消费没有被消费，若没有后续的处理，这些消息就变成了<strong>死信</strong>。</p>
+<p>使用RabbitMQ的死信队列机制，当消息发生异常，消息会进入到死信队列中。</p>
+<h2 id="死信的出现"><a href="#死信的出现" class="headerlink" title="死信的出现"></a>死信的出现</h2><ul>
+<li>消息TTL过期</li>
+<li>队列达最大长度，多余添加到</li>
+<li>消息被拒绝<ul>
+<li>basic.reject或basci.nack并且requeue=false</li>
+</ul>
+</li>
+</ul>
+<h2 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h2><ol>
+<li>生产者生产消息</li>
+<li>消息被拒绝/队列达最大长度/TTL过期</li>
+<li>进入dead_exchange死信交换机</li>
+<li>进入死信队列</li>
+</ol>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><ul>
+<li><p>在需要进行死信处理的队列上添加<strong>死信arguments</strong></p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">channel.queueDeclare(NORMAL_QUEUE,<span class="literal">false</span>,<span class="literal">false</span>,<span class="literal">false</span>,<span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;String,Object&gt;(){{</span><br><span class="line">    put(<span class="string">"x-dead-letter-exchange"</span>,DEAD_EXCHANGE);  <span class="comment">//死信提交的交换机</span></span><br><span class="line">    put(<span class="string">"x-dead-letter-routing-key"</span>,<span class="string">"lisi"</span>);      <span class="comment">//死信</span></span><br><span class="line">}});</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+<h2 id="实战1-消息TTL过期"><a href="#实战1-消息TTL过期" class="headerlink" title="实战1 消息TTL过期"></a>实战1 消息TTL过期</h2><ul>
+<li><p>消费者</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Consumer</span> {</span><br><span class="line"></span><br><span class="line">    <span class="comment">//普通交换机</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">NORMAL_EXCHANGE</span> <span class="operator">=</span> <span class="string">"normal_exchange"</span>;</span><br><span class="line">    <span class="comment">//死信交换机</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">DEAD_EXCHANGE</span> <span class="operator">=</span> <span class="string">"dead_exchange"</span>;</span><br><span class="line">    <span class="comment">//普通队列名称</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">NORMAL_QUEUE</span> <span class="operator">=</span> <span class="string">"normal_queue"</span>;</span><br><span class="line">    <span class="comment">//死信队列</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">DEAD_QUEUE</span> <span class="operator">=</span> <span class="string">"dead_queue"</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception{</span><br><span class="line"></span><br><span class="line">        <span class="type">Channel</span> <span class="variable">channel</span> <span class="operator">=</span> MQUtils.getChannel();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//声明交换机</span></span><br><span class="line">        channel.exchangeDeclare(NORMAL_EXCHANGE, BuiltinExchangeType.DIRECT);<span class="comment">//普通交换机</span></span><br><span class="line">        channel.exchangeDeclare(DEAD_EXCHANGE, BuiltinExchangeType.DIRECT);<span class="comment">//死信交换机</span></span><br><span class="line">        <span class="comment">//声明队列</span></span><br><span class="line">        channel.queueDeclare(NORMAL_QUEUE,<span class="literal">false</span>,<span class="literal">false</span>,<span class="literal">false</span>,<span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;String,Object&gt;(){{</span><br><span class="line">            put(<span class="string">"x-dead-letter-exchange"</span>,DEAD_EXCHANGE);<span class="comment">//为普通队列添加死信队列</span></span><br><span class="line">            put(<span class="string">"x-dead-letter-routing-key"</span>,<span class="string">"lisi"</span>);<span class="comment">//添加死信使用的key</span></span><br><span class="line">        }});</span><br><span class="line">        channel.queueDeclare(DEAD_QUEUE,<span class="literal">false</span>,<span class="literal">false</span>,<span class="literal">false</span>,<span class="literal">null</span>);<span class="comment">//声明死信队列</span></span><br><span class="line">        channel.queueBind(NORMAL_QUEUE,NORMAL_EXCHANGE,<span class="string">"zhangsan"</span>);<span class="comment">//绑定队列</span></span><br><span class="line">        channel.queueBind(DEAD_QUEUE,DEAD_EXCHANGE,<span class="string">"lisi"</span>);</span><br><span class="line">        System.out.println();</span><br><span class="line"></span><br><span class="line">        channel.basicConsume(NORMAL_QUEUE,<span class="literal">true</span>,(String consumerTag, Delivery message)-&gt;{</span><br><span class="line">            System.out.println(<span class="string">"Consumer1接收到消息："</span>+<span class="keyword">new</span> <span class="title class_">String</span>(message.getBody(), StandardCharsets.UTF_8));</span><br><span class="line">        },(String consumerTag)-&gt;{</span><br><span class="line"></span><br><span class="line">        });</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>生产者</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Producer</span> {</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException, TimeoutException {</span><br><span class="line">        <span class="type">Channel</span> <span class="variable">channel</span> <span class="operator">=</span> MQUtils.getChannel();</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; <span class="number">11</span>; i++) {</span><br><span class="line">            <span class="type">String</span> <span class="variable">message</span> <span class="operator">=</span> <span class="string">"info"</span>+i;</span><br><span class="line">            channel.basicPublish(</span><br><span class="line">                    Consumer.NORMAL_EXCHANGE,</span><br><span class="line">                    <span class="string">"zhangsan"</span>,</span><br><span class="line">                    <span class="keyword">new</span> <span class="title class_">AMQP</span>.BasicProperties().builder().expiration(<span class="string">"10000"</span>).build(),</span><br><span class="line">                    message.getBytes());<span class="comment">//生产信息，配置信息的过期时间为10000毫秒</span></span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+<h2 id="实战2-消息队列溢出"><a href="#实战2-消息队列溢出" class="headerlink" title="实战2 消息队列溢出"></a>实战2 消息队列溢出</h2><p>在声明队列的时候，设置队列最大长度，就可实现消息队列消息溢出，消息溢出后即为死信；</p>
+<p>若配置了死信队列，消息会被转移到死信队列中。</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">channel.queueDeclare(NORMAL_QUEUE,<span class="literal">false</span>,<span class="literal">false</span>,<span class="literal">false</span>,<span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;String,Object&gt;(){{</span><br><span class="line">    put(<span class="string">"x-dead-letter-exchange"</span>,DEAD_EXCHANGE);</span><br><span class="line">    put(<span class="string">"x-dead-letter-routing-key"</span>,<span class="string">"lisi"</span>);</span><br><span class="line">    put(<span class="string">"x-max-length"</span>,<span class="number">6</span>);<span class="comment">//设置队列最大长度</span></span><br><span class="line">}});</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="实战3-消息拒绝"><a href="#实战3-消息拒绝" class="headerlink" title="实战3 消息拒绝"></a>实战3 消息拒绝</h2><p>对消息进行nack，即拒绝消息，并设置不自动回到队列，即可实现消息拒绝，消息会被定为死信。</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">p1：消息的Tag</span></span><br><span class="line"><span class="comment">p2：是否批量</span></span><br><span class="line"><span class="comment">p3：是否回到队列，这里为false。</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">channel.basicNack(message.getEnvelope().getDeliveryTag(),<span class="literal">false</span>,<span class="literal">false</span>);</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="基于死信实现的延迟队列"><a href="#基于死信实现的延迟队列" class="headerlink" title="基于死信实现的延迟队列"></a>基于死信实现的延迟队列</h1><p><em>为队列设置消息的ttl过期，即延时队列。</em></p>
+<p>延时队列并非RabbitMQ原生队列，而是在基础上衍生出来的一种使用方式。</p>
+<p>在RabbitMQ中为队列设置ttl，并设置死信队列，消费者在死信队列进行消费，即<strong>延时队列</strong>。</p>
+<p><strong>注意：RabbitMQ只会检测第一个消息的过期时间，不会检测后面的消息是否过期。</strong></p>
+<p><strong>弥补：插件解决</strong></p>
+<h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><ol>
+<li>订单在十分钟内未支付则自动取消</li>
+<li>新创建的店铺，若10天内没有上传商品，则自动发送消息提醒</li>
+<li>用户注册成功，若3天内未登录自动提醒</li>
+</ol>
+<h1 id="真正的延时队列交换机"><a href="#真正的延时队列交换机" class="headerlink" title="真正的延时队列交换机"></a>真正的延时<del>队列</del>交换机</h1><p>安装<code>rabbitmq_delayed_message_exchange</code>插件实现</p>
+<p>安装后会增加延时交换机类型<code>x-delayed-message</code>。</p>
+<ul>
+<li>使用该交换机的消息，可以增加<code>x-delay</code>属性来支持消息的延时传递，单位毫秒，若未设置<code>x-delay</code>属性，消息会被立即传递。</li>
+<li>该交换机遇上带有<code>x-delay</code>属性的消息后，会将该消息缓存，直到指定的时间结束后，消息会进入到指定的队列中。</li>
+</ul>
+<h2 id="使用-1"><a href="#使用-1" class="headerlink" title="使用"></a>使用</h2><h3 id="创建交换机"><a href="#创建交换机" class="headerlink" title="创建交换机"></a>创建交换机</h3><ul>
+<li>需要设交换机类型为<code>x-delayed-message</code></li>
+<li>添加参数<code>x-delayed-type</code>为交换机类型，比如<code>direct</code></li>
+</ul>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> Exchange <span class="title function_">exchange</span><span class="params">()</span>{</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">ExchangeBuilder</span>(DELAY_EXCHANGE,<span class="string">"x-delayed-message"</span>).withArgument(<span class="string">"x-delayed-type"</span>,<span class="string">"direct"</span>).build();</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="向交换机发送消息"><a href="#向交换机发送消息" class="headerlink" title="向交换机发送消息"></a>向交换机发送消息</h3><ul>
+<li>添加参数<code>x-delay</code>为要进行延时的长度，单位毫秒</li>
+</ul>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">send3</span><span class="params">(String message,Integer delay)</span>{</span><br><span class="line">    template.convertAndSend(<span class="string">"delay_exchange_study"</span>,<span class="string">"delay_message_queue_key"</span>,message,(msg)-&gt;{</span><br><span class="line">        msg.getMessageProperties().setDelay(delay);</span><br><span class="line">        <span class="keyword">return</span> msg;</span><br><span class="line">    });</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><h3 id="机制"><a href="#机制" class="headerlink" title="机制"></a>机制</h3><p>安装插件后会生成新的Exchange类型<code>x-delayed-message</code>，该类型消息支持延迟投递机制,接收到消息后并未立即将消息投递至目标队列中，而是存储在<code>mnesia</code>(一个分布式数据系统)表中，并且当前节点是磁盘节点，那么节点重启后，消息还能保留。检测消息延迟时间，如达到可投递时间时并将其通过<code>x-delayed-type</code>类型标记的交换机类型投递至目标队列。但是要注意的是，如果集群中只有一个磁盘节点，如果说磁盘节点丢失，或者节点上的插件失效。意味着消息将会丢失。</p>
+<h1 id="延迟队列总结"><a href="#延迟队列总结" class="headerlink" title="延迟队列总结"></a>延迟队列总结</h1><h2 id="其他选择"><a href="#其他选择" class="headerlink" title="其他选择"></a>其他选择</h2><ul>
+<li>Java的<code>DelayQueue</code></li>
+<li><code>Redis</code>的<code>Zset</code></li>
+<li>Quartz</li>
+<li>或Kafka的时间轮。</li>
+</ul>
+
+                </div>
+
+                
+                        
+<div class="article-copyright-info-container border-box">
+    <div class="copyright-info-content border-box">
+        <div class="copyright-info-top border-box">
+            <div class="post-title border-box text-ellipsis">
+                RabbitMQ 5 交换机 死信队列 延时队列
+            </div>
+
+            <div class="post-link border-box text-ellipsis">
+                2023/02/28/RabbitMQ/RabbitMQ-5_v2/
+            </div>
+        </div>
+
+        <div class="copyright-info-bottom border-box">
+            <div class="post-author bottom-item">
+                <div class="type">
+                    作者
+                </div>
+                <div class="content">uwupu</div>
+            </div>
+
+            <div class="post-time bottom-item">
+                <div class="type">
+                    發布于
+                </div>
+                <div class="content">2023-02-28 22:18</div>
+            </div>
+
+
+            <div class="post-license bottom-item">
+                <div class="type">
+                    許可
+                </div>
+                <div class="content tooltip" data-tooltip-content="CC BY-NC-SA 4.0">
+                    <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed">
+                        <i class="fa-brands fa-creative-commons"></i>
+                        <i class="fa-brands fa-creative-commons-by"></i>
+                        <i class="fa-brands fa-creative-commons-nc"></i>
+                        <i class="fa-brands fa-creative-commons-sa"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <i class="copyright-bg fa-solid fa-copyright"></i>
+    </div>
+    <div class="copy-copyright-info flex-center tooltip" data-tooltip-content="復製版權信息" data-tooltip-offset-y="-2px">
+        <i class="fa-solid fa-copy"></i>
+    </div>
+</div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/RabbitMQ/">RabbitMQ</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="article-nav">
+                        
+                            <div class="article-prev">
+                                <a class="prev" rel="prev" href="/2023/02/28/RabbitMQ/RabbitMQ-5/" title="RabbitMQ 4.9 SpringBoot与RabbitMQ">
+                                    <span class="left arrow-icon flex-center">
+                                      <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                            <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">RabbitMQ 4.9 SpringBoot与RabbitMQ</span>
+                                        <span class="post-nav-item">上一篇</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="article-next">
+                                <a class="next" rel="next" href="/2023/02/27/RabbitMQ/RabbitMQ-3/" title="RabbitMQ 3  消息模式 使用场景">
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">RabbitMQ 3  消息模式 使用场景</span>
+                                        <span class="post-nav-item">下一篇</span>
+                                    </span>
+                                            <span class="right arrow-icon flex-center">
+                                      <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#RabbitMQ%E4%BA%A4%E6%8D%A2%E6%9C%BA"><span class="nav-number">1.</span> <span class="nav-text">RabbitMQ交换机</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%BB%98%E8%AE%A4%E4%BA%A4%E6%8D%A2%E6%9C%BA"><span class="nav-number">1.1.</span> <span class="nav-text">默认交换机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%91%E5%AE%9A%E5%85%B3%E7%B3%BB"><span class="nav-number">1.2.</span> <span class="nav-text">绑定关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Fanout%E4%BA%A4%E6%8D%A2%E6%9C%BA"><span class="nav-number">1.3.</span> <span class="nav-text">Fanout交换机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Direct%E4%BA%A4%E6%8D%A2%E6%9C%BA"><span class="nav-number">1.4.</span> <span class="nav-text">Direct交换机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Topic%E4%BA%A4%E6%8D%A2%E6%9C%BA"><span class="nav-number">1.5.</span> <span class="nav-text">Topic交换机</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%B4%E6%97%B6%E9%98%9F%E5%88%97"><span class="nav-number">2.</span> <span class="nav-text">临时队列</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%BB%E4%BF%A1%E9%98%9F%E5%88%97"><span class="nav-number">3.</span> <span class="nav-text">死信队列</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%BB%E4%BF%A1%E7%9A%84%E5%87%BA%E7%8E%B0"><span class="nav-number">3.1.</span> <span class="nav-text">死信的出现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B"><span class="nav-number">3.2.</span> <span class="nav-text">流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8"><span class="nav-number">3.3.</span> <span class="nav-text">使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E6%88%981-%E6%B6%88%E6%81%AFTTL%E8%BF%87%E6%9C%9F"><span class="nav-number">3.4.</span> <span class="nav-text">实战1 消息TTL过期</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E6%88%982-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E6%BA%A2%E5%87%BA"><span class="nav-number">3.5.</span> <span class="nav-text">实战2 消息队列溢出</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E6%88%983-%E6%B6%88%E6%81%AF%E6%8B%92%E7%BB%9D"><span class="nav-number">3.6.</span> <span class="nav-text">实战3 消息拒绝</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E6%AD%BB%E4%BF%A1%E5%AE%9E%E7%8E%B0%E7%9A%84%E5%BB%B6%E8%BF%9F%E9%98%9F%E5%88%97"><span class="nav-number">4.</span> <span class="nav-text">基于死信实现的延迟队列</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">4.1.</span> <span class="nav-text">使用场景</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9C%9F%E6%AD%A3%E7%9A%84%E5%BB%B6%E6%97%B6%E9%98%9F%E5%88%97%E4%BA%A4%E6%8D%A2%E6%9C%BA"><span class="nav-number">5.</span> <span class="nav-text">真正的延时队列交换机</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-1"><span class="nav-number">5.1.</span> <span class="nav-text">使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E4%BA%A4%E6%8D%A2%E6%9C%BA"><span class="nav-number">5.1.1.</span> <span class="nav-text">创建交换机</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%91%E4%BA%A4%E6%8D%A2%E6%9C%BA%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF"><span class="nav-number">5.1.2.</span> <span class="nav-text">向交换机发送消息</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E7%90%86"><span class="nav-number">5.2.</span> <span class="nav-text">原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%BA%E5%88%B6"><span class="nav-number">5.2.1.</span> <span class="nav-text">机制</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BB%B6%E8%BF%9F%E9%98%9F%E5%88%97%E6%80%BB%E7%BB%93"><span class="nav-number">6.</span> <span class="nav-text">延迟队列总结</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E9%80%89%E6%8B%A9"><span class="nav-number">6.1.</span> <span class="nav-text">其他选择</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="border-box website-info-box default">
+        
+            <div class="copyright-info info-item default">
+                ©&nbsp;<span>2020</span>&nbsp;-&nbsp;2023
+                
+                    &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">uwupu</a>
+                
+            </div>
+
+            <div class="theme-info info-item default">
+                <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;框架&nbsp;&amp;&nbsp;主題&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a>
+            </div>
+
+            
+
+            
+        
+
+        <div class="count-item info-item default">
+            
+                <span class="count-box border-box word">
+                    <span class="item-type border-box">總字數</span>
+                    <span class="item-value border-box word">161.4k</span>
+                </span>
+            
+
+            
+                <span class="count-box border-box uv">
+                    <span class="item-type border-box">讀者</span>
+                    <span class="item-value border-box uv" id="busuanzi_value_site_uv"></span>
+                </span>
+            
+
+            
+                <span class="count-box border-box pv">
+                    <span class="item-type border-box">閱覽</span>
+                    <span class="item-value border-box pv" id="busuanzi_value_site_pv"></span>
+                </span>
+            
+        </div>
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="tools-list border-box">
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="搜尋..." spellcheck="false" type="search" class="search-input">
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#RabbitMQ%E4%BA%A4%E6%8D%A2%E6%9C%BA"><span class="nav-number">1.</span> <span class="nav-text">RabbitMQ交换机</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%BB%98%E8%AE%A4%E4%BA%A4%E6%8D%A2%E6%9C%BA"><span class="nav-number">1.1.</span> <span class="nav-text">默认交换机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%91%E5%AE%9A%E5%85%B3%E7%B3%BB"><span class="nav-number">1.2.</span> <span class="nav-text">绑定关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Fanout%E4%BA%A4%E6%8D%A2%E6%9C%BA"><span class="nav-number">1.3.</span> <span class="nav-text">Fanout交换机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Direct%E4%BA%A4%E6%8D%A2%E6%9C%BA"><span class="nav-number">1.4.</span> <span class="nav-text">Direct交换机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Topic%E4%BA%A4%E6%8D%A2%E6%9C%BA"><span class="nav-number">1.5.</span> <span class="nav-text">Topic交换机</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%B4%E6%97%B6%E9%98%9F%E5%88%97"><span class="nav-number">2.</span> <span class="nav-text">临时队列</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%BB%E4%BF%A1%E9%98%9F%E5%88%97"><span class="nav-number">3.</span> <span class="nav-text">死信队列</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%BB%E4%BF%A1%E7%9A%84%E5%87%BA%E7%8E%B0"><span class="nav-number">3.1.</span> <span class="nav-text">死信的出现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B"><span class="nav-number">3.2.</span> <span class="nav-text">流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8"><span class="nav-number">3.3.</span> <span class="nav-text">使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E6%88%981-%E6%B6%88%E6%81%AFTTL%E8%BF%87%E6%9C%9F"><span class="nav-number">3.4.</span> <span class="nav-text">实战1 消息TTL过期</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E6%88%982-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E6%BA%A2%E5%87%BA"><span class="nav-number">3.5.</span> <span class="nav-text">实战2 消息队列溢出</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E6%88%983-%E6%B6%88%E6%81%AF%E6%8B%92%E7%BB%9D"><span class="nav-number">3.6.</span> <span class="nav-text">实战3 消息拒绝</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E6%AD%BB%E4%BF%A1%E5%AE%9E%E7%8E%B0%E7%9A%84%E5%BB%B6%E8%BF%9F%E9%98%9F%E5%88%97"><span class="nav-number">4.</span> <span class="nav-text">基于死信实现的延迟队列</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">4.1.</span> <span class="nav-text">使用场景</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9C%9F%E6%AD%A3%E7%9A%84%E5%BB%B6%E6%97%B6%E9%98%9F%E5%88%97%E4%BA%A4%E6%8D%A2%E6%9C%BA"><span class="nav-number">5.</span> <span class="nav-text">真正的延时队列交换机</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-1"><span class="nav-number">5.1.</span> <span class="nav-text">使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E4%BA%A4%E6%8D%A2%E6%9C%BA"><span class="nav-number">5.1.1.</span> <span class="nav-text">创建交换机</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%91%E4%BA%A4%E6%8D%A2%E6%9C%BA%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF"><span class="nav-number">5.1.2.</span> <span class="nav-text">向交换机发送消息</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E7%90%86"><span class="nav-number">5.2.</span> <span class="nav-text">原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%BA%E5%88%B6"><span class="nav-number">5.2.1.</span> <span class="nav-text">机制</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BB%B6%E8%BF%9F%E9%98%9F%E5%88%97%E6%80%BB%E7%BB%93"><span class="nav-number">6.</span> <span class="nav-text">延迟队列总结</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E9%80%89%E6%8B%A9"><span class="nav-number">6.1.</span> <span class="nav-text">其他选择</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+<!-- common -->
+<script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/utils.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/header-shrink.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/back2top.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/dark-light-toggle.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/main.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/libs/anime.min.js"></script>
+
+<!-- local-search -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/local-search.js"></script>
+
+
+<!-- code-block -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/code-block.js"></script>
+
+
+<!-- lazyload -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/lazyload.js"></script>
+
+
+<div class="pjax">
+    
+        <!-- post-helper -->
+        <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/post-helper.js"></script>
+
+        <!-- toc -->
+        
+            <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/toc.js"></script>
+        
+
+        <!-- copyright-info -->
+        
+            <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/copyright-info.js"></script>
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- category-page -->
+    
+
+    <!-- links-page -->
+    
+</div>
+
+<!-- mermaid -->
+
+
+<!-- pjax -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/libs/pjax.min.js"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax'
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            KEEP.utils.pjaxProgressBarStart()
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            KEEP.utils.pjaxProgressBarEnd()
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'))
+            KEEP.initExecute()
+        });
+    });
+</script>
+
+
+
+
+
+
+</body></html>

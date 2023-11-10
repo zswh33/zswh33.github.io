@@ -1,0 +1,770 @@
+<!DOCTYPE html><html lang="zh-Hans"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="一个包含有学习日记的博客">
+    <meta name="author" content="uwupu">
+    
+    <title>
+        
+            Day9 多线程进阶 3 集合类不安全 |
+        
+        uwupu 学习日志
+    </title>
+    
+
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+    
+    
+    
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"zswh33.github.io","root":"/","language":"zh-Hans","path":"search.json"}
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":true,"init_open":true,"layout":"right"},"style":{"primary_color":"#F099BC","logo":"/images/logo.svg","favicon":"/images/logo.svg","avatar":"/images/avatar.svg","first_screen":{"enable":false,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"scroll":{"progress_bar":false,"percent":false}},"local_search":{"enable":true,"preload":true},"code_block":{"tools":{"enable":true,"style":"mac"},"highlight_theme":"obsidian"},"pjax":{"enable":true},"lazyload":{"enable":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.21"},"waline":{"server_url":null,"reaction":false,"version":2},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false}},"post":{"author_label":{"enable":true,"auto":false,"custom_label_list":["啦啦啦啦啦"]},"word_count":{"wordcount":true,"min2read":true},"datetime_format":"YYYY-MM-DD HH:mm","copyright_info":true,"share":false,"reward":{"enable":false,"img_link":null,"text":null}},"website_count":{"busuanzi_count":{"enable":true,"site_uv":true,"site_pv":true,"page_pv":true}},"version":"3.8.6"}
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
+    KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
+    KEEP.language_copy_copyright = {"copy":"Copy copyright info","copied":"Copied","title":"Original article title","author":"Original article author","link":"Original article link"}
+  </script>
+<meta name="generator" content="Hexo 6.2.0"><link rel="alternate" href="/atom.xml" title="uwupu Blog" type="application/atom+xml">
+<script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/fontawesome.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/regular.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/solid.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/brands.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/fontawesome.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/regular.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/solid.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/brands.min.css"></noscript></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <i class="pjax-progress-icon fas fa-circle-notch fa-spin"></i>
+    
+</div>
+
+
+<main class="page-container border-box">
+
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.svg">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               uwupu 学习日志
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class="" href="/">
+                                首頁
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/archives">
+                                歸檔
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/tags">
+                                標籤
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/categories">
+                                分類
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/links">
+                                友鏈
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/about">
+                                關於
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/">首頁</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/archives">歸檔</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/tags">標籤</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/categories">分類</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/links">友鏈</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/about">關於</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+
+                
+
+                    <div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+
+        <div class="article-content-container border-box">
+
+            
+
+            <div class="article-content-bottom border-box">
+                
+                    <div class="article-title">
+                        Day9 多线程进阶 3 集合类不安全
+                    </div>
+                
+
+                
+                    <div class="article-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/avatar.svg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author">
+                                <span class="name">uwupu</span>
+                                
+                                    <span class="author-label">啦啦啦啦啦</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="article-meta-info-container border-box post">
+    <div class="article-meta-info border-box">
+        
+
+
+        
+            <span class="meta-info-item article-create-date">
+                <i class="icon fa-solid fa-calendar-check"></i>&nbsp;
+                <span class="pc">2022-09-01 12:05</span>
+                <span class="mobile">2022-09-01 12:05</span>
+            </span>
+
+            <span class="meta-info-item article-update-date">
+                <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                <span class="pc" data-updated="Fri Nov 10 2023 23:09:16 GMT+0800">2023-11-10 23:09</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item article-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="article-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/Day/">Day</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="article-tag meta-info-item border-box">
+                <i class="icon fas fa-tags"></i>&nbsp;
+                <ul class="article-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Java/">Java</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+            <span class="meta-info-item article-wordcount">
+                <i class="icon fas fa-file-word"></i>&nbsp;<span>2.1k 字數</span>
+            </span>
+        
+        
+            <span class="meta-info-item article-min2read">
+                <i class="icon fas fa-clock"></i>&nbsp;<span>11 分鐘</span>
+            </span>
+        
+        
+            <span class="meta-info-item article-pv">
+                <i class="icon fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="article-content keep-markdown-body">
+                    
+
+                    <h1 id="引入：集合类不安全"><a href="#引入：集合类不安全" class="headerlink" title="引入：集合类不安全"></a>引入：集合类不安全</h1><h2 id="例：使用多线程操作List-lt-String-gt"><a href="#例：使用多线程操作List-lt-String-gt" class="headerlink" title="例：使用多线程操作List<String>"></a>例：使用多线程操作<code>List&lt;String&gt;</code></h2><blockquote>
+<p>代码</p>
+</blockquote>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Demo9_</span>多线程操作字符串ArrayList {</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> {</span><br><span class="line">        List&lt;String&gt; list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) {</span><br><span class="line">            <span class="keyword">new</span> <span class="title class_">Thread</span>(()-&gt;{</span><br><span class="line">                list.add(UUID.randomUUID().toString().substring(<span class="number">0</span>,<span class="number">5</span>));<span class="comment">//随机生成一个字符串，添加到list中。</span></span><br><span class="line">                System.out.println(list);</span><br><span class="line">            },String.valueOf(i)).start();<span class="comment">//线程名为i对应的值</span></span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p>输出</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">[058ac]</span><br><span class="line">[058ac, e749b, a5fec]</span><br><span class="line">[058ac, e749b, a5fec, a8e9a]</span><br><span class="line">[058ac, e749b, a5fec, a8e9a, 06bae, 09588]</span><br><span class="line">[058ac, e749b, a5fec, a8e9a, 06bae]</span><br><span class="line">[058ac, e749b, a5fec, a8e9a, 06bae, 09588, 20884]</span><br><span class="line">[058ac, e749b, a5fec, a8e9a, 06bae, 09588, 20884, 1edab]</span><br><span class="line">[058ac, e749b, a5fec, a8e9a, 06bae, 09588, 20884, 1edab, ce3d3]</span><br><span class="line">[058ac, e749b, a5fec, a8e9a, 06bae, 09588, 20884, 1edab, ce3d3, 86bcf]</span><br><span class="line">Exception in thread "2" java.util.ConcurrentModificationException</span><br><span class="line">	at java.util.ArrayList$Itr.checkForComodification(ArrayList.java:909)</span><br><span class="line">	at java.util.ArrayList$Itr.next(ArrayList.java:859)</span><br><span class="line">	at java.util.AbstractCollection.toString(AbstractCollection.java:461)</span><br><span class="line">	at java.lang.String.valueOf(String.java:2994)</span><br><span class="line">	at java.io.PrintStream.println(PrintStream.java:821)</span><br><span class="line">	at com.yn.Demo9_多线程操作字符串ArrayList.lambda$main$0(Demo9_多线程操作字符串ArrayList.java:14)</span><br><span class="line">	at java.lang.Thread.run(Thread.java:748)</span><br><span class="line"></span><br><span class="line">Process finished with exit code 0</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p><code>java.util.ConcurrentModificationException</code></p>
+</blockquote>
+<p>上面例子中出现了<code>java.util.ConcurrentModificationException</code>异常。</p>
+<p><code>java.util.ConcurrentModificationException</code>异常，即：<strong>并发修改异常</strong>。</p>
+<p>结论：<strong>并发下ArrayList 不安全</strong>。</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><ol>
+<li><p><code>List&lt;String&gt; list = new Vector&lt;&gt;();</code></p>
+<p>Vector是线程安全的，ArrayList是线程不安全的。</p>
+<p>在<code>Vector</code>类下，<code>add()</code>方法带有<code>synchronized</code>修饰；<code>ArrayList</code>下的add()方法没有<code>synchronized</code>修饰。</p>
+</li>
+<li><p><code>List&lt;String&gt; list = Collections.synchronizedList(new ArrayList&lt;&gt;());</code></p>
+</li>
+<li><p>（ JUC方案 ）<code>List&lt;String&gt; list = new CopyOnWriteArrayList&lt;&gt;();</code></p>
+</li>
+</ol>
+<h1 id="CopyOnWriteArrayList"><a href="#CopyOnWriteArrayList" class="headerlink" title="CopyOnWriteArrayList"></a><code>CopyOnWriteArrayList</code></h1><p><em>写入时复制</em></p>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>首先把<strong>原数组</strong>复制一份，然后把<strong>要添加的内容</strong>添加进<strong>新数组</strong>，最后将<strong>新的数组</strong>直接赋值给<strong>原引用</strong>。</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">add</span><span class="params">(E e)</span> {</span><br><span class="line">        <span class="keyword">final</span> <span class="type">ReentrantLock</span> <span class="variable">lock</span> <span class="operator">=</span> <span class="built_in">this</span>.lock;</span><br><span class="line">        lock.lock();</span><br><span class="line">        <span class="keyword">try</span> {</span><br><span class="line">            Object[] elements = getArray();</span><br><span class="line">            <span class="type">int</span> <span class="variable">len</span> <span class="operator">=</span> elements.length;</span><br><span class="line">            Object[] newElements = Arrays.copyOf(elements, len + <span class="number">1</span>);<span class="comment">//复制数组</span></span><br><span class="line">            newElements[len] = e;<span class="comment">//插入</span></span><br><span class="line">            setArray(newElements);<span class="comment">//新的数组赋值给原引用</span></span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        } <span class="keyword">finally</span> {</span><br><span class="line">            lock.unlock();</span><br><span class="line">        }</span><br><span class="line">    }</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li>写入时复制</li>
+<li>读写分离</li>
+</ul>
+<h2 id="CopyOnWriteArrayList-和-Vector"><a href="#CopyOnWriteArrayList-和-Vector" class="headerlink" title="CopyOnWriteArrayList 和 Vector"></a><code>CopyOnWriteArrayList</code> 和 <code>Vector</code></h2><p>CopyOnWriteArrayList效率比Vector高。</p>
+<h1 id="Set不安全"><a href="#Set不安全" class="headerlink" title="Set不安全"></a>Set不安全</h1><p><img lazyload="" alt="image" data-src="/Day9-Multithreading2-3/image-20220901150416448.png"></p>
+<h2 id="例：使用多线程操作Set-lt-String-gt"><a href="#例：使用多线程操作Set-lt-String-gt" class="headerlink" title="例：使用多线程操作Set<String>"></a>例：使用多线程操作<code>Set&lt;String&gt;</code></h2><blockquote>
+<p>代码</p>
+</blockquote>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Demo10_</span>多线程操作字符串Set {</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> {</span><br><span class="line">        Set&lt;String&gt; set = <span class="keyword">new</span> <span class="title class_">HashSet</span>&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">15</span>; i++) {</span><br><span class="line">            <span class="keyword">new</span> <span class="title class_">Thread</span>(()-&gt;{</span><br><span class="line">                set.add(UUID.randomUUID().toString().substring(<span class="number">0</span>,<span class="number">5</span>));</span><br><span class="line">                System.out.println(set);</span><br><span class="line">            },String.valueOf(i)).start();</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p>输出</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">[1cb01, eb758, aa01b, 9af06, c57bf, 847f3, 2b7e6, e2f07, 96c2f, bc219, b0027]</span><br><span class="line">[1cb01, eb758, aa01b, 9af06, c57bf, 847f3, 2b7e6, e2f07, 96c2f, bc219, b0027]</span><br><span class="line">[1cb01, eb758, aa01b, 9af06, c57bf, 847f3, 2b7e6, e2f07, 96c2f, bc219, b0027]</span><br><span class="line">[1cb01, eb758, aa01b, 9af06, c57bf, 847f3, 2b7e6, e2f07, 96c2f, bc219, b0027]</span><br><span class="line">[eb758, aa01b, c57bf, 847f3, e2f07, 96c2f, b9460, bc219, 1cb01, 9af06, 2b7e6, b0027, 93907]</span><br><span class="line">[eb758, aa01b, c57bf, 847f3, e2f07, 96c2f, b9460, bc219, 1cb01, 9af06, 2b7e6, b0027, 93907]</span><br><span class="line">[1cb01, eb758, aa01b, 9af06, c57bf, 847f3, 2b7e6, e2f07, 96c2f, b9460, bc219, b0027]</span><br><span class="line">[1cb01, eb758, aa01b, 9af06, c57bf, 847f3, 2b7e6, e2f07, 96c2f, b9460, bc219, b0027]</span><br><span class="line">[eb758, aa01b, 6e750, c57bf, 847f3, e2f07, 96c2f, b9460, bc219, 1cb01, 9af06, 2b7e6, b0027, 93907]</span><br><span class="line">[eb758, aa01b, 6e750, c57bf, 847f3, e2f07, 96c2f, b9460, bc219, 1cb01, 9af06, 2b7e6, b0027, 93907]</span><br><span class="line">[eb758, aa01b, 6e750, c57bf, 847f3, e2f07, 96c2f, b9460, bc219, 1cb01, 9af06, 2b7e6, b0027, 93907]</span><br><span class="line">[eb758, aa01b, 6e750, c57bf, 847f3, e2f07, 96c2f, b9460, bc219, 1cb01, 9af06, 2b7e6, b0027, 93907]</span><br><span class="line">[eb758, aa01b, 6e750, c57bf, 847f3, e2f07, 96c2f, b9460, bc219, 1cb01, 9af06, 2b7e6, b0027, 93907]</span><br><span class="line">[eb758, aa01b, 6e750, c57bf, 847f3, e2f07, 96c2f, b9460, bc219, 1cb01, 9af06, 2b7e6, b0027, 93907]</span><br><span class="line">Exception in thread "1" java.util.ConcurrentModificationException</span><br><span class="line">	at java.util.HashMap$HashIterator.nextNode(HashMap.java:1445)</span><br><span class="line">	at java.util.HashMap$KeyIterator.next(HashMap.java:1469)</span><br><span class="line">	at java.util.AbstractCollection.toString(AbstractCollection.java:461)</span><br><span class="line">	at java.lang.String.valueOf(String.java:2994)</span><br><span class="line">	at java.io.PrintStream.println(PrintStream.java:821)</span><br><span class="line">	at com.yn.Demo10_多线程操作字符串Set.lambda$main$0(Demo10_多线程操作字符串Set.java:13)</span><br><span class="line">	at java.lang.Thread.run(Thread.java:748)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>出现了错误<code>java.util.ConcurrentModificationException</code>。</p>
+<h2 id="解决方案-1"><a href="#解决方案-1" class="headerlink" title="解决方案"></a>解决方案</h2><ol>
+<li><code>Set&lt;String&gt; set = Collections.synchronizedSet(new HashSet&lt;&gt;());</code></li>
+<li>( JUC方案 ) <code>Set&lt;String&gt; set = new CopyOnWriteArraySet&lt;&gt;();</code></li>
+</ol>
+<h2 id="HashSet底层"><a href="#HashSet底层" class="headerlink" title="HashSet底层"></a><code>HashSet</code>底层</h2><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="title function_">HashSet</span><span class="params">()</span> {</span><br><span class="line">    map = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">//add     set的本质是map的key   key是无法宠物的</span></span><br><span class="line"><span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">add</span><span class="params">(E e)</span> {</span><br><span class="line">    <span class="keyword">return</span> map.put(e, PRESENT)==<span class="literal">null</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Object</span> <span class="variable">PRESENT</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Object</span>();<span class="comment">//PRESENT是一个常量，是一个不变的值。</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p><code>HashSet</code>的底层是<code>HashMap</code>。</p>
+<h1 id="多线程的HashMap"><a href="#多线程的HashMap" class="headerlink" title="多线程的HashMap"></a>多线程的<code>HashMap</code></h1><blockquote>
+<p>引入：</p>
+<p><code>Map&lt;String,String&gt; map = new HashMap&lt;&gt;();</code></p>
+<p>map是这么用的吗？默认等价于什么？</p>
+</blockquote>
+<p>不是这样用的。用法：Hole….（挖坑，后续填）</p>
+<p>默认等价于<code>new HashMap&lt;&gt;(16,0.75)</code></p>
+<h2 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a><code>HashMap</code></h2><p><code>HashMap</code>是一个集合，键值对的集合，每个节点用Node&lt;K,V&gt;表示</p>
+<blockquote>
+<p>Node</p>
+</blockquote>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">Node</span>&lt;K,V&gt; <span class="keyword">implements</span> <span class="title class_">Map</span>.Entry&lt;K,V&gt; {</span><br><span class="line">        <span class="keyword">final</span> <span class="type">int</span> hash;</span><br><span class="line">        <span class="keyword">final</span> K key;</span><br><span class="line">        V value;</span><br><span class="line">        Node&lt;K,V&gt; next;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>Node是一个内部类，key为键，value为值，next指向下一个元素。</p>
+<blockquote>
+<p>数据结构</p>
+</blockquote>
+<p>HashMap的数据结构为：数组+（链表或红黑树）</p>
+<ul>
+<li>在JDK1.8之前，HashMap的数据结构为“数组 + 链表”，数组是HashMap的主体，链表则是为了解决哈希冲突问题；</li>
+<li>Jdk1.8之后，当链表长度大于阈值（或者红黑树的边界值，默认为8），并且当前数组长度大于64时，此索引位置上的所有数据改为使用红黑树存储。</li>
+</ul>
+<p>注：若链表长度大于64，但数组长度小于64，此时并不会将链表转换为红黑树，而是进行数组扩容。</p>
+<p>因为红黑树需要保持平衡，影响效率，为了提高性能和减少搜索时间，当链表长度大于阈值且数组长度大于64时，链表才会转换为红黑树。</p>
+<blockquote>
+<p>HashMap的构造函数</p>
+</blockquote>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="title function_">HashMap</span><span class="params">(<span class="type">int</span> initialCapacity, <span class="type">float</span> loadFactor)</span> {</span><br><span class="line">    <span class="keyword">if</span> (initialCapacity &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">"Illegal initial capacity: "</span> +</span><br><span class="line">                                           initialCapacity);</span><br><span class="line">    <span class="keyword">if</span> (initialCapacity &gt; MAXIMUM_CAPACITY)</span><br><span class="line">        initialCapacity = MAXIMUM_CAPACITY;</span><br><span class="line">    <span class="keyword">if</span> (loadFactor &lt;= <span class="number">0</span> || Float.isNaN(loadFactor))</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">"Illegal load factor: "</span> +</span><br><span class="line">                                           loadFactor);</span><br><span class="line">    <span class="built_in">this</span>.loadFactor = loadFactor;</span><br><span class="line">    <span class="built_in">this</span>.threshold = tableSizeFor(initialCapacity);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>HashMap有两个参数：initialCapacity 和 loadFactor  （初始容量和加载因子）</p>
+<ul>
+<li>初始容量是创建时数组分配的容量大小，默认为16；</li>
+<li>加载因子</li>
+</ul>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> V <span class="title function_">putVal</span><span class="params">(<span class="type">int</span> hash, K key, V value, <span class="type">boolean</span> onlyIfAbsent,</span></span><br><span class="line"><span class="params">                   <span class="type">boolean</span> evict)</span> {<span class="comment">// K 键 V值 onlyIfAbsent  evict</span></span><br><span class="line">        Node&lt;K,V&gt;[] tab; Node&lt;K,V&gt; p; <span class="type">int</span> n, i;<span class="comment">//tab 为节点头</span></span><br><span class="line">        <span class="keyword">if</span> ((tab = table) == <span class="literal">null</span> || (n = tab.length) == <span class="number">0</span>)</span><br><span class="line">            n = (tab = resize()).length;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">        <span class="keyword">if</span> ((p = tab[i = (n - <span class="number">1</span>) &amp; hash]) == <span class="literal">null</span>)</span><br><span class="line">            tab[i] = newNode(hash, key, value, <span class="literal">null</span>);</span><br><span class="line">        <span class="keyword">else</span> {</span><br><span class="line">            Node&lt;K,V&gt; e; K k;</span><br><span class="line">            <span class="keyword">if</span> (p.hash == hash &amp;&amp;</span><br><span class="line">                ((k = p.key) == key || (key != <span class="literal">null</span> &amp;&amp; key.equals(k))))</span><br><span class="line">                e = p;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (p <span class="keyword">instanceof</span> TreeNode)</span><br><span class="line">                e = ((TreeNode&lt;K,V&gt;)p).putTreeVal(<span class="built_in">this</span>, tab, hash, key, value);</span><br><span class="line">            <span class="keyword">else</span> {</span><br><span class="line">                <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">binCount</span> <span class="operator">=</span> <span class="number">0</span>; ; ++binCount) {</span><br><span class="line">                    <span class="keyword">if</span> ((e = p.next) == <span class="literal">null</span>) {</span><br><span class="line">                        p.next = newNode(hash, key, value, <span class="literal">null</span>);</span><br><span class="line">                        <span class="keyword">if</span> (binCount &gt;= TREEIFY_THRESHOLD - <span class="number">1</span>) <span class="comment">// -1 for 1st</span></span><br><span class="line">                            treeifyBin(tab, hash);</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    }</span><br><span class="line">                    <span class="keyword">if</span> (e.hash == hash &amp;&amp;</span><br><span class="line">                        ((k = e.key) == key || (key != <span class="literal">null</span> &amp;&amp; key.equals(k))))</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    p = e;</span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line">            <span class="keyword">if</span> (e != <span class="literal">null</span>) { <span class="comment">// existing mapping for key</span></span><br><span class="line">                <span class="type">V</span> <span class="variable">oldValue</span> <span class="operator">=</span> e.value;</span><br><span class="line">                <span class="keyword">if</span> (!onlyIfAbsent || oldValue == <span class="literal">null</span>)</span><br><span class="line">                    e.value = value;</span><br><span class="line">                afterNodeAccess(e);</span><br><span class="line">                <span class="keyword">return</span> oldValue;</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">        ++modCount;</span><br><span class="line">        <span class="keyword">if</span> (++size &gt; threshold)</span><br><span class="line">            resize();</span><br><span class="line">        afterNodeInsertion(evict);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    }</span><br></pre></td></tr></tbody></table></figure>
+
+
+
+<h2 id="例：使用多线程操作Set-lt-String-gt-1"><a href="#例：使用多线程操作Set-lt-String-gt-1" class="headerlink" title="例：使用多线程操作Set<String>"></a>例：使用多线程操作<code>Set&lt;String&gt;</code></h2><blockquote>
+<p>代码</p>
+</blockquote>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Demo11_</span>多线程操作HashMap {</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> {</span><br><span class="line">        Map&lt;String,String&gt; map = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) {</span><br><span class="line">            <span class="keyword">new</span> <span class="title class_">Thread</span>(()-&gt;{</span><br><span class="line">                map.put(Thread.currentThread().getName(), UUID.randomUUID().toString().substring(<span class="number">0</span>,<span class="number">5</span>));</span><br><span class="line">                System.out.println(map);</span><br><span class="line">            },String.valueOf(i)).start();</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p>输出</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">{0=c16d6, 1=a939d, 3=96525, 4=27c75}</span><br><span class="line">{0=c16d6, 1=a939d, 3=96525, 4=27c75, 5=ead0a, 6=a81ee, 7=96a76, 9=ec2fb}</span><br><span class="line">{0=c16d6, 1=a939d, 3=96525, 4=27c75, 5=ead0a, 6=a81ee, 9=ec2fb}</span><br><span class="line">{0=c16d6, 1=a939d, 3=96525, 4=27c75, 5=ead0a, 9=ec2fb}</span><br><span class="line">{0=c16d6, 1=a939d, 3=96525, 4=27c75, 5=ead0a}</span><br><span class="line">{0=c16d6, 1=a939d, 3=96525, 4=27c75}</span><br><span class="line">{0=c16d6, 1=a939d, 3=96525, 4=27c75, 5=ead0a, 6=a81ee, 7=96a76, 8=78b79, 9=ec2fb}</span><br><span class="line">Exception in thread "3" Exception in thread "2" Exception in thread "0" java.util.ConcurrentModificationException</span><br><span class="line">	at java.util.HashMap$HashIterator.nextNode(HashMap.java:1445)</span><br><span class="line">	at java.util.HashMap$EntryIterator.next(HashMap.java:1479)</span><br><span class="line">	at java.util.HashMap$EntryIterator.next(HashMap.java:1477)</span><br><span class="line">	at java.util.AbstractMap.toString(AbstractMap.java:554)</span><br><span class="line">	at java.lang.String.valueOf(String.java:2994)</span><br><span class="line">	at java.io.PrintStream.println(PrintStream.java:821)</span><br><span class="line">	at com.yn.Demo11_多线程操作HashMap.lambda$main$0(Demo11_多线程操作HashMap.java:13)</span><br><span class="line">	at java.lang.Thread.run(Thread.java:748)</span><br><span class="line">java.util.ConcurrentModificationException</span><br><span class="line">	at java.util.HashMap$HashIterator.nextNode(HashMap.java:1445)</span><br><span class="line">	at java.util.HashMap$EntryIterator.next(HashMap.java:1479)</span><br><span class="line">	at java.util.HashMap$EntryIterator.next(HashMap.java:1477)</span><br><span class="line">	at java.util.AbstractMap.toString(AbstractMap.java:554)</span><br><span class="line">	at java.lang.String.valueOf(String.java:2994)</span><br><span class="line">	at java.io.PrintStream.println(PrintStream.java:821)</span><br><span class="line">	at com.yn.Demo11_多线程操作HashMap.lambda$main$0(Demo11_多线程操作HashMap.java:13)</span><br><span class="line">	at java.lang.Thread.run(Thread.java:748)</span><br><span class="line">java.util.ConcurrentModificationException</span><br><span class="line">	at java.util.HashMap$HashIterator.nextNode(HashMap.java:1445)</span><br><span class="line">	at java.util.HashMap$EntryIterator.next(HashMap.java:1479)</span><br><span class="line">	at java.util.HashMap$EntryIterator.next(HashMap.java:1477)</span><br><span class="line">	at java.util.AbstractMap.toString(AbstractMap.java:554)</span><br><span class="line">	at java.lang.String.valueOf(String.java:2994)</span><br><span class="line">	at java.io.PrintStream.println(PrintStream.java:821)</span><br><span class="line">	at com.yn.Demo11_多线程操作HashMap.lambda$main$0(Demo11_多线程操作HashMap.java:13)</span><br><span class="line">	at java.lang.Thread.run(Thread.java:748)</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="解决方案-2"><a href="#解决方案-2" class="headerlink" title="解决方案"></a>解决方案</h2><ol>
+<li><code>Map&lt;String,String&gt; map = Collections.synchronizedMap(new HashMap&lt;&gt;());</code></li>
+<li>( JUC方案 )  <code>Map&lt;String,String&gt; map = new ConcurrentHashMap&lt;&gt;();</code></li>
+</ol>
+<p><img lazyload="" alt="image" data-src="/Day9-Multithreading2-3/image-20220901155650474.png"></p>
+<h2 id="ConcurrentHashMap-介绍…-gt-Hole…"><a href="#ConcurrentHashMap-介绍…-gt-Hole…" class="headerlink" title="ConcurrentHashMap 介绍….-> Hole…"></a>ConcurrentHashMap 介绍….-&gt; Hole…</h2><h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><blockquote>
+<p>随机生成字符串</p>
+</blockquote>
+<p><code>UUID.randomUUID().toString()</code></p>
+<p>可以随机生成字符串，使用<code>substring(0,x)</code>取出其中一部分。</p>
+
+                </div>
+
+                
+                        
+<div class="article-copyright-info-container border-box">
+    <div class="copyright-info-content border-box">
+        <div class="copyright-info-top border-box">
+            <div class="post-title border-box text-ellipsis">
+                Day9 多线程进阶 3 集合类不安全
+            </div>
+
+            <div class="post-link border-box text-ellipsis">
+                2022/09/01/Day/Day9-Multithreading2-3/
+            </div>
+        </div>
+
+        <div class="copyright-info-bottom border-box">
+            <div class="post-author bottom-item">
+                <div class="type">
+                    作者
+                </div>
+                <div class="content">uwupu</div>
+            </div>
+
+            <div class="post-time bottom-item">
+                <div class="type">
+                    發布于
+                </div>
+                <div class="content">2022-09-01 12:05</div>
+            </div>
+
+
+            <div class="post-license bottom-item">
+                <div class="type">
+                    許可
+                </div>
+                <div class="content tooltip" data-tooltip-content="CC BY-NC-SA 4.0">
+                    <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed">
+                        <i class="fa-brands fa-creative-commons"></i>
+                        <i class="fa-brands fa-creative-commons-by"></i>
+                        <i class="fa-brands fa-creative-commons-nc"></i>
+                        <i class="fa-brands fa-creative-commons-sa"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <i class="copyright-bg fa-solid fa-copyright"></i>
+    </div>
+    <div class="copy-copyright-info flex-center tooltip" data-tooltip-content="復製版權信息" data-tooltip-offset-y="-2px">
+        <i class="fa-solid fa-copy"></i>
+    </div>
+</div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Java/">Java</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="article-nav">
+                        
+                            <div class="article-prev">
+                                <a class="prev" rel="prev" href="/2022/09/01/Day/Day9-Multithreading2-4/" title="Day9 多线程进阶 4 Callable 和 常用的并发用三个辅助类">
+                                    <span class="left arrow-icon flex-center">
+                                      <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                            <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Day9 多线程进阶 4 Callable 和 常用的并发用三个辅助类</span>
+                                        <span class="post-nav-item">上一篇</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="article-next">
+                                <a class="next" rel="next" href="/2022/09/01/Day/Day9-Multithreading2-2/" title="Day9 多线程进阶 2 八锁现象">
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Day9 多线程进阶 2 八锁现象</span>
+                                        <span class="post-nav-item">下一篇</span>
+                                    </span>
+                                            <span class="right arrow-icon flex-center">
+                                      <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%95%E5%85%A5%EF%BC%9A%E9%9B%86%E5%90%88%E7%B1%BB%E4%B8%8D%E5%AE%89%E5%85%A8"><span class="nav-number">1.</span> <span class="nav-text">引入：集合类不安全</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BE%8B%EF%BC%9A%E4%BD%BF%E7%94%A8%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%93%8D%E4%BD%9CList-lt-String-gt"><span class="nav-number">1.1.</span> <span class="nav-text">例：使用多线程操作List&lt;String&gt;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="nav-number">1.2.</span> <span class="nav-text">解决方案</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CopyOnWriteArrayList"><span class="nav-number">2.</span> <span class="nav-text">CopyOnWriteArrayList</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E7%90%86"><span class="nav-number">2.1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CopyOnWriteArrayList-%E5%92%8C-Vector"><span class="nav-number">2.2.</span> <span class="nav-text">CopyOnWriteArrayList 和 Vector</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Set%E4%B8%8D%E5%AE%89%E5%85%A8"><span class="nav-number">3.</span> <span class="nav-text">Set不安全</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BE%8B%EF%BC%9A%E4%BD%BF%E7%94%A8%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%93%8D%E4%BD%9CSet-lt-String-gt"><span class="nav-number">3.1.</span> <span class="nav-text">例：使用多线程操作Set&lt;String&gt;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88-1"><span class="nav-number">3.2.</span> <span class="nav-text">解决方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HashSet%E5%BA%95%E5%B1%82"><span class="nav-number">3.3.</span> <span class="nav-text">HashSet底层</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%9A%84HashMap"><span class="nav-number">4.</span> <span class="nav-text">多线程的HashMap</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#HashMap"><span class="nav-number">4.1.</span> <span class="nav-text">HashMap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BE%8B%EF%BC%9A%E4%BD%BF%E7%94%A8%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%93%8D%E4%BD%9CSet-lt-String-gt-1"><span class="nav-number">4.2.</span> <span class="nav-text">例：使用多线程操作Set&lt;String&gt;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88-2"><span class="nav-number">4.3.</span> <span class="nav-text">解决方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ConcurrentHashMap-%E4%BB%8B%E7%BB%8D%E2%80%A6-gt-Hole%E2%80%A6"><span class="nav-number">4.4.</span> <span class="nav-text">ConcurrentHashMap 介绍….-&gt; Hole…</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">5.</span> <span class="nav-text">其他</span></a></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="border-box website-info-box default">
+        
+            <div class="copyright-info info-item default">
+                ©&nbsp;<span>2020</span>&nbsp;-&nbsp;2023
+                
+                    &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">uwupu</a>
+                
+            </div>
+
+            <div class="theme-info info-item default">
+                <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;框架&nbsp;&amp;&nbsp;主題&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a>
+            </div>
+
+            
+
+            
+        
+
+        <div class="count-item info-item default">
+            
+                <span class="count-box border-box word">
+                    <span class="item-type border-box">總字數</span>
+                    <span class="item-value border-box word">161.4k</span>
+                </span>
+            
+
+            
+                <span class="count-box border-box uv">
+                    <span class="item-type border-box">讀者</span>
+                    <span class="item-value border-box uv" id="busuanzi_value_site_uv"></span>
+                </span>
+            
+
+            
+                <span class="count-box border-box pv">
+                    <span class="item-type border-box">閱覽</span>
+                    <span class="item-value border-box pv" id="busuanzi_value_site_pv"></span>
+                </span>
+            
+        </div>
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="tools-list border-box">
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="搜尋..." spellcheck="false" type="search" class="search-input">
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%95%E5%85%A5%EF%BC%9A%E9%9B%86%E5%90%88%E7%B1%BB%E4%B8%8D%E5%AE%89%E5%85%A8"><span class="nav-number">1.</span> <span class="nav-text">引入：集合类不安全</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BE%8B%EF%BC%9A%E4%BD%BF%E7%94%A8%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%93%8D%E4%BD%9CList-lt-String-gt"><span class="nav-number">1.1.</span> <span class="nav-text">例：使用多线程操作List&lt;String&gt;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="nav-number">1.2.</span> <span class="nav-text">解决方案</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CopyOnWriteArrayList"><span class="nav-number">2.</span> <span class="nav-text">CopyOnWriteArrayList</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E7%90%86"><span class="nav-number">2.1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CopyOnWriteArrayList-%E5%92%8C-Vector"><span class="nav-number">2.2.</span> <span class="nav-text">CopyOnWriteArrayList 和 Vector</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Set%E4%B8%8D%E5%AE%89%E5%85%A8"><span class="nav-number">3.</span> <span class="nav-text">Set不安全</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BE%8B%EF%BC%9A%E4%BD%BF%E7%94%A8%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%93%8D%E4%BD%9CSet-lt-String-gt"><span class="nav-number">3.1.</span> <span class="nav-text">例：使用多线程操作Set&lt;String&gt;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88-1"><span class="nav-number">3.2.</span> <span class="nav-text">解决方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HashSet%E5%BA%95%E5%B1%82"><span class="nav-number">3.3.</span> <span class="nav-text">HashSet底层</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%9A%84HashMap"><span class="nav-number">4.</span> <span class="nav-text">多线程的HashMap</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#HashMap"><span class="nav-number">4.1.</span> <span class="nav-text">HashMap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BE%8B%EF%BC%9A%E4%BD%BF%E7%94%A8%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%93%8D%E4%BD%9CSet-lt-String-gt-1"><span class="nav-number">4.2.</span> <span class="nav-text">例：使用多线程操作Set&lt;String&gt;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88-2"><span class="nav-number">4.3.</span> <span class="nav-text">解决方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ConcurrentHashMap-%E4%BB%8B%E7%BB%8D%E2%80%A6-gt-Hole%E2%80%A6"><span class="nav-number">4.4.</span> <span class="nav-text">ConcurrentHashMap 介绍….-&gt; Hole…</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">5.</span> <span class="nav-text">其他</span></a></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+<!-- common -->
+<script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/utils.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/header-shrink.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/back2top.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/dark-light-toggle.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/main.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/libs/anime.min.js"></script>
+
+<!-- local-search -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/local-search.js"></script>
+
+
+<!-- code-block -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/code-block.js"></script>
+
+
+<!-- lazyload -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/lazyload.js"></script>
+
+
+<div class="pjax">
+    
+        <!-- post-helper -->
+        <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/post-helper.js"></script>
+
+        <!-- toc -->
+        
+            <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/toc.js"></script>
+        
+
+        <!-- copyright-info -->
+        
+            <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/copyright-info.js"></script>
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- category-page -->
+    
+
+    <!-- links-page -->
+    
+</div>
+
+<!-- mermaid -->
+
+
+<!-- pjax -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/libs/pjax.min.js"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax'
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            KEEP.utils.pjaxProgressBarStart()
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            KEEP.utils.pjaxProgressBarEnd()
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'))
+            KEEP.initExecute()
+        });
+    });
+</script>
+
+
+
+
+
+
+</body></html>

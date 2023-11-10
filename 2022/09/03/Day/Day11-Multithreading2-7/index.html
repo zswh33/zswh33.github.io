@@ -1,0 +1,816 @@
+<!DOCTYPE html><html lang="zh-Hans"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="一个包含有学习日记的博客">
+    <meta name="author" content="uwupu">
+    
+    <title>
+        
+            Day11 多线程进阶 7 JMM Volatile |
+        
+        uwupu 学习日志
+    </title>
+    
+
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+    
+    
+    
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"zswh33.github.io","root":"/","language":"zh-Hans","path":"search.json"}
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":true,"init_open":true,"layout":"right"},"style":{"primary_color":"#F099BC","logo":"/images/logo.svg","favicon":"/images/logo.svg","avatar":"/images/avatar.svg","first_screen":{"enable":false,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"scroll":{"progress_bar":false,"percent":false}},"local_search":{"enable":true,"preload":true},"code_block":{"tools":{"enable":true,"style":"mac"},"highlight_theme":"obsidian"},"pjax":{"enable":true},"lazyload":{"enable":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.21"},"waline":{"server_url":null,"reaction":false,"version":2},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false}},"post":{"author_label":{"enable":true,"auto":false,"custom_label_list":["啦啦啦啦啦"]},"word_count":{"wordcount":true,"min2read":true},"datetime_format":"YYYY-MM-DD HH:mm","copyright_info":true,"share":false,"reward":{"enable":false,"img_link":null,"text":null}},"website_count":{"busuanzi_count":{"enable":true,"site_uv":true,"site_pv":true,"page_pv":true}},"version":"3.8.6"}
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
+    KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
+    KEEP.language_copy_copyright = {"copy":"Copy copyright info","copied":"Copied","title":"Original article title","author":"Original article author","link":"Original article link"}
+  </script>
+<meta name="generator" content="Hexo 6.2.0"><link rel="alternate" href="/atom.xml" title="uwupu Blog" type="application/atom+xml">
+<script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/fontawesome.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/regular.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/solid.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/brands.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/fontawesome.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/regular.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/solid.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/brands.min.css"></noscript></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <i class="pjax-progress-icon fas fa-circle-notch fa-spin"></i>
+    
+</div>
+
+
+<main class="page-container border-box">
+
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.svg">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               uwupu 学习日志
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class="" href="/">
+                                首頁
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/archives">
+                                歸檔
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/tags">
+                                標籤
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/categories">
+                                分類
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/links">
+                                友鏈
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/about">
+                                關於
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/">首頁</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/archives">歸檔</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/tags">標籤</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/categories">分類</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/links">友鏈</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/about">關於</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+
+                
+
+                    <div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+
+        <div class="article-content-container border-box">
+
+            
+
+            <div class="article-content-bottom border-box">
+                
+                    <div class="article-title">
+                        Day11 多线程进阶 7 JMM Volatile
+                    </div>
+                
+
+                
+                    <div class="article-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/avatar.svg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author">
+                                <span class="name">uwupu</span>
+                                
+                                    <span class="author-label">啦啦啦啦啦</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="article-meta-info-container border-box post">
+    <div class="article-meta-info border-box">
+        
+
+
+        
+            <span class="meta-info-item article-create-date">
+                <i class="icon fa-solid fa-calendar-check"></i>&nbsp;
+                <span class="pc">2022-09-03 08:23</span>
+                <span class="mobile">2022-09-03 08:23</span>
+            </span>
+
+            <span class="meta-info-item article-update-date">
+                <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                <span class="pc" data-updated="Fri Nov 10 2023 23:09:26 GMT+0800">2023-11-10 23:09</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item article-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="article-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/Day/">Day</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="article-tag meta-info-item border-box">
+                <i class="icon fas fa-tags"></i>&nbsp;
+                <ul class="article-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Java/">Java</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+            <span class="meta-info-item article-wordcount">
+                <i class="icon fas fa-file-word"></i>&nbsp;<span>2.2k 字數</span>
+            </span>
+        
+        
+            <span class="meta-info-item article-min2read">
+                <i class="icon fas fa-clock"></i>&nbsp;<span>8 分鐘</span>
+            </span>
+        
+        
+            <span class="meta-info-item article-pv">
+                <i class="icon fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="article-content keep-markdown-body">
+                    
+
+                    <h1 id="JMM"><a href="#JMM" class="headerlink" title="JMM"></a>JMM</h1><p><em>Java Memory Model</em></p>
+<blockquote>
+<p>介绍</p>
+</blockquote>
+<p>JMM：Java内存模型。（一个约定，协议）</p>
+<blockquote>
+<p>使用场景 / 解决的问题</p>
+</blockquote>
+<p>在不同硬件生产商和不同操作系统下，内存的访问逻辑有一定的差异，导致一段代码在某个系统环境下运行良好，并且线程安全，但是换了系统就出现各种问题。</p>
+<p>Java内存模型，就是为了屏蔽系统和硬件的差异，让一套代码在不同平台下能达到相同的访问效果。</p>
+<blockquote>
+<p>概念：内存划分</p>
+</blockquote>
+<p>JMM规定<strong>内存</strong>主要划分为<strong>主内存和工作内存两种</strong>。</p>
+<p>此处的主内存和工作内存与JVM内存划分（堆、栈、方法区）是在不同的层次上进行的，若非要对应起来，主内存对应的是Java堆中的对象实例部分，工作内存对应的是栈中的部分区域。</p>
+<p>从底层来看，<strong>主内存</strong>对应的是<strong>硬件的物理内存</strong>，<strong>工作内存</strong>对应的是<strong>寄存器和高速缓存</strong>。</p>
+<blockquote>
+<p>概念：内存交互操作</p>
+</blockquote>
+<p>内存交互操作有8中，虚拟机实现必须保证每一个操作都是原子的（原子：即不可再分的）。</p>
+<table>
+<thead>
+<tr>
+<th>原子操作</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>lock(锁定)</td>
+<td>作用于主内存的变量，把一个变量标识为线程独占状态。</td>
+</tr>
+<tr>
+<td>unlock(解锁)</td>
+<td>作用于主内存的变量，把一个处于锁定状态的变量释放出来。</td>
+</tr>
+<tr>
+<td>read(读取)</td>
+<td>作用于主内存的变量，把一个变量的值从主内存传输到线程的工作内存中。与load一起使用。</td>
+</tr>
+<tr>
+<td>load(载入)</td>
+<td>作用于工作内存的变量，把 <strong>read操作从主存中传输的变量</strong> 放入工作内存中。与read一起使用。</td>
+</tr>
+<tr>
+<td>use（使用）</td>
+<td>作用于工作内存的变量，把工作内存的变量传输给执行引擎。每当虚拟机遇到一个需要使用到变量的值，就要用到这个指定。</td>
+</tr>
+<tr>
+<td>assign（赋值）</td>
+<td>作用于工作内存的变量，把一个从执行引擎中接受到的值放入工作内存的变量副本中。</td>
+</tr>
+<tr>
+<td>store（存储）</td>
+<td>作用于主内存中的变量，把一个从工作内存变量的值传输到主内存中。与write一起使用。</td>
+</tr>
+<tr>
+<td>write（写入）</td>
+<td>作用于主内存中的变量，把store操作从工作内存中得到的变量的值放入主内存的变量中。与store一起使用。</td>
+</tr>
+</tbody></table>
+<p><strong>JMM原子操作的一些约定：</strong></p>
+<ol>
+<li>不允许read和load、store和write操作之一单独出现，即使用了read必须load，使用了store必须write；</li>
+<li>不允许线程丢弃它最近的assign操作，即工作变量数据改变之后，必须告知内存；</li>
+<li>不允许一个线程将没有assign的数据从工作内存同步回主内存；</li>
+<li>一个新的变量必须在内存中诞生，不允许工作内存直接使用一个未被初始化的变量。也就是对变量实施use、store操作之前，必须经过assign和load操作；</li>
+<li>一个变量同一时间只有一个线程能对其进行lock。多次lock后，必须执行相同次数的unlock才能解锁；</li>
+<li>如果对一个变量进行lock操作，会清空所有工作内存中此变量的值，在执行引擎使用这个变量前，必须重新load或assign操作初始化变量的值；</li>
+<li>如果一个变量没有被lock，就不能对其进行unlock操作，也不能unlock一个被其他线程锁住的变量；</li>
+<li>对一个变量进行unlock操作之前，必须把此变量同步回主内存。</li>
+</ol>
+<blockquote>
+<p>概念：一些约定</p>
+</blockquote>
+<p><em>关于JMM的一些同步的约定</em></p>
+<ol>
+<li>线程解锁前，必须立刻把<strong>共享变量立刻刷回主存</strong>；</li>
+<li>线程加锁前，必须读取主存中的最新值到工作内存中；</li>
+<li>加锁和解锁是同一把锁。</li>
+</ol>
+<h1 id="Volatile"><a href="#Volatile" class="headerlink" title="Volatile"></a>Volatile</h1><p>Volatile是Java虚拟机提供的轻量级<strong>同步机制</strong>。</p>
+<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>hole…</p>
+<h2 id="作用-x2F-特征"><a href="#作用-x2F-特征" class="headerlink" title="作用/特征"></a>作用/特征</h2><ol>
+<li>保证可见性</li>
+<li>不保证原子性</li>
+<li>禁止指令重排</li>
+</ol>
+<h2 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h2><p>单例模式。</p>
+<h2 id="特征介绍"><a href="#特征介绍" class="headerlink" title="特征介绍"></a>特征介绍</h2><h3 id="特性1：保证可见性"><a href="#特性1：保证可见性" class="headerlink" title="特性1：保证可见性"></a>特性1：保证可见性</h3><p><strong>问题简述：</strong></p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//出现问题：num赋值为1后，线程并没有停止</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Demo29_Volatile</span> {</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="variable">num</span> <span class="operator">=</span> <span class="number">0</span>;<span class="comment">//位于主存的一个变量</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException {</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(()-&gt;{</span><br><span class="line">            <span class="keyword">while</span> (num == <span class="number">0</span>){</span><br><span class="line">                <span class="comment">//在线程中使用num时，会读取到工作区的num值，并没有同步主存的num值，</span></span><br><span class="line">                <span class="comment">//当主线程修改了主存中的num值，线程仍旧不会停止</span></span><br><span class="line">            }</span><br><span class="line">        }).start();</span><br><span class="line">        TimeUnit.SECONDS.sleep(<span class="number">1</span>);</span><br><span class="line">        num = <span class="number">1</span>;<span class="comment">//修改num值为1</span></span><br><span class="line">        System.out.println(<span class="string">"现在num为1"</span>);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>当num赋值为1，子线程没有停止。因为在当前程序中，子线程运行后，会将num值复制到工作区，后续线程使用num值，只会使用到工作区的num，不使用主线程的num，主线程修改num后，子线程工作区的num仍为原来的值，导致在线程内num一直为0，子线程不会停止。</p>
+<p>另外的说法：在子线程运行后，num被read/load到子线程的工作区后，线程的执行引擎使用工作区的num。当主线程将num值修改后，子线程工作区的num仍为原来的值，线程不会停止。</p>
+<p><strong>解决方法：</strong></p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//出现问题：num赋值为1后，线程并没有停止</span></span><br><span class="line"><span class="comment">//解决方法：在num前加volatile</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Demo29_Volatile</span> {</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> <span class="type">int</span> <span class="variable">num</span> <span class="operator">=</span> <span class="number">0</span>;<span class="comment">//位于主存的一个变量</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException {</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(()-&gt;{</span><br><span class="line">            <span class="keyword">while</span> (num == <span class="number">0</span>){</span><br><span class="line">                <span class="comment">//在线程中使用num时，会读取到工作区的num值，并没有同步主存的num值，</span></span><br><span class="line">                <span class="comment">//当主线程修改了主存中的num值，线程仍旧不会停止</span></span><br><span class="line">            }</span><br><span class="line">        }).start();</span><br><span class="line">        TimeUnit.SECONDS.sleep(<span class="number">1</span>);</span><br><span class="line">        num = <span class="number">1</span>;<span class="comment">//修改num值为1</span></span><br><span class="line">        System.out.println(<span class="string">"现在num为1"</span>);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>在num前加：volatile。</p>
+<p><em>待完善</em>  volatile可以保证可见性。</p>
+<h3 id="特性2：不保证原子性"><a href="#特性2：不保证原子性" class="headerlink" title="特性2：不保证原子性"></a>特性2：不保证原子性</h3><h4 id="基本问题"><a href="#基本问题" class="headerlink" title="基本问题"></a>基本问题</h4><p><strong>代码：</strong></p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Demo29_Volatile</span>不保证原子性 {</span><br><span class="line">    <span class="comment">//volatile不保证原子性</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> <span class="type">int</span> <span class="variable">num</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">add</span><span class="params">()</span>{</span><br><span class="line">        num++;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> {</span><br><span class="line">        <span class="comment">//理论上num结果应为20000</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">20</span>; i++) {</span><br><span class="line">            <span class="keyword">new</span> <span class="title class_">Thread</span>(()-&gt;{</span><br><span class="line">                <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt; <span class="number">1000</span>; j++) {</span><br><span class="line">                    add();</span><br><span class="line">                }</span><br><span class="line">            },String.valueOf(i)).start();</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="comment">//等待上面创建的线程执行结束</span></span><br><span class="line">        <span class="keyword">while</span> (Thread.activeCount()&gt;<span class="number">2</span>){</span><br><span class="line">            <span class="comment">//Java有两个默认线程：main和gc。所以这里写2。</span></span><br><span class="line">            Thread.yield();<span class="comment">//让主线程从运行态变为就绪态</span></span><br><span class="line">        }</span><br><span class="line">        System.out.println(Thread.currentThread().getName()+<span class="string">" "</span>+num);<span class="comment">//输出结果</span></span><br><span class="line">        <span class="comment">//main 18821</span></span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>在当前程序中，num输出结果并不是20000。</p>
+<h4 id="如何解决这个问题？"><a href="#如何解决这个问题？" class="headerlink" title="如何解决这个问题？"></a>如何解决这个问题？</h4><p>方法1： 在add()方法前添加synchronized，或添加lock机制。</p>
+<p>方法2： 将int替换为AtomicInteger原子Integer类。</p>
+<h4 id="使用原子类解决这个问题：将int替换为AtomicInteger原子Integer类。"><a href="#使用原子类解决这个问题：将int替换为AtomicInteger原子Integer类。" class="headerlink" title="使用原子类解决这个问题：将int替换为AtomicInteger原子Integer类。"></a><strong>使用原子类解决这个问题：将int替换为AtomicInteger原子Integer类。</strong></h4><blockquote>
+<p>分析add()的字节码</p>
+</blockquote>
+<p><img lazyload="" alt="image" data-src="/Day11-Multithreading2-7/image-20220903103744379.png"></p>
+<p>add()里的“num++”，是<strong>线程不安全的</strong>。从底层看，”num++”<strong>不是一个原子性操作</strong>。</p>
+<blockquote>
+<p>使用原子类，解决原子性问题</p>
+</blockquote>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Demo29_Volatile</span>不保证原子性_从原子角度解决问题 {</span><br><span class="line">    <span class="comment">// volatile不保证原子性</span></span><br><span class="line">    <span class="comment">// 将int改为AtomicInteger原子类Integer。</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> <span class="type">AtomicInteger</span> <span class="variable">num</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AtomicInteger</span>();</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">add</span><span class="params">()</span>{</span><br><span class="line">        <span class="comment">//num++;//不是一个原子性操作</span></span><br><span class="line">        num.getAndIncrement();<span class="comment">// AtomicInteger + 1 方法 底层：CAS</span></span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> {</span><br><span class="line">        <span class="comment">//理论上num结果应为20000</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">20</span>; i++) {</span><br><span class="line">            <span class="keyword">new</span> <span class="title class_">Thread</span>(()-&gt;{</span><br><span class="line">                <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt; <span class="number">1000</span>; j++) {</span><br><span class="line">                    add();</span><br><span class="line">                }</span><br><span class="line">            },String.valueOf(i)).start();</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="comment">//等待上面创建的线程执行结束</span></span><br><span class="line">        <span class="keyword">while</span> (Thread.activeCount()&gt;<span class="number">2</span>){</span><br><span class="line">            <span class="comment">//Java有两个默认线程：main和gc。所以这里写2。</span></span><br><span class="line">            Thread.yield();<span class="comment">//让主线程从运行态变为就绪态</span></span><br><span class="line">        }</span><br><span class="line">        System.out.println(Thread.currentThread().getName()+<span class="string">" "</span>+num);<span class="comment">//输出结果</span></span><br><span class="line">        <span class="comment">//main 20000</span></span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p>AtomicInteger</p>
+</blockquote>
+<p><em>类的底层直接与操作系统挂钩！在内存中操作值。</em></p>
+<p>hole….</p>
+<h3 id="特性3：禁止指令重排"><a href="#特性3：禁止指令重排" class="headerlink" title="特性3：禁止指令重排"></a>特性3：禁止指令重排</h3><blockquote>
+<p>介绍</p>
+</blockquote>
+<p>Volatile基于内存屏障，可以避免指令重排。</p>
+<blockquote>
+<p>实现原理</p>
+</blockquote>
+<p>在正常的指令流中，xx会为volatile指令前后添加内存屏障，禁止volatile前后的指令顺序交换。</p>
+<blockquote>
+<p>依赖</p>
+</blockquote>
+<p>内存屏障 作用：</p>
+<ol>
+<li>保证特定的操作的执行顺序；</li>
+<li>可以保证某些变量的内存可见性；</li>
+</ol>
+<p><strong>依赖于“内存屏障”，volatile实现了禁止指令重排。</strong></p>
+<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><h2 id="指令重排"><a href="#指令重排" class="headerlink" title="指令重排"></a>指令重排</h2><blockquote>
+<p>介绍</p>
+</blockquote>
+<p>计算机不按照写的程序的顺序去执行。</p>
+<blockquote>
+<p>可能触发指令重排</p>
+</blockquote>
+<ol>
+<li>编译器优化的重排</li>
+<li>指令并行可能会重排</li>
+<li>内存系统重排</li>
+</ol>
+<blockquote>
+<p>一个例子</p>
+</blockquote>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="variable">x</span> <span class="operator">=</span> <span class="number">1</span>; <span class="comment">// 1</span></span><br><span class="line"><span class="type">int</span> <span class="variable">y</span> <span class="operator">=</span> <span class="number">2</span>; <span class="comment">// 2</span></span><br><span class="line">x = x + <span class="number">5</span>; <span class="comment">// 3</span></span><br><span class="line">y = x * x; <span class="comment">// 4</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>我们期望的： 1234</p>
+<p>实际执行可能的存在： 1324 、 2134等</p>
+<p>不可能的存在：4123</p>
+<h2 id="查看class文件字节码"><a href="#查看class文件字节码" class="headerlink" title="查看class文件字节码"></a>查看class文件字节码</h2><p>javap -c 类名.class</p>
+<h2 id="原子性操作"><a href="#原子性操作" class="headerlink" title="原子性操作"></a>原子性操作</h2><p>原子，即不可再分。</p>
+
+                </div>
+
+                
+                        
+<div class="article-copyright-info-container border-box">
+    <div class="copyright-info-content border-box">
+        <div class="copyright-info-top border-box">
+            <div class="post-title border-box text-ellipsis">
+                Day11 多线程进阶 7 JMM Volatile
+            </div>
+
+            <div class="post-link border-box text-ellipsis">
+                2022/09/03/Day/Day11-Multithreading2-7/
+            </div>
+        </div>
+
+        <div class="copyright-info-bottom border-box">
+            <div class="post-author bottom-item">
+                <div class="type">
+                    作者
+                </div>
+                <div class="content">uwupu</div>
+            </div>
+
+            <div class="post-time bottom-item">
+                <div class="type">
+                    發布于
+                </div>
+                <div class="content">2022-09-03 08:23</div>
+            </div>
+
+
+            <div class="post-license bottom-item">
+                <div class="type">
+                    許可
+                </div>
+                <div class="content tooltip" data-tooltip-content="CC BY-NC-SA 4.0">
+                    <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed">
+                        <i class="fa-brands fa-creative-commons"></i>
+                        <i class="fa-brands fa-creative-commons-by"></i>
+                        <i class="fa-brands fa-creative-commons-nc"></i>
+                        <i class="fa-brands fa-creative-commons-sa"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <i class="copyright-bg fa-solid fa-copyright"></i>
+    </div>
+    <div class="copy-copyright-info flex-center tooltip" data-tooltip-content="復製版權信息" data-tooltip-offset-y="-2px">
+        <i class="fa-solid fa-copy"></i>
+    </div>
+</div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Java/">Java</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="article-nav">
+                        
+                            <div class="article-prev">
+                                <a class="prev" rel="prev" href="/2022/09/03/Day/Day11-Multithreading2-8/" title="Day11 多线程进阶 8 单例模式">
+                                    <span class="left arrow-icon flex-center">
+                                      <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                            <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Day11 多线程进阶 8 单例模式</span>
+                                        <span class="post-nav-item">上一篇</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="article-next">
+                                <a class="next" rel="next" href="/2022/09/02/Day/Day10-Multitherading2-6/" title="Day10 多线程进阶 6 四大函数式接口 Stream流式计算 ForkJoin分支合并 CompletableFuture异步回调">
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Day10 多线程进阶 6 四大函数式接口 Stream流式计算 ForkJoin分支合并 CompletableFuture异步回调</span>
+                                        <span class="post-nav-item">下一篇</span>
+                                    </span>
+                                            <span class="right arrow-icon flex-center">
+                                      <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#JMM"><span class="nav-number">1.</span> <span class="nav-text">JMM</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Volatile"><span class="nav-number">2.</span> <span class="nav-text">Volatile</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="nav-number">2.1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%9C%E7%94%A8-x2F-%E7%89%B9%E5%BE%81"><span class="nav-number">2.2.</span> <span class="nav-text">作用/特征</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">2.3.</span> <span class="nav-text">应用场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E5%BE%81%E4%BB%8B%E7%BB%8D"><span class="nav-number">2.4.</span> <span class="nav-text">特征介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E6%80%A71%EF%BC%9A%E4%BF%9D%E8%AF%81%E5%8F%AF%E8%A7%81%E6%80%A7"><span class="nav-number">2.4.1.</span> <span class="nav-text">特性1：保证可见性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E6%80%A72%EF%BC%9A%E4%B8%8D%E4%BF%9D%E8%AF%81%E5%8E%9F%E5%AD%90%E6%80%A7"><span class="nav-number">2.4.2.</span> <span class="nav-text">特性2：不保证原子性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E9%97%AE%E9%A2%98"><span class="nav-number">2.4.2.1.</span> <span class="nav-text">基本问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3%E8%BF%99%E4%B8%AA%E9%97%AE%E9%A2%98%EF%BC%9F"><span class="nav-number">2.4.2.2.</span> <span class="nav-text">如何解决这个问题？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%8E%9F%E5%AD%90%E7%B1%BB%E8%A7%A3%E5%86%B3%E8%BF%99%E4%B8%AA%E9%97%AE%E9%A2%98%EF%BC%9A%E5%B0%86int%E6%9B%BF%E6%8D%A2%E4%B8%BAAtomicInteger%E5%8E%9F%E5%AD%90Integer%E7%B1%BB%E3%80%82"><span class="nav-number">2.4.2.3.</span> <span class="nav-text">使用原子类解决这个问题：将int替换为AtomicInteger原子Integer类。</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E6%80%A73%EF%BC%9A%E7%A6%81%E6%AD%A2%E6%8C%87%E4%BB%A4%E9%87%8D%E6%8E%92"><span class="nav-number">2.4.3.</span> <span class="nav-text">特性3：禁止指令重排</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">3.</span> <span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%87%E4%BB%A4%E9%87%8D%E6%8E%92"><span class="nav-number">3.1.</span> <span class="nav-text">指令重排</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8Bclass%E6%96%87%E4%BB%B6%E5%AD%97%E8%8A%82%E7%A0%81"><span class="nav-number">3.2.</span> <span class="nav-text">查看class文件字节码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E5%AD%90%E6%80%A7%E6%93%8D%E4%BD%9C"><span class="nav-number">3.3.</span> <span class="nav-text">原子性操作</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="border-box website-info-box default">
+        
+            <div class="copyright-info info-item default">
+                ©&nbsp;<span>2020</span>&nbsp;-&nbsp;2023
+                
+                    &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">uwupu</a>
+                
+            </div>
+
+            <div class="theme-info info-item default">
+                <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;框架&nbsp;&amp;&nbsp;主題&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a>
+            </div>
+
+            
+
+            
+        
+
+        <div class="count-item info-item default">
+            
+                <span class="count-box border-box word">
+                    <span class="item-type border-box">總字數</span>
+                    <span class="item-value border-box word">161.4k</span>
+                </span>
+            
+
+            
+                <span class="count-box border-box uv">
+                    <span class="item-type border-box">讀者</span>
+                    <span class="item-value border-box uv" id="busuanzi_value_site_uv"></span>
+                </span>
+            
+
+            
+                <span class="count-box border-box pv">
+                    <span class="item-type border-box">閱覽</span>
+                    <span class="item-value border-box pv" id="busuanzi_value_site_pv"></span>
+                </span>
+            
+        </div>
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="tools-list border-box">
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="搜尋..." spellcheck="false" type="search" class="search-input">
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#JMM"><span class="nav-number">1.</span> <span class="nav-text">JMM</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Volatile"><span class="nav-number">2.</span> <span class="nav-text">Volatile</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="nav-number">2.1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%9C%E7%94%A8-x2F-%E7%89%B9%E5%BE%81"><span class="nav-number">2.2.</span> <span class="nav-text">作用/特征</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">2.3.</span> <span class="nav-text">应用场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E5%BE%81%E4%BB%8B%E7%BB%8D"><span class="nav-number">2.4.</span> <span class="nav-text">特征介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E6%80%A71%EF%BC%9A%E4%BF%9D%E8%AF%81%E5%8F%AF%E8%A7%81%E6%80%A7"><span class="nav-number">2.4.1.</span> <span class="nav-text">特性1：保证可见性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E6%80%A72%EF%BC%9A%E4%B8%8D%E4%BF%9D%E8%AF%81%E5%8E%9F%E5%AD%90%E6%80%A7"><span class="nav-number">2.4.2.</span> <span class="nav-text">特性2：不保证原子性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E9%97%AE%E9%A2%98"><span class="nav-number">2.4.2.1.</span> <span class="nav-text">基本问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3%E8%BF%99%E4%B8%AA%E9%97%AE%E9%A2%98%EF%BC%9F"><span class="nav-number">2.4.2.2.</span> <span class="nav-text">如何解决这个问题？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%8E%9F%E5%AD%90%E7%B1%BB%E8%A7%A3%E5%86%B3%E8%BF%99%E4%B8%AA%E9%97%AE%E9%A2%98%EF%BC%9A%E5%B0%86int%E6%9B%BF%E6%8D%A2%E4%B8%BAAtomicInteger%E5%8E%9F%E5%AD%90Integer%E7%B1%BB%E3%80%82"><span class="nav-number">2.4.2.3.</span> <span class="nav-text">使用原子类解决这个问题：将int替换为AtomicInteger原子Integer类。</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E6%80%A73%EF%BC%9A%E7%A6%81%E6%AD%A2%E6%8C%87%E4%BB%A4%E9%87%8D%E6%8E%92"><span class="nav-number">2.4.3.</span> <span class="nav-text">特性3：禁止指令重排</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">3.</span> <span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%87%E4%BB%A4%E9%87%8D%E6%8E%92"><span class="nav-number">3.1.</span> <span class="nav-text">指令重排</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8Bclass%E6%96%87%E4%BB%B6%E5%AD%97%E8%8A%82%E7%A0%81"><span class="nav-number">3.2.</span> <span class="nav-text">查看class文件字节码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E5%AD%90%E6%80%A7%E6%93%8D%E4%BD%9C"><span class="nav-number">3.3.</span> <span class="nav-text">原子性操作</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+<!-- common -->
+<script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/utils.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/header-shrink.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/back2top.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/dark-light-toggle.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/main.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/libs/anime.min.js"></script>
+
+<!-- local-search -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/local-search.js"></script>
+
+
+<!-- code-block -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/code-block.js"></script>
+
+
+<!-- lazyload -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/lazyload.js"></script>
+
+
+<div class="pjax">
+    
+        <!-- post-helper -->
+        <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/post-helper.js"></script>
+
+        <!-- toc -->
+        
+            <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/toc.js"></script>
+        
+
+        <!-- copyright-info -->
+        
+            <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/copyright-info.js"></script>
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- category-page -->
+    
+
+    <!-- links-page -->
+    
+</div>
+
+<!-- mermaid -->
+
+
+<!-- pjax -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/libs/pjax.min.js"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax'
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            KEEP.utils.pjaxProgressBarStart()
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            KEEP.utils.pjaxProgressBarEnd()
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'))
+            KEEP.initExecute()
+        });
+    });
+</script>
+
+
+
+
+
+
+</body></html>

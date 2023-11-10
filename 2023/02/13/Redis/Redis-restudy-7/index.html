@@ -1,0 +1,793 @@
+<!DOCTYPE html><html lang="zh-Hans"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="一个包含有学习日记的博客">
+    <meta name="author" content="uwupu">
+    
+    <title>
+        
+            Redis restudy 7 发布订阅 主从复制 哨兵模式 |
+        
+        uwupu 学习日志
+    </title>
+    
+
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+    
+    
+    
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"zswh33.github.io","root":"/","language":"zh-Hans","path":"search.json"}
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":true,"init_open":true,"layout":"right"},"style":{"primary_color":"#F099BC","logo":"/images/logo.svg","favicon":"/images/logo.svg","avatar":"/images/avatar.svg","first_screen":{"enable":false,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"scroll":{"progress_bar":false,"percent":false}},"local_search":{"enable":true,"preload":true},"code_block":{"tools":{"enable":true,"style":"mac"},"highlight_theme":"obsidian"},"pjax":{"enable":true},"lazyload":{"enable":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.21"},"waline":{"server_url":null,"reaction":false,"version":2},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false}},"post":{"author_label":{"enable":true,"auto":false,"custom_label_list":["啦啦啦啦啦"]},"word_count":{"wordcount":true,"min2read":true},"datetime_format":"YYYY-MM-DD HH:mm","copyright_info":true,"share":false,"reward":{"enable":false,"img_link":null,"text":null}},"website_count":{"busuanzi_count":{"enable":true,"site_uv":true,"site_pv":true,"page_pv":true}},"version":"3.8.6"}
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
+    KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
+    KEEP.language_copy_copyright = {"copy":"Copy copyright info","copied":"Copied","title":"Original article title","author":"Original article author","link":"Original article link"}
+  </script>
+<meta name="generator" content="Hexo 6.2.0"><link rel="alternate" href="/atom.xml" title="uwupu Blog" type="application/atom+xml">
+<script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/fontawesome.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/regular.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/solid.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/brands.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/fontawesome.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/regular.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/solid.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/brands.min.css"></noscript></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <i class="pjax-progress-icon fas fa-circle-notch fa-spin"></i>
+    
+</div>
+
+
+<main class="page-container border-box">
+
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.svg">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               uwupu 学习日志
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class="" href="/">
+                                首頁
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/archives">
+                                歸檔
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/tags">
+                                標籤
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/categories">
+                                分類
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/links">
+                                友鏈
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/about">
+                                關於
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/">首頁</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/archives">歸檔</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/tags">標籤</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/categories">分類</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/links">友鏈</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/about">關於</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+
+                
+
+                    <div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+
+        <div class="article-content-container border-box">
+
+            
+
+            <div class="article-content-bottom border-box">
+                
+                    <div class="article-title">
+                        Redis restudy 7 发布订阅 主从复制 哨兵模式
+                    </div>
+                
+
+                
+                    <div class="article-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/avatar.svg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author">
+                                <span class="name">uwupu</span>
+                                
+                                    <span class="author-label">啦啦啦啦啦</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="article-meta-info-container border-box post">
+    <div class="article-meta-info border-box">
+        
+
+
+        
+            <span class="meta-info-item article-create-date">
+                <i class="icon fa-solid fa-calendar-check"></i>&nbsp;
+                <span class="pc">2023-02-13 19:29</span>
+                <span class="mobile">2023-02-13 19:29</span>
+            </span>
+
+            <span class="meta-info-item article-update-date">
+                <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                <span class="pc" data-updated="Fri Nov 10 2023 23:15:19 GMT+0800">2023-11-10 23:15</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item article-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="article-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="article-tag meta-info-item border-box">
+                <i class="icon fas fa-tags"></i>&nbsp;
+                <ul class="article-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Redis/">Redis</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+            <span class="meta-info-item article-wordcount">
+                <i class="icon fas fa-file-word"></i>&nbsp;<span>3.1k 字數</span>
+            </span>
+        
+        
+            <span class="meta-info-item article-min2read">
+                <i class="icon fas fa-clock"></i>&nbsp;<span>13 分鐘</span>
+            </span>
+        
+        
+            <span class="meta-info-item article-pv">
+                <i class="icon fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="article-content keep-markdown-body">
+                    
+
+                    <h1 id="Redis发布订阅"><a href="#Redis发布订阅" class="headerlink" title="Redis发布订阅"></a>Redis发布订阅</h1><p><img lazyload="" alt="image" data-src="/Redis-restudy-7/redis_sub.svg"></p>
+<p>Redis可以订阅任何数量的频道。</p>
+<h2 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h2><p><code>psubscribe pattern [pattern ...]</code>：订阅一个或多个符合给定模式的频道</p>
+<p><code>pubsub subcommand [argument [argument ..]]</code>：查询订阅与发布系统状态</p>
+<p><code>publish channel message</code>：将信息发送到指定的频道</p>
+<p><code>punsubscribe [pattern [pattern ...]]</code>：退订所给定模式的频道</p>
+<p><code>subscribe channel [channel ...]</code>：订阅给定的一个或多个频道的信息</p>
+<p><code>unsubscribe [channel [channel ...]]</code>：退订给定的频道</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 订阅频道</span></span><br><span class="line">127.0.0.1:6379&gt; subscribe yn</span><br><span class="line">Reading messages... (press Ctrl-C to quit)</span><br><span class="line">1) <span class="string">"subscribe"</span></span><br><span class="line">2) <span class="string">"yn"</span></span><br><span class="line">3) (<span class="built_in">integer</span>) 1</span><br><span class="line">1) <span class="string">"message"</span></span><br><span class="line">2) <span class="string">"yn"</span></span><br><span class="line">3) <span class="string">"HelloWorld"</span></span><br><span class="line">1) <span class="string">"message"</span> <span class="comment">#消息</span></span><br><span class="line">2) <span class="string">"yn"</span>  <span class="comment">#来自哪个频道</span></span><br><span class="line">3) <span class="string">"ZhangSan"</span>  <span class="comment">#消息内容</span></span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 频道信息发布</span></span><br><span class="line">127.0.0.1:6379&gt; publish yn HelloWorld</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; publish yn ZhangSan</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><p>实时消息系统，实时聊天。</p>
+<h2 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h2><p>有更专业的MQ，Redis订阅可能不需要。</p>
+<h1 id="Redis主从复制"><a href="#Redis主从复制" class="headerlink" title="Redis主从复制"></a>Redis主从复制</h1><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>主从复制，将一台Redis服务器的数据，复制到其他Redis服务器。</p>
+<p>前者为主节点（Master/leader）,后者为从节点（slave/follower）;</p>
+<p>数据复制是单向的，只能由主节点到从节点，Master写为主，Slave读为主。</p>
+<p>主从复制，读写分离！80%的情况下都是在进行读操作，减缓服务器压力。</p>
+<h2 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h2><ol>
+<li>数据冗余：主从复制实现了数据的热备份，是持久化之外的一种数据冗余方式</li>
+<li>故障恢复：当主节点出现问题时，可以由从节点提供服务，实现快速的故障回复，实际上是一种服务的冗余；</li>
+<li>负载均衡：在主从复制的基础上，配合读写分离，可以由主节点提供写服务，由从节点提供度服务，分担服务器负载；尤其是在写少读多的场景下，通过多个节点分担读负载，可以大大提高Redis服务器并发量。</li>
+<li>高可用基石：主从复制为哨兵和集群提供能够实施的基础，因此主从复制是Redis高可用的基础。</li>
+</ol>
+<p>（“高可用”名词一般用于集群）</p>
+<h2 id="一般来说，Redis在工程项目中了，只用一台Redis是万万不能的"><a href="#一般来说，Redis在工程项目中了，只用一台Redis是万万不能的" class="headerlink" title="一般来说，Redis在工程项目中了，只用一台Redis是万万不能的"></a>一般来说，Redis在工程项目中了，只用一台Redis是万万不能的</h2><ol>
+<li>从结构上，单个Redis服务器会发生单点故障，并且一台服务器需要处理所有的请求负载，压力较大；</li>
+<li>从容量上，单个Redis服务器内存容量有限；一般来说，单台Redis最大使用内存不应该超过20G。</li>
+</ol>
+<p>只要在公司中，主从复制就是要必须使用的，在真实的项目中不可能单机使用Redis。</p>
+<h2 id="性质"><a href="#性质" class="headerlink" title="性质"></a>性质</h2><ul>
+<li><p>默认情况下，每台Redis服务器都是主节点</p>
+</li>
+<li><p>一个主节点可以有多个从节点，一个从节点只能有一个主节点。</p>
+</li>
+</ul>
+<h2 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h2><p>只配置从库，不用配置主库。</p>
+<h3 id="命令-1"><a href="#命令-1" class="headerlink" title="命令"></a>命令</h3><p><code>info replication</code>：查看当前库的信息</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; info replication</span><br><span class="line"><span class="comment"># Replication</span></span><br><span class="line">role:master  </span><br><span class="line">connected_slaves:0</span><br><span class="line">master_replid:cf3c24d5b4964e0604f7cbc984152291c0175d35</span><br><span class="line">master_replid2:0000000000000000000000000000000000000000</span><br><span class="line">master_repl_offset:0</span><br><span class="line">second_repl_offset:-1</span><br><span class="line">repl_backlog_active:0</span><br><span class="line">repl_backlog_size:1048576</span><br><span class="line">repl_backlog_first_byte_offset:0</span><br><span class="line">repl_backlog_histlen:0</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><h4 id="单机测试学习"><a href="#单机测试学习" class="headerlink" title="单机测试学习"></a>单机测试学习</h4><ul>
+<li>准备3-4个配置文件</li>
+</ul>
+<ol>
+<li><p>要进行单机测试的话，要修改的配置</p>
+<ul>
+<li>端口，pid，log文件，备份文件名</li>
+</ul>
+</li>
+<li><p>只需配置从机，不配置主机</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#其中一个从机的信息</span></span><br><span class="line">127.0.0.1:6380&gt; slaveof 127.0.0.1 6379  <span class="comment">#认定指定服务器为主机</span></span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6380&gt; info replication</span><br><span class="line"><span class="comment"># Replication</span></span><br><span class="line">role:slave <span class="comment"># 当前角色：从机</span></span><br><span class="line">master_host:127.0.0.1</span><br><span class="line">master_port:6379</span><br><span class="line">master_link_status:up</span><br><span class="line">master_last_io_seconds_ago:5</span><br><span class="line">master_sync_in_progress:0</span><br><span class="line">slave_repl_offset:0</span><br><span class="line">slave_priority:100</span><br><span class="line">slave_read_only:1</span><br><span class="line">connected_slaves:0</span><br><span class="line">master_replid:36c79b03b82a86ae900da1f1a4c8b98ad063dbdd</span><br><span class="line">master_replid2:0000000000000000000000000000000000000000</span><br><span class="line">master_repl_offset:0</span><br><span class="line">second_repl_offset:-1</span><br><span class="line">repl_backlog_active:1</span><br><span class="line">repl_backlog_size:1048576</span><br><span class="line">repl_backlog_first_byte_offset:1</span><br><span class="line">repl_backlog_histlen:0</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>查看结论</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 主机的信息</span></span><br><span class="line">root@yynlinux:~/yn<span class="comment"># redis-cli -p 6379</span></span><br><span class="line">127.0.0.1:6379&gt; info replication</span><br><span class="line"><span class="comment"># Replication</span></span><br><span class="line">role:master</span><br><span class="line">connected_slaves:1  <span class="comment">#连接的从机</span></span><br><span class="line">slave0:ip=127.0.0.1,port=6380,state=online,offset=140,lag=0 <span class="comment">#从机的信息</span></span><br><span class="line">master_replid:36c79b03b82a86ae900da1f1a4c8b98ad063dbdd</span><br><span class="line">master_replid2:0000000000000000000000000000000000000000</span><br><span class="line">master_repl_offset:140</span><br><span class="line">second_repl_offset:-1</span><br><span class="line">repl_backlog_active:1</span><br><span class="line">repl_backlog_size:1048576</span><br><span class="line">repl_backlog_first_byte_offset:1</span><br><span class="line">repl_backlog_histlen:14</span><br></pre></td></tr></tbody></table></figure></li>
+</ol>
+<h4 id="正式配置"><a href="#正式配置" class="headerlink" title="正式配置"></a>正式配置</h4><h5 id="命令配置"><a href="#命令配置" class="headerlink" title="命令配置"></a>命令配置</h5><p>在从机上</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6380&gt; slaveof 127.0.0.1 6379  <span class="comment">#认定指定服务器为主机</span></span><br><span class="line">OK</span><br></pre></td></tr></tbody></table></figure>
+
+<p>即可实现主从复制。</p>
+<h5 id="配置文件配置"><a href="#配置文件配置" class="headerlink" title="配置文件配置"></a>配置文件配置</h5><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">replicaof &lt;masterip&gt; &lt;masterport&gt; <span class="comment"># 主机ip和端口</span></span><br><span class="line">masterauth &lt;master-password&gt;  <span class="comment">#主机密码，密码和用户可以不存在</span></span><br><span class="line">masteruser &lt;username&gt; <span class="comment">#主机用户</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><ul>
+<li><p>主机可以写，从机只能读。</p>
+</li>
+<li><p>主机的数据会被从机自动保存</p>
+</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#在从机写会发生的事情</span></span><br><span class="line">127.0.0.1:6380&gt; <span class="built_in">set</span> k2 v2</span><br><span class="line">(error) READONLY You can<span class="string">'t write against a read only replica.</span></span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li>主机宕机后，从机依旧连接主机；主机如果恢复了，从机依旧能够获取主机的信息。</li>
+<li>命令行配置的主从关系在从机重启后会消失，只有配置文件配置的主从能够保持。</li>
+</ul>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>Slave启动连接后会向master发送一个sync命令，</p>
+<p>master接到命令，启动后台的存盘进程，同时收集所有接受到的用于修改数据集的命令，在后台进程执行结束后，master将整个数据文件发送到slave，并完成一次完全同步；</p>
+<p>全量复制：slave将收到的数据文件，将其存盘并加载到内存中；</p>
+<p>增量复制：Master继续将新的所有收集到的修改命令依次传给slave，完成同步。</p>
+<h2 id="主从复制形式"><a href="#主从复制形式" class="headerlink" title="主从复制形式"></a>主从复制形式</h2><ol>
+<li><p>一个主机带多个从机</p>
+<p><img lazyload="" alt="image" data-src="/Redis-restudy-7/Master-Slave.svg"></p>
+</li>
+<li><p>一个主机带多个从机，从机再带从机</p>
+<p><img lazyload="" alt="image" data-src="/Redis-restudy-7/Master-Slave2.svg"></p>
+<p>（中间的节点仍是从节点，不能写入。）</p>
+</li>
+</ol>
+<h2 id="取消从机模式"><a href="#取消从机模式" class="headerlink" title="取消从机模式"></a>取消从机模式</h2><p>两种方式：</p>
+<ol>
+<li><p>改配置文件，重启</p>
+</li>
+<li><p>命令：<code>slaveof no one</code></p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6380&gt; slaveof no one</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6380&gt; info replication</span><br><span class="line"><span class="comment"># Replication</span></span><br><span class="line">role:master</span><br><span class="line">connected_slaves:0</span><br><span class="line">master_replid:31c0ab1d95cc58365a1c357e721646ace499ad92</span><br><span class="line">master_replid2:f7d2c0c54849a249b28c1aaaa3c19595b0b732f9</span><br><span class="line">master_repl_offset:1666</span><br><span class="line">second_repl_offset:1667</span><br><span class="line">repl_backlog_active:1</span><br><span class="line">repl_backlog_size:1048576</span><br><span class="line">repl_backlog_first_byte_offset:1</span><br><span class="line">repl_backlog_histlen:1666</span><br></pre></td></tr></tbody></table></figure></li>
+</ol>
+<h1 id="Redis哨兵模式"><a href="#Redis哨兵模式" class="headerlink" title="Redis哨兵模式"></a>Redis哨兵模式</h1><p>自动选举Master~❤</p>
+<h2 id="传统的主从切换"><a href="#传统的主从切换" class="headerlink" title="传统的主从切换"></a>传统的主从切换</h2><p>当主服务器宕机，需要手动把一台服务器切换为主服务器，这需要人工干预，费时费力，且造成短时间服务不可用。</p>
+<p>Redis2.8正式提供了Sentinel哨兵架构来解决这个问题。</p>
+<h2 id="介绍-1"><a href="#介绍-1" class="headerlink" title="介绍"></a>介绍</h2><ul>
+<li><p>哨兵模式能够监控主机是否故障，若故障则根据投票数自动将从库转换为主库。</p>
+</li>
+<li><p>哨兵是一种特殊的模式，哨兵是一个独立的进程，他会独立运行。</p>
+</li>
+<li><p><strong>哨兵通过发送命令，等待Redis服务器响应，从而监控运行的多个Redis示例。</strong></p>
+</li>
+</ul>
+<p><img lazyload="" alt="image" data-src="/Redis-restudy-7/%E5%93%A8%E5%85%B5%E6%A8%A1%E5%BC%8F.svg"></p>
+<h2 id="原理-1"><a href="#原理-1" class="headerlink" title="原理"></a>原理</h2><p>假设主服务器宕机，</p>
+<ul>
+<li>哨兵1会检测到这个结果，系统不会马上进行failover过程，仅仅是哨兵1认为主服务器不可用，这个现象称为<strong>主观下线</strong>；</li>
+<li>当后面的哨兵也检测到主服务器不可用，并达到一定数量时，那么哨兵之间会进行一次投票，投票的结果由一个哨兵发起（这个哨兵是随机的），进行failover[故障转移]操作，切换成功后，就会通过发布订阅模式，让各个哨兵把自己监控的从服务器实现切换主机，这个过程称为<strong>客观下线</strong>。</li>
+</ul>
+<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><ol>
+<li><p>配置哨兵配置文件</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sentinel monitor 被监控的名称 地址 端口 最低投票数</span><br><span class="line">sentinel monitor r1 127.0.0.1 6379 1</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li>被监控的名称自定义，不影响结果</li>
+</ul>
+</li>
+<li><p>启动哨兵</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">root@yynlinux:~/yn<span class="comment"># redis-sentinel sentinel.conf</span></span><br><span class="line">63284:X 13 Feb 2023 13:34:16.343 <span class="comment"># oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo</span></span><br><span class="line">63284:X 13 Feb 2023 13:34:16.345 <span class="comment"># Redis version=6.0.16, bits=64, commit=00000000, modified=0, pid=63284, just started</span></span><br><span class="line">63284:X 13 Feb 2023 13:34:16.346 <span class="comment"># Configuration loaded</span></span><br><span class="line">63284:X 13 Feb 2023 13:34:16.349 * Increased maximum number of open files to 10032 (it was originally <span class="built_in">set</span> to 1024).</span><br><span class="line">                _._</span><br><span class="line">           _.-``__ <span class="string">''</span>-._</span><br><span class="line">      _.-``    `.  `_.  <span class="string">''</span>-._           Redis 6.0.16 (00000000/0) 64 bit</span><br><span class="line">  .-`` .-```.  ```\/    _.,_ <span class="string">''</span>-._</span><br><span class="line"> (    <span class="string">'      ,       .-`  | `,    )     Running in sentinel mode</span></span><br><span class="line"><span class="string"> |`-._`-...-` __...-.``-._|'</span>` _.-<span class="string">'|     Port: 26379</span></span><br><span class="line"><span class="string"> |    `-._   `._    /     _.-'</span>    |     PID: 63284</span><br><span class="line">  `-._    `-._  `-./  _.-<span class="string">'    _.-'</span></span><br><span class="line"> |`-._`-._    `-.__.-<span class="string">'    _.-'</span>_.-<span class="string">'|</span></span><br><span class="line"><span class="string"> |    `-._`-._        _.-'</span>_.-<span class="string">'    |           http://redis.io</span></span><br><span class="line"><span class="string">  `-._    `-._`-.__.-'</span>_.-<span class="string">'    _.-'</span></span><br><span class="line"> |`-._`-._    `-.__.-<span class="string">'    _.-'</span>_.-<span class="string">'|</span></span><br><span class="line"><span class="string"> |    `-._`-._        _.-'</span>_.-<span class="string">'    |</span></span><br><span class="line"><span class="string">  `-._    `-._`-.__.-'</span>_.-<span class="string">'    _.-'</span></span><br><span class="line">      `-._    `-.__.-<span class="string">'    _.-'</span></span><br><span class="line">          `-._        _.-<span class="string">'</span></span><br><span class="line"><span class="string">              `-.__.-'</span></span><br><span class="line"></span><br><span class="line">63284:X 13 Feb 2023 13:34:16.371 <span class="comment"># Sentinel ID is aab9a70d6160f5ffdcbc57130a26295510730b10</span></span><br><span class="line">63284:X 13 Feb 2023 13:34:16.372 <span class="comment"># +monitor master r1 127.0.0.1 6379 quorum 1</span></span><br><span class="line">63284:X 13 Feb 2023 13:34:16.377 * +slave slave 127.0.0.1:6380 127.0.0.1 6380 @ r1 127.0.0.1 6379</span><br><span class="line">63284:X 13 Feb 2023 13:36:14.070 <span class="comment"># +sdown master r1 127.0.0.1 6379</span></span><br><span class="line">63284:X 13 Feb 2023 13:36:14.072 <span class="comment"># +odown master r1 127.0.0.1 6379 #quorum 1/1</span></span><br><span class="line">63284:X 13 Feb 2023 13:36:14.073 <span class="comment"># +new-epoch 1</span></span><br><span class="line">63284:X 13 Feb 2023 13:36:14.075 <span class="comment"># +try-failover master r1 127.0.0.1 6379</span></span><br><span class="line">63284:X 13 Feb 2023 13:36:14.084 <span class="comment"># +vote-for-leader aab9a70d6160f5ffdcbc57130a26295510730b10 1</span></span><br><span class="line">63284:X 13 Feb 2023 13:36:14.086 <span class="comment"># +elected-leader master r1 127.0.0.1 6379</span></span><br><span class="line">63284:X 13 Feb 2023 13:36:14.088 <span class="comment"># +failover-state-select-slave master r1 127.0.0.1 6379</span></span><br><span class="line">63284:X 13 Feb 2023 13:36:14.182 <span class="comment"># +selected-slave slave 127.0.0.1:6380 127.0.0.1 6380 @ r1 127.0.0.1 6379</span></span><br><span class="line">63284:X 13 Feb 2023 13:36:14.184 * +failover-state-send-slaveof-noone slave 127.0.0.1:6380 127.0.0.1 6380 @ r1 127.0.0.1 6379</span><br><span class="line">63284:X 13 Feb 2023 13:36:14.243 * +failover-state-wait-promotion slave 127.0.0.1:6380 127.0.0.1 6380 @ r1 127.0.0.1 6379</span><br><span class="line">63284:X 13 Feb 2023 13:36:14.860 <span class="comment"># +promoted-slave slave 127.0.0.1:6380 127.0.0.1 6380 @ r1 127.0.0.1 6379</span></span><br><span class="line">63284:X 13 Feb 2023 13:36:14.862 <span class="comment"># +failover-state-reconf-slaves master r1 127.0.0.1 6379</span></span><br><span class="line">63284:X 13 Feb 2023 13:36:14.938 <span class="comment"># +failover-end master r1 127.0.0.1 6379</span></span><br><span class="line">63284:X 13 Feb 2023 13:36:14.939 <span class="comment"># +switch-master r1 127.0.0.1 6379 127.0.0.1 6380</span></span><br><span class="line">63284:X 13 Feb 2023 13:36:14.942 * +slave slave 127.0.0.1:6379 127.0.0.1 6379 @ r1 127.0.0.1 6380</span><br><span class="line">63284:X 13 Feb 2023 13:36:15.208 * +slave slave 127.0.0.1:6381 127.0.0.1 6381 @ r1 127.0.0.1 6380</span><br><span class="line">63284:X 13 Feb 2023 13:36:44.969 <span class="comment"># +sdown slave 127.0.0.1:6379 127.0.0.1 6379 @ r1 127.0.0.1 6380</span></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure></li>
+</ol>
+<h2 id="其他-1"><a href="#其他-1" class="headerlink" title="其他"></a>其他</h2><ul>
+<li>若主机宕机后，哨兵会自动投票选举从机作为主机。</li>
+<li>主机宕机恢复后，哨兵会向该主机发送命令，将该主机变为新主机的从机。</li>
+</ul>
+<h2 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h2><ol>
+<li>主从可以切换，故障可以转移，系统的可用性会更好；</li>
+<li>哨兵模式就是主从模式的升级，手动到自动；</li>
+</ol>
+<h2 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h2><ol>
+<li>Redis不易扩容，集群容量一旦达到上限，在线扩容十分麻烦；</li>
+<li>实现哨兵模式的配置麻烦。</li>
+</ol>
+<h2 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h2><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">bind</span> 127.0.0.1 ::1</span><br><span class="line">port 26379  <span class="comment">#如果有哨兵集群，则需要配置端口</span></span><br><span class="line">daemonize no</span><br><span class="line">pidfile <span class="string">"/var/run/sentinel/redis-sentinel.pid"</span></span><br><span class="line">logfile <span class="string">"/var/log/redis/redis-sentinel.log"</span></span><br><span class="line"><span class="comment"># 指定监听的master</span></span><br><span class="line"><span class="comment">#    quorum 有多少个哨兵认为失联了，就认定主机down了</span></span><br><span class="line"><span class="comment">#sentinel monitor 主机名   地址     端口 quorum</span></span><br><span class="line">sentinel monitor mymaster 127.0.0.1 6379 2</span><br><span class="line"><span class="comment">#配置主机密码</span></span><br><span class="line">sentinel auto-pass &lt;master-name&gt; &lt;password&gt;</span><br><span class="line"><span class="comment"># 指定多长时间，哨兵主观认为master不可用了，单位是毫秒，默认为30秒</span></span><br><span class="line"><span class="comment"># 默认延时操作                      主机名        延时</span></span><br><span class="line">sentinel down-after-milliseconds &lt;master-name&gt; &lt;milliseconds&gt;</span><br><span class="line"><span class="comment">#  故障转移时，最多允许多少个从机同时从master进行数据同步。  因此，1则表示串行。设为1保证每次只有一个slave处于不能处理请求的状态</span></span><br><span class="line">sentinel parallel syncs &lt;master-name&gt; &lt;numslaves&gt;</span><br><span class="line"><span class="comment"># 故障转移 超时时间 若超过180000ms没有转移成功，则视为故障转移失败</span></span><br><span class="line">sentinel failover-timeout mymaster 180000</span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置某一事件发生时要执行的脚本</span></span><br><span class="line"><span class="comment"># 通知型脚本：当sentinel有任何警告级别的事件发生时（比如Redis实例主管失效、客观失效等），将会去调用这个脚本，这时脚本应该通过邮件，SMS等方式通知系统管理员关于系统不正常运行的而信息；调用该脚本时，将会给脚本传递两个参数，一个是事件的类型，一个是事件的描述。若配置了这个脚本，则必须保证脚本可执行，否则sentinel无法正常启动</span></span><br><span class="line"><span class="comment"># 规则：</span></span><br><span class="line"><span class="comment"># 1. 若脚本执行后返回1，则该脚本会被再次执行，重复次数默认为10</span></span><br><span class="line"><span class="comment"># 2. 若脚本返回2或一个比2更高的值，脚本不会被重复执行</span></span><br><span class="line"><span class="comment"># 3. 若脚本执行过程中收到中断信号终止了，则同返回值为1的行为相同</span></span><br><span class="line"><span class="comment"># 4. 脚本最大执行时间为60s，超过这个时间会被一个SIGKILL信号终止，之后重新执行。</span></span><br><span class="line">sentinel notification-script mymaster /var/redis/notfiy.sh</span><br><span class="line"></span><br><span class="line"><span class="comment"># 当一个master由于failover而发生改变时，这个脚本将被调用，通知相关的客户端关于master地址已经发生改变的信息，以下参数将会在调用脚本时传给脚本。</span></span><br><span class="line"><span class="comment"># &lt;master-name&gt; &lt;role&gt; &lt;state&gt; &lt;from-ip&gt; &lt;from-port&gt; &lt;to-ip&gt; &lt;to-port&gt;</span></span><br><span class="line">sentinel client-reconfig-script mymaster /var/redis/reconfig.sh</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+
+                </div>
+
+                
+                        
+<div class="article-copyright-info-container border-box">
+    <div class="copyright-info-content border-box">
+        <div class="copyright-info-top border-box">
+            <div class="post-title border-box text-ellipsis">
+                Redis restudy 7 发布订阅 主从复制 哨兵模式
+            </div>
+
+            <div class="post-link border-box text-ellipsis">
+                2023/02/13/Redis/Redis-restudy-7/
+            </div>
+        </div>
+
+        <div class="copyright-info-bottom border-box">
+            <div class="post-author bottom-item">
+                <div class="type">
+                    作者
+                </div>
+                <div class="content">uwupu</div>
+            </div>
+
+            <div class="post-time bottom-item">
+                <div class="type">
+                    發布于
+                </div>
+                <div class="content">2023-02-13 19:29</div>
+            </div>
+
+
+            <div class="post-license bottom-item">
+                <div class="type">
+                    許可
+                </div>
+                <div class="content tooltip" data-tooltip-content="CC BY-NC-SA 4.0">
+                    <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed">
+                        <i class="fa-brands fa-creative-commons"></i>
+                        <i class="fa-brands fa-creative-commons-by"></i>
+                        <i class="fa-brands fa-creative-commons-nc"></i>
+                        <i class="fa-brands fa-creative-commons-sa"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <i class="copyright-bg fa-solid fa-copyright"></i>
+    </div>
+    <div class="copy-copyright-info flex-center tooltip" data-tooltip-content="復製版權信息" data-tooltip-offset-y="-2px">
+        <i class="fa-solid fa-copy"></i>
+    </div>
+</div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Redis/">Redis</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="article-nav">
+                        
+                            <div class="article-prev">
+                                <a class="prev" rel="prev" href="/2023/02/13/Redis/Redis-restudy-8/" title="Redis restudy 8 缓存穿透，击穿，雪崩">
+                                    <span class="left arrow-icon flex-center">
+                                      <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                            <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Redis restudy 8 缓存穿透，击穿，雪崩</span>
+                                        <span class="post-nav-item">上一篇</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="article-next">
+                                <a class="next" rel="next" href="/2023/02/13/Redis/Redis-restudy-6/" title="Redis restudy 6 conf 持久化">
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Redis restudy 6 conf 持久化</span>
+                                        <span class="post-nav-item">下一篇</span>
+                                    </span>
+                                            <span class="right arrow-icon flex-center">
+                                      <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis%E5%8F%91%E5%B8%83%E8%AE%A2%E9%98%85"><span class="nav-number">1.</span> <span class="nav-text">Redis发布订阅</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%91%BD%E4%BB%A4"><span class="nav-number">1.1.</span> <span class="nav-text">命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">1.2.</span> <span class="nav-text">使用场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%94%E7%94%A8"><span class="nav-number">1.3.</span> <span class="nav-text">应用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6"><span class="nav-number">2.</span> <span class="nav-text">Redis主从复制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="nav-number">2.1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%9C%E7%94%A8"><span class="nav-number">2.2.</span> <span class="nav-text">作用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E8%88%AC%E6%9D%A5%E8%AF%B4%EF%BC%8CRedis%E5%9C%A8%E5%B7%A5%E7%A8%8B%E9%A1%B9%E7%9B%AE%E4%B8%AD%E4%BA%86%EF%BC%8C%E5%8F%AA%E7%94%A8%E4%B8%80%E5%8F%B0Redis%E6%98%AF%E4%B8%87%E4%B8%87%E4%B8%8D%E8%83%BD%E7%9A%84"><span class="nav-number">2.3.</span> <span class="nav-text">一般来说，Redis在工程项目中了，只用一台Redis是万万不能的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%A7%E8%B4%A8"><span class="nav-number">2.4.</span> <span class="nav-text">性质</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="nav-number">2.5.</span> <span class="nav-text">环境配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%91%BD%E4%BB%A4-1"><span class="nav-number">2.5.1.</span> <span class="nav-text">命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE"><span class="nav-number">2.5.2.</span> <span class="nav-text">配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8D%95%E6%9C%BA%E6%B5%8B%E8%AF%95%E5%AD%A6%E4%B9%A0"><span class="nav-number">2.5.2.1.</span> <span class="nav-text">单机测试学习</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%AD%A3%E5%BC%8F%E9%85%8D%E7%BD%AE"><span class="nav-number">2.5.2.2.</span> <span class="nav-text">正式配置</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%91%BD%E4%BB%A4%E9%85%8D%E7%BD%AE"><span class="nav-number">2.5.2.2.1.</span> <span class="nav-text">命令配置</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E9%85%8D%E7%BD%AE"><span class="nav-number">2.5.2.2.2.</span> <span class="nav-text">配置文件配置</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">2.5.3.</span> <span class="nav-text">其他</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E7%90%86"><span class="nav-number">2.6.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%BD%A2%E5%BC%8F"><span class="nav-number">2.7.</span> <span class="nav-text">主从复制形式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%96%E6%B6%88%E4%BB%8E%E6%9C%BA%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.8.</span> <span class="nav-text">取消从机模式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis%E5%93%A8%E5%85%B5%E6%A8%A1%E5%BC%8F"><span class="nav-number">3.</span> <span class="nav-text">Redis哨兵模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%A0%E7%BB%9F%E7%9A%84%E4%B8%BB%E4%BB%8E%E5%88%87%E6%8D%A2"><span class="nav-number">3.1.</span> <span class="nav-text">传统的主从切换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D-1"><span class="nav-number">3.2.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E7%90%86-1"><span class="nav-number">3.3.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B"><span class="nav-number">3.4.</span> <span class="nav-text">示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96-1"><span class="nav-number">3.5.</span> <span class="nav-text">其他</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%98%E7%82%B9"><span class="nav-number">3.6.</span> <span class="nav-text">优点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%BA%E7%82%B9"><span class="nav-number">3.7.</span> <span class="nav-text">缺点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">3.8.</span> <span class="nav-text">配置文件</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="border-box website-info-box default">
+        
+            <div class="copyright-info info-item default">
+                ©&nbsp;<span>2020</span>&nbsp;-&nbsp;2023
+                
+                    &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">uwupu</a>
+                
+            </div>
+
+            <div class="theme-info info-item default">
+                <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;框架&nbsp;&amp;&nbsp;主題&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a>
+            </div>
+
+            
+
+            
+        
+
+        <div class="count-item info-item default">
+            
+                <span class="count-box border-box word">
+                    <span class="item-type border-box">總字數</span>
+                    <span class="item-value border-box word">161.4k</span>
+                </span>
+            
+
+            
+                <span class="count-box border-box uv">
+                    <span class="item-type border-box">讀者</span>
+                    <span class="item-value border-box uv" id="busuanzi_value_site_uv"></span>
+                </span>
+            
+
+            
+                <span class="count-box border-box pv">
+                    <span class="item-type border-box">閱覽</span>
+                    <span class="item-value border-box pv" id="busuanzi_value_site_pv"></span>
+                </span>
+            
+        </div>
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="tools-list border-box">
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="搜尋..." spellcheck="false" type="search" class="search-input">
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis%E5%8F%91%E5%B8%83%E8%AE%A2%E9%98%85"><span class="nav-number">1.</span> <span class="nav-text">Redis发布订阅</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%91%BD%E4%BB%A4"><span class="nav-number">1.1.</span> <span class="nav-text">命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">1.2.</span> <span class="nav-text">使用场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%94%E7%94%A8"><span class="nav-number">1.3.</span> <span class="nav-text">应用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6"><span class="nav-number">2.</span> <span class="nav-text">Redis主从复制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="nav-number">2.1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%9C%E7%94%A8"><span class="nav-number">2.2.</span> <span class="nav-text">作用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E8%88%AC%E6%9D%A5%E8%AF%B4%EF%BC%8CRedis%E5%9C%A8%E5%B7%A5%E7%A8%8B%E9%A1%B9%E7%9B%AE%E4%B8%AD%E4%BA%86%EF%BC%8C%E5%8F%AA%E7%94%A8%E4%B8%80%E5%8F%B0Redis%E6%98%AF%E4%B8%87%E4%B8%87%E4%B8%8D%E8%83%BD%E7%9A%84"><span class="nav-number">2.3.</span> <span class="nav-text">一般来说，Redis在工程项目中了，只用一台Redis是万万不能的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%A7%E8%B4%A8"><span class="nav-number">2.4.</span> <span class="nav-text">性质</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="nav-number">2.5.</span> <span class="nav-text">环境配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%91%BD%E4%BB%A4-1"><span class="nav-number">2.5.1.</span> <span class="nav-text">命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE"><span class="nav-number">2.5.2.</span> <span class="nav-text">配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8D%95%E6%9C%BA%E6%B5%8B%E8%AF%95%E5%AD%A6%E4%B9%A0"><span class="nav-number">2.5.2.1.</span> <span class="nav-text">单机测试学习</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%AD%A3%E5%BC%8F%E9%85%8D%E7%BD%AE"><span class="nav-number">2.5.2.2.</span> <span class="nav-text">正式配置</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%91%BD%E4%BB%A4%E9%85%8D%E7%BD%AE"><span class="nav-number">2.5.2.2.1.</span> <span class="nav-text">命令配置</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E9%85%8D%E7%BD%AE"><span class="nav-number">2.5.2.2.2.</span> <span class="nav-text">配置文件配置</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">2.5.3.</span> <span class="nav-text">其他</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E7%90%86"><span class="nav-number">2.6.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%BD%A2%E5%BC%8F"><span class="nav-number">2.7.</span> <span class="nav-text">主从复制形式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%96%E6%B6%88%E4%BB%8E%E6%9C%BA%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.8.</span> <span class="nav-text">取消从机模式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis%E5%93%A8%E5%85%B5%E6%A8%A1%E5%BC%8F"><span class="nav-number">3.</span> <span class="nav-text">Redis哨兵模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%A0%E7%BB%9F%E7%9A%84%E4%B8%BB%E4%BB%8E%E5%88%87%E6%8D%A2"><span class="nav-number">3.1.</span> <span class="nav-text">传统的主从切换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D-1"><span class="nav-number">3.2.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E7%90%86-1"><span class="nav-number">3.3.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B"><span class="nav-number">3.4.</span> <span class="nav-text">示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96-1"><span class="nav-number">3.5.</span> <span class="nav-text">其他</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%98%E7%82%B9"><span class="nav-number">3.6.</span> <span class="nav-text">优点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%BA%E7%82%B9"><span class="nav-number">3.7.</span> <span class="nav-text">缺点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">3.8.</span> <span class="nav-text">配置文件</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+<!-- common -->
+<script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/utils.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/header-shrink.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/back2top.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/dark-light-toggle.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/main.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/libs/anime.min.js"></script>
+
+<!-- local-search -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/local-search.js"></script>
+
+
+<!-- code-block -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/code-block.js"></script>
+
+
+<!-- lazyload -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/lazyload.js"></script>
+
+
+<div class="pjax">
+    
+        <!-- post-helper -->
+        <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/post-helper.js"></script>
+
+        <!-- toc -->
+        
+            <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/toc.js"></script>
+        
+
+        <!-- copyright-info -->
+        
+            <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/copyright-info.js"></script>
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- category-page -->
+    
+
+    <!-- links-page -->
+    
+</div>
+
+<!-- mermaid -->
+
+
+<!-- pjax -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/libs/pjax.min.js"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax'
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            KEEP.utils.pjaxProgressBarStart()
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            KEEP.utils.pjaxProgressBarEnd()
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'))
+            KEEP.initExecute()
+        });
+    });
+</script>
+
+
+
+
+
+
+</body></html>

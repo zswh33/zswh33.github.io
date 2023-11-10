@@ -1,0 +1,838 @@
+<!DOCTYPE html><html lang="zh-Hans"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="一个包含有学习日记的博客">
+    <meta name="author" content="uwupu">
+    
+    <title>
+        
+            Day8 Reflection 反射机制 |
+        
+        uwupu 学习日志
+    </title>
+    
+
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+    
+    
+    
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"zswh33.github.io","root":"/","language":"zh-Hans","path":"search.json"}
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":true,"init_open":true,"layout":"right"},"style":{"primary_color":"#F099BC","logo":"/images/logo.svg","favicon":"/images/logo.svg","avatar":"/images/avatar.svg","first_screen":{"enable":false,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"scroll":{"progress_bar":false,"percent":false}},"local_search":{"enable":true,"preload":true},"code_block":{"tools":{"enable":true,"style":"mac"},"highlight_theme":"obsidian"},"pjax":{"enable":true},"lazyload":{"enable":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.21"},"waline":{"server_url":null,"reaction":false,"version":2},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false}},"post":{"author_label":{"enable":true,"auto":false,"custom_label_list":["啦啦啦啦啦"]},"word_count":{"wordcount":true,"min2read":true},"datetime_format":"YYYY-MM-DD HH:mm","copyright_info":true,"share":false,"reward":{"enable":false,"img_link":null,"text":null}},"website_count":{"busuanzi_count":{"enable":true,"site_uv":true,"site_pv":true,"page_pv":true}},"version":"3.8.6"}
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
+    KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
+    KEEP.language_copy_copyright = {"copy":"Copy copyright info","copied":"Copied","title":"Original article title","author":"Original article author","link":"Original article link"}
+  </script>
+<meta name="generator" content="Hexo 6.2.0"><link rel="alternate" href="/atom.xml" title="uwupu Blog" type="application/atom+xml">
+<script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/fontawesome.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/regular.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/solid.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/brands.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/fontawesome.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/regular.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/solid.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/brands.min.css"></noscript></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <i class="pjax-progress-icon fas fa-circle-notch fa-spin"></i>
+    
+</div>
+
+
+<main class="page-container border-box">
+
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.svg">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               uwupu 学习日志
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class="" href="/">
+                                首頁
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/archives">
+                                歸檔
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/tags">
+                                標籤
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/categories">
+                                分類
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/links">
+                                友鏈
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/about">
+                                關於
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/">首頁</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/archives">歸檔</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/tags">標籤</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/categories">分類</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/links">友鏈</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/about">關於</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+
+                
+
+                    <div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+
+        <div class="article-content-container border-box">
+
+            
+
+            <div class="article-content-bottom border-box">
+                
+                    <div class="article-title">
+                        Day8 Reflection 反射机制
+                    </div>
+                
+
+                
+                    <div class="article-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/avatar.svg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author">
+                                <span class="name">uwupu</span>
+                                
+                                    <span class="author-label">啦啦啦啦啦</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="article-meta-info-container border-box post">
+    <div class="article-meta-info border-box">
+        
+
+
+        
+            <span class="meta-info-item article-create-date">
+                <i class="icon fa-solid fa-calendar-check"></i>&nbsp;
+                <span class="pc">2022-08-31 09:29</span>
+                <span class="mobile">2022-08-31 09:29</span>
+            </span>
+
+            <span class="meta-info-item article-update-date">
+                <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                <span class="pc" data-updated="Fri Nov 10 2023 23:09:12 GMT+0800">2023-11-10 23:09</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item article-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="article-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/Day/">Day</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="article-tag meta-info-item border-box">
+                <i class="icon fas fa-tags"></i>&nbsp;
+                <ul class="article-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Java/">Java</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+            <span class="meta-info-item article-wordcount">
+                <i class="icon fas fa-file-word"></i>&nbsp;<span>2.4k 字數</span>
+            </span>
+        
+        
+            <span class="meta-info-item article-min2read">
+                <i class="icon fas fa-clock"></i>&nbsp;<span>9 分鐘</span>
+            </span>
+        
+        
+            <span class="meta-info-item article-pv">
+                <i class="icon fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="article-content keep-markdown-body">
+                    
+
+                    <h1 id="Java-Reflection-反射机制"><a href="#Java-Reflection-反射机制" class="headerlink" title="Java Reflection 反射机制"></a>Java Reflection 反射机制</h1><h2 id="静态语言-动态语言"><a href="#静态语言-动态语言" class="headerlink" title="静态语言 动态语言"></a>静态语言 动态语言</h2><h3 id="动态语言"><a href="#动态语言" class="headerlink" title="动态语言"></a>动态语言</h3><p>是一类在运行时可以改变其结构的语言。</p>
+<p>即：在运行时代码可以根据某些条件改变自身结构。</p>
+<p>主要动态语言：Object-C、C#、JavaScript、PHP、Python等。</p>
+<h3 id="静态语言"><a href="#静态语言" class="headerlink" title="静态语言"></a>静态语言</h3><p>运行时结构不可变的语言就是静态语言，如Java，C，C++。</p>
+<p>Java不是动态语言，但可以称为“准动态语言”。可以通过反射机制获得类似动态语言的特性。</p>
+<h2 id="Java-Reflection"><a href="#Java-Reflection" class="headerlink" title="Java Reflection"></a>Java Reflection</h2><p>Reflection反射机制允许程序在执行期间借助于Reflection API取得任何类的内部信息，并能直接操作任意对象的内部属性及方法。</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Class</span> <span class="variable">c</span> <span class="operator">=</span> Class.forName(<span class="string">"java.lang.String"</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+
+
+<p>加载完类之后，在堆内存的方法区就产生了一个Class类型的对象（一个类只有一个Class对象），这个对象就包含了完整的类的结构信息。通过这个对象可以看到类的结构。</p>
+<p>透过这个对象看到类结构的过程，称为<strong>反射</strong>。</p>
+<h3 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h3><p>在运行时：</p>
+<ol>
+<li>判断任意一个对象所属的类；</li>
+<li>构造任意一个类的对象；</li>
+<li>判断任意一个类所具有的成员变量和方法；</li>
+<li>获取泛型信息；</li>
+<li>调用任意一个对象的成员变量和方法；</li>
+<li>处理注解；</li>
+<li>生产动态代理；</li>
+<li>…</li>
+</ol>
+<h3 id="优点-缺点"><a href="#优点-缺点" class="headerlink" title="优点 缺点"></a>优点 缺点</h3><p>优点：可以实现动态创建对象和编译；</p>
+<p>缺点：这类操作慢于直接执行的操作。</p>
+<h3 id="主要API"><a href="#主要API" class="headerlink" title="主要API"></a>主要API</h3><ul>
+<li><p><code>java.lang.Class</code> 代表一个类</p>
+</li>
+<li><p><code>java.lang.Method</code> 代表类的方法</p>
+</li>
+<li><p><code>java.lang.Field</code> 代表类的成员变量</p>
+</li>
+<li><p><code>java.lang.Constructor</code> 代表类的构造器</p>
+</li>
+<li><p>……</p>
+</li>
+</ul>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Test1</span> {</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> ClassNotFoundException {</span><br><span class="line">        <span class="comment">//通过反射获取类的class对象</span></span><br><span class="line">        <span class="type">Class</span> <span class="variable">c1</span> <span class="operator">=</span> Class.forName(<span class="string">"Demo2_Reflection.User"</span>);</span><br><span class="line">        System.out.println(c1);<span class="comment">//获取类</span></span><br><span class="line">        <span class="type">Class</span> <span class="variable">c2</span> <span class="operator">=</span> Class.forName(<span class="string">"Demo2_Reflection.User"</span>);</span><br><span class="line">        System.out.println(c1==c2);<span class="comment">//true  每个类只有一个Class对象</span></span><br><span class="line"></span><br><span class="line">        Method[] methods = c1.getMethods();<span class="comment">//获取类的方法</span></span><br><span class="line">        <span class="keyword">for</span> (Method i : methods){</span><br><span class="line">            System.out.println(i.getName());</span><br><span class="line">        }</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">        toString</span></span><br><span class="line"><span class="comment">        getName</span></span><br><span class="line"><span class="comment">        getId</span></span><br><span class="line"><span class="comment">        ...</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">//一个实体类 ： 一般用POJO或entity表示</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">User</span>{...}<span class="comment">//getter setter constructor ...</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="Class类"><a href="#Class类" class="headerlink" title="Class类"></a>Class类</h2><p>Class是Java的一个类。</p>
+<ul>
+<li>Class对象只能由系统建立对象。</li>
+<li>一个加载的类在JVM中只会有一个Class实例；</li>
+<li>一个Class对象对应的是一个加载到JVM中的一个class文件；</li>
+<li>通过Class可以完整地得到一个类中的<strong>所有被加载的结构</strong>。</li>
+</ul>
+<h3 id="常用方法"><a href="#常用方法" class="headerlink" title="常用方法"></a>常用方法</h3><table>
+<thead>
+<tr>
+<th>方法名</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>static ClassforName(String name)</code></td>
+<td>返回指定类名name的Class对象</td>
+</tr>
+<tr>
+<td><code>Object newInstance()</code></td>
+<td>调用缺省构造函数，返回Class对象的一个实例。</td>
+</tr>
+<tr>
+<td><code>getName()</code></td>
+<td>返回Class对象表示的实体的名称</td>
+</tr>
+<tr>
+<td><code>Class getSuperClass()</code></td>
+<td>返回当前Class对象分类的Class对象。</td>
+</tr>
+<tr>
+<td><code>Class[] getinterfaces()</code></td>
+<td>获取当前Class对象的接口</td>
+</tr>
+<tr>
+<td><code>ClassLoader getClassLoader()</code></td>
+<td>返回该类的类加载器</td>
+</tr>
+<tr>
+<td><code>Constructor[] getConstructors()</code></td>
+<td>返回一个包含某些Constructor对象的数组。</td>
+</tr>
+<tr>
+<td><code>Method getMethod(String name,Class ... T)</code></td>
+<td>返回Method对象，形参类型为paramType</td>
+</tr>
+<tr>
+<td><code>Field[] getDeclaredFiedlds()</code></td>
+<td>返回Field对象的一个数组</td>
+</tr>
+</tbody></table>
+<h3 id="获取Class对象"><a href="#获取Class对象" class="headerlink" title="获取Class对象"></a>获取Class对象</h3><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Demo3_CreateClass</span> {</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> ClassNotFoundException {</span><br><span class="line"></span><br><span class="line">        <span class="type">User2</span> <span class="variable">user2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">User2</span>();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//1. 通过对象获得</span></span><br><span class="line">        <span class="type">Class</span> <span class="variable">c1</span> <span class="operator">=</span> user2.getClass();</span><br><span class="line">        <span class="comment">//2. 通过forname获得</span></span><br><span class="line">        <span class="type">Class</span> <span class="variable">c2</span> <span class="operator">=</span> Class.forName(<span class="string">"User2"</span>);</span><br><span class="line">        <span class="comment">//3. 通过类名.class获得</span></span><br><span class="line">        <span class="type">Class</span> <span class="variable">c3</span> <span class="operator">=</span> User2.class;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//获取父类类型</span></span><br><span class="line">        <span class="type">Class</span> <span class="variable">c4</span> <span class="operator">=</span> c1.getSuperclass();</span><br><span class="line">        System.out.println(c4);<span class="comment">//class java.lang.Object</span></span><br><span class="line"></span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="哪些类型可以有Class对象"><a href="#哪些类型可以有Class对象" class="headerlink" title="哪些类型可以有Class对象"></a>哪些类型可以有Class对象</h3><ul>
+<li><p>class：外部类，成员，局部内部类，匿名内部类；</p>
+</li>
+<li><p>interface接口</p>
+</li>
+<li><p>[]数组</p>
+</li>
+<li><p><code>enum</code>枚举</p>
+</li>
+<li><p>annotation注解<code>@interface</code></p>
+</li>
+<li><p>void</p>
+</li>
+</ul>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Demo4_ClassFromWhere</span> {</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> {</span><br><span class="line">        <span class="type">Class</span> <span class="variable">c1</span> <span class="operator">=</span> Object.class;<span class="comment">//类</span></span><br><span class="line">        <span class="type">Class</span> <span class="variable">c2</span> <span class="operator">=</span> Comparable.class;<span class="comment">//接口</span></span><br><span class="line">        <span class="type">Class</span> <span class="variable">c3</span> <span class="operator">=</span> String[].class;<span class="comment">//数组</span></span><br><span class="line">        <span class="type">Class</span> <span class="variable">c4</span> <span class="operator">=</span> <span class="type">int</span>[][].class;<span class="comment">//二维数组</span></span><br><span class="line">        <span class="type">Class</span> <span class="variable">c5</span> <span class="operator">=</span> Override.class;<span class="comment">//注解</span></span><br><span class="line">        <span class="type">Class</span> <span class="variable">c6</span> <span class="operator">=</span> ElementType.class; <span class="comment">//枚举</span></span><br><span class="line">        <span class="type">Class</span> <span class="variable">c7</span> <span class="operator">=</span> Integer.class; <span class="comment">// 基本数据类型</span></span><br><span class="line">        <span class="type">Class</span> <span class="variable">c8</span> <span class="operator">=</span> <span class="keyword">void</span>.class;<span class="comment">//void</span></span><br><span class="line">        <span class="type">Class</span> <span class="variable">c9</span> <span class="operator">=</span> Class.class; <span class="comment">//Class对象</span></span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="Java内存分析"><a href="#Java内存分析" class="headerlink" title="Java内存分析"></a>Java内存分析</h3><h4 id="类的加载过程"><a href="#类的加载过程" class="headerlink" title="类的加载过程"></a>类的加载过程</h4><table>
+<thead>
+<tr>
+<th>序号</th>
+<th>过程</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>类的加载Load</td>
+<td>将类的class文件读入内存，并为之创建一个java.lang.Class对象。这个过程由类加载器完成。</td>
+</tr>
+<tr>
+<td>2</td>
+<td>类的链接Link</td>
+<td>将类的二进制数据合并到JVM中。</td>
+</tr>
+<tr>
+<td>3</td>
+<td>类的初始化Initialize</td>
+<td>JVM负责对类进行初始化。</td>
+</tr>
+</tbody></table>
+<h5 id="链接-过程"><a href="#链接-过程" class="headerlink" title="链接 过程"></a>链接 过程</h5><ul>
+<li>验证：确保加载的类信息符合JVM规范，没有安全方面问题；</li>
+<li>准备：为类变量static分配内存并设置类变量默认初始值的阶段，这些内存都将在方法区中分配；</li>
+<li>解析：虚拟机常量池内的符号引用（常量名）替换为直接引用（地址）的过程。</li>
+</ul>
+<h6 id="类初始化顺序代码"><a href="#类初始化顺序代码" class="headerlink" title="类初始化顺序代码"></a>类初始化顺序代码</h6><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Demo5_</span>初始化顺序 {</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> {</span><br><span class="line">        System.out.println(<span class="string">"程序开始"</span>);</span><br><span class="line">        <span class="type">AClass</span> <span class="variable">aClass</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AClass</span>();</span><br><span class="line">        System.out.println(<span class="string">"程序结束"</span>);</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">        运行结果：</span></span><br><span class="line"><span class="comment">            程序开始</span></span><br><span class="line"><span class="comment">            类代码块初始化</span></span><br><span class="line"><span class="comment">            无参构造初始化</span></span><br><span class="line"><span class="comment">            程序结束</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">AClass</span>{</span><br><span class="line">    <span class="keyword">static</span> {</span><br><span class="line">        System.out.println(<span class="string">"类代码块初始化"</span>);</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">AClass</span><span class="params">()</span>{</span><br><span class="line">        System.out.println(<span class="string">"无参构造初始化"</span>);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h6 id="初始化顺序-代码2"><a href="#初始化顺序-代码2" class="headerlink" title="初始化顺序 代码2"></a>初始化顺序 代码2</h6><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Test</span> {</span><br><span class="line">    <span class="keyword">static</span>{</span><br><span class="line">        System.out.println(<span class="string">"main方法所在类被加载"</span>);</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> ClassNotFoundException {</span><br><span class="line">        <span class="comment">//主动引用：new</span></span><br><span class="line">        <span class="type">Son</span> <span class="variable">son</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Son</span>();</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Father</span>{</span><br><span class="line">    <span class="keyword">static</span> {</span><br><span class="line">        System.out.println(<span class="string">"父类被加载"</span>);</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Son</span> <span class="keyword">extends</span> <span class="title class_">Father</span>{</span><br><span class="line">    <span class="keyword">static</span> {</span><br><span class="line">        System.out.println(<span class="string">"子类被加载"</span>);</span><br><span class="line">        m = <span class="number">300</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">static</span> <span class="type">int</span> <span class="variable">m</span> <span class="operator">=</span> <span class="number">100</span>;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">M</span> <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>输出</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">main方法所在类被加载</span><br><span class="line">父类被加载</span><br><span class="line">子类被加载</span><br></pre></td></tr></tbody></table></figure>
+
+<h5 id="初始化-过程"><a href="#初始化-过程" class="headerlink" title="初始化 过程"></a>初始化 过程</h5><ul>
+<li>即，执行构造器<code>&lt;clinit&gt;</code>方法的过程。</li>
+</ul>
+<h6 id="lt-clinit-gt"><a href="#lt-clinit-gt" class="headerlink" title="<clinit>"></a>&lt;clinit&gt;</h6><p>类构造器<code>&lt;clinit&gt;()</code>方法是由编译器自动收集类中所有类变量的赋值动作和静态代码块中的语句合并产生的。（类构造器用来<strong>构造类信息</strong>，而不是用来构造<strong>该类对象的构造器</strong>）</p>
+<p>虚拟机会保证一个类的<code>&lt;clinit&gt;()</code>方法在多线程环境中被正确加锁和同步。</p>
+<h2 id="类的初始化"><a href="#类的初始化" class="headerlink" title="类的初始化"></a>类的初始化</h2><ul>
+<li>当发生<strong>类的主动引用</strong>，则一定会发生类的初始化。<ul>
+<li>当虚拟机启动，先初始化main方法所在的类。</li>
+<li>new<strong>一个类的对象</strong>。（new一个类的数组不计入。）</li>
+<li>调用类的静态成员和静态方法（除了final常量）</li>
+<li>使用java.lang.reflect包的方法对类进行反射调用。</li>
+<li>当初始化一个类，如果其父类没有被初始化，则先会初始化它的父类。</li>
+</ul>
+</li>
+<li><strong>类的被动引用</strong>，不会发生类的初始化<ul>
+<li>当访问一个静态域时，只有<strong>真正声明这个域的类</strong>才会被初始化。<ul>
+<li>如：当通过子类引用父类的静态变量，<strong>不会导致子类初始化</strong>。</li>
+</ul>
+</li>
+<li>通过数组定义类引用，不会触发此类的初始化。</li>
+<li><strong>引用常量</strong>不会触发此类的初始化（常量在链接阶段就存入调用类的常量池中）</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="variable">a</span> <span class="operator">=</span> Son.M;<span class="comment">//引用常量</span></span><br><span class="line">Son[] array = <span class="keyword">new</span> <span class="title class_">Son</span>[<span class="number">5</span>];<span class="comment">//new一个数组，不引发初始化</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="类加载器"><a href="#类加载器" class="headerlink" title="类加载器"></a>类加载器</h2><p><strong>类加载：</strong>将class文件字节码内容加载到内存中，并将这些静态数据转换成方法区的运行时数据结构，然后在堆中生成一个代表这个类的java.lang.Class对象，作为方法区中类数据的访问入口。</p>
+<p><strong>类缓存：</strong>标准的JavaSE类加载器可以按要求查找类，但一旦某个类被加载到类加载器中，将<strong>维持加载（缓存）</strong>一段时间。</p>
+<p><em>JVM垃圾回收机制可以回收这些Class对象</em></p>
+<p><img lazyload="" alt="image" data-src="/Day8-Reflection/image-20220831150141611.png"></p>
+<h3 id="类加载器分类"><a href="#类加载器分类" class="headerlink" title="类加载器分类"></a>类加载器分类</h3><p><strong>引导类加载器：</strong>用C++编写，是JVM自带的类加载器，<strong>负责Java平台核心库</strong>，用来装载核心类库。该加载器无法直接获取。<em>Bootstap Classloader</em></p>
+<p><strong>扩展类加载器：</strong>负责<code>jre/lib/ext</code>目录下的jar包或<code>-D java.ext.dirs</code>指定目录下的jar包装入工作库。<em>Extension Classloader、ExtClassLoader</em></p>
+<p><strong>系统类加载器：</strong>负责<code>java --classpath</code>或<code>--D java.class.path</code>所指目录下的类与jar包装入工作，是最常用的类加载器。<em>System Classloader、 AppClassLoader</em></p>
+<p><em>注释：</em>Java平台核心库，即<code>rt.jar</code>包。文件位置：jre/lib/rt.jar（内含有如：java.lang.*等类的字节码文件。）</p>
+<p><img lazyload="" alt="image" data-src="/Day8-Reflection/image-20220831151249781.png"></p>
+<h4 id="代码查看"><a href="#代码查看" class="headerlink" title="代码查看"></a>代码查看</h4><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Demo6_</span>系统类的加载器 {</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> ClassNotFoundException {</span><br><span class="line">        <span class="comment">//获取系统类的加载器</span></span><br><span class="line">        <span class="type">ClassLoader</span> <span class="variable">systemClassLoader</span> <span class="operator">=</span> ClassLoader.getSystemClassLoader();</span><br><span class="line">        System.out.println(<span class="string">"系统类加载器： "</span>+systemClassLoader);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//获取系统类加载器的父类加载器-&gt;扩展类加载器</span></span><br><span class="line">        <span class="type">ClassLoader</span> <span class="variable">parent</span> <span class="operator">=</span> systemClassLoader.getParent();</span><br><span class="line">        System.out.println(<span class="string">"系统类加载器的父类扩展类加载器： "</span>+parent);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//获取扩展类加载器的父类加载器 -&gt; 根加载器(c/c++)</span></span><br><span class="line">        <span class="type">ClassLoader</span> <span class="variable">parent2</span> <span class="operator">=</span> parent.getParent();</span><br><span class="line">        System.out.println(<span class="string">"扩展类加载器的父类根加载器："</span>+parent2);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">//当前类是哪个加载器加载的</span></span><br><span class="line">        <span class="type">ClassLoader</span> <span class="variable">classLoader</span> <span class="operator">=</span> Class.forName(<span class="string">"Demo6_系统类的加载器"</span>).getClassLoader();</span><br><span class="line">        System.out.println(<span class="string">"自定义类的加载器： "</span>+classLoader);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//JDK内置类是哪个加载器加载的</span></span><br><span class="line">        <span class="type">ClassLoader</span> <span class="variable">classLoader2</span> <span class="operator">=</span> Class.forName(<span class="string">"java.lang.Object"</span>).getClassLoader();</span><br><span class="line">        System.out.println(<span class="string">"JDK内置类的类加载器： "</span>+classLoader2);</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">        系统类加载器： sun.misc.Launcher$AppClassLoader@18b4aac2</span></span><br><span class="line"><span class="comment">        系统类加载器的父类扩展类加载器： sun.misc.Launcher$ExtClassLoader@1b6d3586</span></span><br><span class="line"><span class="comment">        扩展类加载器的父类根加载器：null  //根加载器不能直接获得</span></span><br><span class="line"><span class="comment">        自定义类的加载器： sun.misc.Launcher$AppClassLoader@18b4aac2</span></span><br><span class="line"><span class="comment">        JDK内置类的类加载器： null</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">//获得系统类加载器可以加载的路径</span></span><br><span class="line">        System.out.println(System.getProperty(<span class="string">"java.class.path"</span>));</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">        D:\AboutProgram\Env\jdk1.8.0_202\jre\lib\charsets.jar;</span></span><br><span class="line"><span class="comment">        D:\AboutProgram\Env\jdk1.8.0_202\jre\lib\deploy.jar;</span></span><br><span class="line"><span class="comment">        ...</span></span><br><span class="line"><span class="comment">        D:\AboutProgram\Env\jdk1.8.0_202\jre\lib\resources.jar;</span></span><br><span class="line"><span class="comment">        D:\AboutProgram\Env\jdk1.8.0_202\jre\lib\rt.jar;   //这个是rt.jar</span></span><br><span class="line"><span class="comment">        D:\ uwupu\ideaProject\Java反射\out\production\Java反射;  //项目</span></span><br><span class="line"><span class="comment">        D:\Software\IntelliJ IDEA 2021.2.2\lib\idea_rt.jar    //idea_rt.jar包</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+                </div>
+
+                
+                        
+<div class="article-copyright-info-container border-box">
+    <div class="copyright-info-content border-box">
+        <div class="copyright-info-top border-box">
+            <div class="post-title border-box text-ellipsis">
+                Day8 Reflection 反射机制
+            </div>
+
+            <div class="post-link border-box text-ellipsis">
+                2022/08/31/Day/Day8-Reflection/
+            </div>
+        </div>
+
+        <div class="copyright-info-bottom border-box">
+            <div class="post-author bottom-item">
+                <div class="type">
+                    作者
+                </div>
+                <div class="content">uwupu</div>
+            </div>
+
+            <div class="post-time bottom-item">
+                <div class="type">
+                    發布于
+                </div>
+                <div class="content">2022-08-31 09:29</div>
+            </div>
+
+
+            <div class="post-license bottom-item">
+                <div class="type">
+                    許可
+                </div>
+                <div class="content tooltip" data-tooltip-content="CC BY-NC-SA 4.0">
+                    <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed">
+                        <i class="fa-brands fa-creative-commons"></i>
+                        <i class="fa-brands fa-creative-commons-by"></i>
+                        <i class="fa-brands fa-creative-commons-nc"></i>
+                        <i class="fa-brands fa-creative-commons-sa"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <i class="copyright-bg fa-solid fa-copyright"></i>
+    </div>
+    <div class="copy-copyright-info flex-center tooltip" data-tooltip-content="復製版權信息" data-tooltip-offset-y="-2px">
+        <i class="fa-solid fa-copy"></i>
+    </div>
+</div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Java/">Java</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="article-nav">
+                        
+                            <div class="article-prev">
+                                <a class="prev" rel="prev" href="/2022/08/31/Day/Day8-Reflection-2/" title="Day8 反射机制 2">
+                                    <span class="left arrow-icon flex-center">
+                                      <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                            <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Day8 反射机制 2</span>
+                                        <span class="post-nav-item">上一篇</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="article-next">
+                                <a class="next" rel="next" href="/2022/08/30/Day/Day7-Java-Annotation-1/" title="Day7 Java 注解">
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Day7 Java 注解</span>
+                                        <span class="post-nav-item">下一篇</span>
+                                    </span>
+                                            <span class="right arrow-icon flex-center">
+                                      <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Java-Reflection-%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6"><span class="nav-number">1.</span> <span class="nav-text">Java Reflection 反射机制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E8%AF%AD%E8%A8%80-%E5%8A%A8%E6%80%81%E8%AF%AD%E8%A8%80"><span class="nav-number">1.1.</span> <span class="nav-text">静态语言 动态语言</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E8%AF%AD%E8%A8%80"><span class="nav-number">1.1.1.</span> <span class="nav-text">动态语言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E8%AF%AD%E8%A8%80"><span class="nav-number">1.1.2.</span> <span class="nav-text">静态语言</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-Reflection"><span class="nav-number">1.2.</span> <span class="nav-text">Java Reflection</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%9F%E8%83%BD"><span class="nav-number">1.2.1.</span> <span class="nav-text">功能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E7%82%B9-%E7%BC%BA%E7%82%B9"><span class="nav-number">1.2.2.</span> <span class="nav-text">优点 缺点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E8%A6%81API"><span class="nav-number">1.2.3.</span> <span class="nav-text">主要API</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Class%E7%B1%BB"><span class="nav-number">1.3.</span> <span class="nav-text">Class类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95"><span class="nav-number">1.3.1.</span> <span class="nav-text">常用方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96Class%E5%AF%B9%E8%B1%A1"><span class="nav-number">1.3.2.</span> <span class="nav-text">获取Class对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%93%AA%E4%BA%9B%E7%B1%BB%E5%9E%8B%E5%8F%AF%E4%BB%A5%E6%9C%89Class%E5%AF%B9%E8%B1%A1"><span class="nav-number">1.3.3.</span> <span class="nav-text">哪些类型可以有Class对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java%E5%86%85%E5%AD%98%E5%88%86%E6%9E%90"><span class="nav-number">1.3.4.</span> <span class="nav-text">Java内存分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%B1%BB%E7%9A%84%E5%8A%A0%E8%BD%BD%E8%BF%87%E7%A8%8B"><span class="nav-number">1.3.4.1.</span> <span class="nav-text">类的加载过程</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%93%BE%E6%8E%A5-%E8%BF%87%E7%A8%8B"><span class="nav-number">1.3.4.1.1.</span> <span class="nav-text">链接 过程</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E7%B1%BB%E5%88%9D%E5%A7%8B%E5%8C%96%E9%A1%BA%E5%BA%8F%E4%BB%A3%E7%A0%81"><span class="nav-number">1.3.4.1.1.1.</span> <span class="nav-text">类初始化顺序代码</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E9%A1%BA%E5%BA%8F-%E4%BB%A3%E7%A0%812"><span class="nav-number">1.3.4.1.1.2.</span> <span class="nav-text">初始化顺序 代码2</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96-%E8%BF%87%E7%A8%8B"><span class="nav-number">1.3.4.1.2.</span> <span class="nav-text">初始化 过程</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#lt-clinit-gt"><span class="nav-number">1.3.4.1.2.1.</span> <span class="nav-text">&lt;clinit&gt;</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">1.4.</span> <span class="nav-text">类的初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8"><span class="nav-number">1.5.</span> <span class="nav-text">类加载器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%88%86%E7%B1%BB"><span class="nav-number">1.5.1.</span> <span class="nav-text">类加载器分类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E6%9F%A5%E7%9C%8B"><span class="nav-number">1.5.1.1.</span> <span class="nav-text">代码查看</span></a></li></ol></li></ol></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="border-box website-info-box default">
+        
+            <div class="copyright-info info-item default">
+                ©&nbsp;<span>2020</span>&nbsp;-&nbsp;2023
+                
+                    &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">uwupu</a>
+                
+            </div>
+
+            <div class="theme-info info-item default">
+                <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;框架&nbsp;&amp;&nbsp;主題&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a>
+            </div>
+
+            
+
+            
+        
+
+        <div class="count-item info-item default">
+            
+                <span class="count-box border-box word">
+                    <span class="item-type border-box">總字數</span>
+                    <span class="item-value border-box word">161.4k</span>
+                </span>
+            
+
+            
+                <span class="count-box border-box uv">
+                    <span class="item-type border-box">讀者</span>
+                    <span class="item-value border-box uv" id="busuanzi_value_site_uv"></span>
+                </span>
+            
+
+            
+                <span class="count-box border-box pv">
+                    <span class="item-type border-box">閱覽</span>
+                    <span class="item-value border-box pv" id="busuanzi_value_site_pv"></span>
+                </span>
+            
+        </div>
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="tools-list border-box">
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="搜尋..." spellcheck="false" type="search" class="search-input">
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Java-Reflection-%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6"><span class="nav-number">1.</span> <span class="nav-text">Java Reflection 反射机制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E8%AF%AD%E8%A8%80-%E5%8A%A8%E6%80%81%E8%AF%AD%E8%A8%80"><span class="nav-number">1.1.</span> <span class="nav-text">静态语言 动态语言</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E8%AF%AD%E8%A8%80"><span class="nav-number">1.1.1.</span> <span class="nav-text">动态语言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E8%AF%AD%E8%A8%80"><span class="nav-number">1.1.2.</span> <span class="nav-text">静态语言</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-Reflection"><span class="nav-number">1.2.</span> <span class="nav-text">Java Reflection</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%9F%E8%83%BD"><span class="nav-number">1.2.1.</span> <span class="nav-text">功能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E7%82%B9-%E7%BC%BA%E7%82%B9"><span class="nav-number">1.2.2.</span> <span class="nav-text">优点 缺点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E8%A6%81API"><span class="nav-number">1.2.3.</span> <span class="nav-text">主要API</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Class%E7%B1%BB"><span class="nav-number">1.3.</span> <span class="nav-text">Class类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95"><span class="nav-number">1.3.1.</span> <span class="nav-text">常用方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96Class%E5%AF%B9%E8%B1%A1"><span class="nav-number">1.3.2.</span> <span class="nav-text">获取Class对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%93%AA%E4%BA%9B%E7%B1%BB%E5%9E%8B%E5%8F%AF%E4%BB%A5%E6%9C%89Class%E5%AF%B9%E8%B1%A1"><span class="nav-number">1.3.3.</span> <span class="nav-text">哪些类型可以有Class对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java%E5%86%85%E5%AD%98%E5%88%86%E6%9E%90"><span class="nav-number">1.3.4.</span> <span class="nav-text">Java内存分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%B1%BB%E7%9A%84%E5%8A%A0%E8%BD%BD%E8%BF%87%E7%A8%8B"><span class="nav-number">1.3.4.1.</span> <span class="nav-text">类的加载过程</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%93%BE%E6%8E%A5-%E8%BF%87%E7%A8%8B"><span class="nav-number">1.3.4.1.1.</span> <span class="nav-text">链接 过程</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E7%B1%BB%E5%88%9D%E5%A7%8B%E5%8C%96%E9%A1%BA%E5%BA%8F%E4%BB%A3%E7%A0%81"><span class="nav-number">1.3.4.1.1.1.</span> <span class="nav-text">类初始化顺序代码</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E9%A1%BA%E5%BA%8F-%E4%BB%A3%E7%A0%812"><span class="nav-number">1.3.4.1.1.2.</span> <span class="nav-text">初始化顺序 代码2</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96-%E8%BF%87%E7%A8%8B"><span class="nav-number">1.3.4.1.2.</span> <span class="nav-text">初始化 过程</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#lt-clinit-gt"><span class="nav-number">1.3.4.1.2.1.</span> <span class="nav-text">&lt;clinit&gt;</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">1.4.</span> <span class="nav-text">类的初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8"><span class="nav-number">1.5.</span> <span class="nav-text">类加载器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%88%86%E7%B1%BB"><span class="nav-number">1.5.1.</span> <span class="nav-text">类加载器分类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E6%9F%A5%E7%9C%8B"><span class="nav-number">1.5.1.1.</span> <span class="nav-text">代码查看</span></a></li></ol></li></ol></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+<!-- common -->
+<script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/utils.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/header-shrink.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/back2top.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/dark-light-toggle.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/main.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/libs/anime.min.js"></script>
+
+<!-- local-search -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/local-search.js"></script>
+
+
+<!-- code-block -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/code-block.js"></script>
+
+
+<!-- lazyload -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/lazyload.js"></script>
+
+
+<div class="pjax">
+    
+        <!-- post-helper -->
+        <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/post-helper.js"></script>
+
+        <!-- toc -->
+        
+            <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/toc.js"></script>
+        
+
+        <!-- copyright-info -->
+        
+            <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/copyright-info.js"></script>
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- category-page -->
+    
+
+    <!-- links-page -->
+    
+</div>
+
+<!-- mermaid -->
+
+
+<!-- pjax -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/libs/pjax.min.js"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax'
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            KEEP.utils.pjaxProgressBarStart()
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            KEEP.utils.pjaxProgressBarEnd()
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'))
+            KEEP.initExecute()
+        });
+    });
+</script>
+
+
+
+
+
+
+</body></html>

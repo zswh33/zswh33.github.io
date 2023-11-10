@@ -1,0 +1,743 @@
+<!DOCTYPE html><html lang="zh-Hans"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="一个包含有学习日记的博客">
+    <meta name="author" content="uwupu">
+    
+    <title>
+        
+            Day11 DCL懒汉式单例反破解攻坚战 (๑•̀ㅂ•́)و✧ |
+        
+        uwupu 学习日志
+    </title>
+    
+
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+    
+    
+    
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"zswh33.github.io","root":"/","language":"zh-Hans","path":"search.json"}
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":true,"init_open":true,"layout":"right"},"style":{"primary_color":"#F099BC","logo":"/images/logo.svg","favicon":"/images/logo.svg","avatar":"/images/avatar.svg","first_screen":{"enable":false,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"scroll":{"progress_bar":false,"percent":false}},"local_search":{"enable":true,"preload":true},"code_block":{"tools":{"enable":true,"style":"mac"},"highlight_theme":"obsidian"},"pjax":{"enable":true},"lazyload":{"enable":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.21"},"waline":{"server_url":null,"reaction":false,"version":2},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false}},"post":{"author_label":{"enable":true,"auto":false,"custom_label_list":["啦啦啦啦啦"]},"word_count":{"wordcount":true,"min2read":true},"datetime_format":"YYYY-MM-DD HH:mm","copyright_info":true,"share":false,"reward":{"enable":false,"img_link":null,"text":null}},"website_count":{"busuanzi_count":{"enable":true,"site_uv":true,"site_pv":true,"page_pv":true}},"version":"3.8.6"}
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
+    KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
+    KEEP.language_copy_copyright = {"copy":"Copy copyright info","copied":"Copied","title":"Original article title","author":"Original article author","link":"Original article link"}
+  </script>
+<meta name="generator" content="Hexo 6.2.0"><link rel="alternate" href="/atom.xml" title="uwupu Blog" type="application/atom+xml">
+<script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/fontawesome.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/regular.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/solid.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/brands.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/fontawesome.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/regular.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/solid.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/brands.min.css"></noscript></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <i class="pjax-progress-icon fas fa-circle-notch fa-spin"></i>
+    
+</div>
+
+
+<main class="page-container border-box">
+
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.svg">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               uwupu 学习日志
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class="" href="/">
+                                首頁
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/archives">
+                                歸檔
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/tags">
+                                標籤
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/categories">
+                                分類
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/links">
+                                友鏈
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/about">
+                                關於
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/">首頁</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/archives">歸檔</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/tags">標籤</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/categories">分類</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/links">友鏈</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/about">關於</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+
+                
+
+                    <div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+
+        <div class="article-content-container border-box">
+
+            
+
+            <div class="article-content-bottom border-box">
+                
+                    <div class="article-title">
+                        Day11 DCL懒汉式单例反破解攻坚战 (๑•̀ㅂ•́)و✧
+                    </div>
+                
+
+                
+                    <div class="article-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/avatar.svg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author">
+                                <span class="name">uwupu</span>
+                                
+                                    <span class="author-label">啦啦啦啦啦</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="article-meta-info-container border-box post">
+    <div class="article-meta-info border-box">
+        
+
+
+        
+            <span class="meta-info-item article-create-date">
+                <i class="icon fa-solid fa-calendar-check"></i>&nbsp;
+                <span class="pc">2022-09-03 12:03</span>
+                <span class="mobile">2022-09-03 12:03</span>
+            </span>
+
+            <span class="meta-info-item article-update-date">
+                <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                <span class="pc" data-updated="Fri Nov 10 2023 23:09:23 GMT+0800">2023-11-10 23:09</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item article-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="article-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/Day/">Day</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="article-tag meta-info-item border-box">
+                <i class="icon fas fa-tags"></i>&nbsp;
+                <ul class="article-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Java/">Java</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+            <span class="meta-info-item article-wordcount">
+                <i class="icon fas fa-file-word"></i>&nbsp;<span>2.2k 字數</span>
+            </span>
+        
+        
+            <span class="meta-info-item article-min2read">
+                <i class="icon fas fa-clock"></i>&nbsp;<span>10 分鐘</span>
+            </span>
+        
+        
+            <span class="meta-info-item article-pv">
+                <i class="icon fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="article-content keep-markdown-body">
+                    
+
+                    <h1 id="DCL懒汉式单例反破解攻坚战-๑•̀ㅂ•́-و✧"><a href="#DCL懒汉式单例反破解攻坚战-๑•̀ㅂ•́-و✧" class="headerlink" title="DCL懒汉式单例反破解攻坚战 (๑•̀ㅂ•́)و✧"></a>DCL懒汉式单例反破解攻坚战 (๑•̀ㅂ•́)و✧</h1><h2 id="DCL懒汉式单例"><a href="#DCL懒汉式单例" class="headerlink" title="DCL懒汉式单例"></a>DCL懒汉式单例</h2><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//懒汉式单例</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LazyMan</span> {</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> LazyMan lazyMan;<span class="comment">//添加volatile，防止代码重新编排。具体影响位置：getInstance()下的lazyMan = new LazyMan();</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//双重监测锁模式的 懒汉式单例  DCL懒汉式</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> LazyMan <span class="title function_">getInstance</span><span class="params">()</span>{</span><br><span class="line">        <span class="keyword">if</span>(lazyMan==<span class="literal">null</span>){</span><br><span class="line">            <span class="keyword">synchronized</span> (LazyMan.class){ <span class="comment">//双重检测锁模式 避免对象反复创建</span></span><br><span class="line">                <span class="keyword">if</span>(lazyMan==<span class="literal">null</span>){</span><br><span class="line">                    lazyMan = <span class="keyword">new</span> <span class="title class_">LazyMan</span>();</span><br><span class="line">                }</span><br><span class="line"></span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">return</span> lazyMan;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">LazyMan</span><span class="params">()</span>{</span><br><span class="line">        </span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="通过反射破解DCL懒汉式单例"><a href="#通过反射破解DCL懒汉式单例" class="headerlink" title="通过反射破解DCL懒汉式单例"></a>通过反射破解DCL懒汉式单例</h2><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Crack1</span> {</span><br><span class="line">    <span class="comment">//通过反射获取多个LazyManV2</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {</span><br><span class="line">        <span class="type">LazyManV2</span> <span class="variable">lazyManV2_1</span> <span class="operator">=</span> LazyManV2.getInstance();<span class="comment">//第一个</span></span><br><span class="line">        <span class="type">Class</span> <span class="variable">c1</span> <span class="operator">=</span> LazyManV2.class;<span class="comment">//获取LazyManV2的Class类</span></span><br><span class="line">        <span class="type">Constructor</span> <span class="variable">constructor</span> <span class="operator">=</span> c1.getDeclaredConstructor();<span class="comment">//通过反射获取构造方法</span></span><br><span class="line">        constructor.setAccessible(<span class="literal">true</span>);<span class="comment">//设置权限</span></span><br><span class="line">        <span class="type">LazyManV2</span> <span class="variable">lazyManV2_2</span> <span class="operator">=</span> (LazyManV2) constructor.newInstance();<span class="comment">//创建对象</span></span><br><span class="line">        System.out.println(lazyManV2_1);</span><br><span class="line">        System.out.println(lazyManV2_2);</span><br><span class="line"></span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">main线程创建了一个DCL LazyMan</span><br><span class="line">main线程创建了一个DCL LazyMan</span><br><span class="line">com.yn.Demo31_懒汉式单例破解攻坚战.LazyManV2@1b6d3586</span><br><span class="line">com.yn.Demo31_懒汉式单例破解攻坚战.LazyManV2@4554617c</span><br><span class="line"></span><br><span class="line">Process finished with exit code <span class="number">0</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>成功创建两个不同的单例。</p>
+<h2 id="DCL懒汉式单例2-0"><a href="#DCL懒汉式单例2-0" class="headerlink" title="DCL懒汉式单例2.0"></a>DCL懒汉式单例2.0</h2><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//懒汉式单例</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LazyManV3</span> {</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> LazyManV3 lazyMan;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//双重监测锁模式的 懒汉式单例  DCL懒汉式</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> LazyManV3 <span class="title function_">getInstance</span><span class="params">()</span>{</span><br><span class="line">        <span class="keyword">if</span>(lazyMan==<span class="literal">null</span>){</span><br><span class="line">            <span class="keyword">synchronized</span> (LazyManV3.class){</span><br><span class="line">                <span class="keyword">if</span>(lazyMan==<span class="literal">null</span>){</span><br><span class="line">                    lazyMan = <span class="keyword">new</span> <span class="title class_">LazyManV3</span>();</span><br><span class="line">                }</span><br><span class="line"></span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">return</span> lazyMan;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">LazyManV3</span><span class="params">()</span>{</span><br><span class="line">        <span class="comment">//防止对象反复创建 防止通过反射破坏单例</span></span><br><span class="line">        <span class="keyword">synchronized</span> (LazyManV3.class){</span><br><span class="line">            <span class="keyword">if</span>(lazyMan!=<span class="literal">null</span>){</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(<span class="string">"不要试图使用反射破坏异常"</span>);</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">        System.out.println(Thread.currentThread().getName()+ <span class="string">"线程创建了一个DCL LazyMan"</span>);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>这里在构造方法中添加了语句，在getInstance()方法创建对象后，禁止通过反射方式再次创建对象。</p>
+<p>使用getInstance()创建对象后，再次使用反射方式创建对象会抛出异常。</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">main线程创建了一个DCL LazyMan</span><br><span class="line">Exception in thread "main" java.lang.reflect.InvocationTargetException</span><br><span class="line">	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)</span><br><span class="line">	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)</span><br><span class="line">	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)</span><br><span class="line">	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)</span><br><span class="line">	at com.yn.Demo31_懒汉式单例破解攻坚战.Crack2.main(Crack2.java:13)</span><br><span class="line">Caused by: java.lang.RuntimeException: 不要试图使用反射破坏异常</span><br><span class="line">	at com.yn.Demo31_懒汉式单例破解攻坚战.LazyManV3.&lt;init&gt;(LazyManV3.java:24)</span><br><span class="line">	... 5 more</span><br><span class="line"></span><br><span class="line">Process finished with exit code 1</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="通过反射破解DCL懒汉式单例2-0"><a href="#通过反射破解DCL懒汉式单例2-0" class="headerlink" title="通过反射破解DCL懒汉式单例2.0"></a>通过反射破解DCL懒汉式单例2.0</h2><p><em>道高一尺，魔高一丈。</em></p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Crack2</span> {</span><br><span class="line">    <span class="comment">//通过反射获取多个LazyManV2</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {</span><br><span class="line"><span class="comment">//        LazyManV3 lazyMan_1 = LazyManV3.getInstance();//第一个</span></span><br><span class="line">        <span class="type">Class</span> <span class="variable">c1</span> <span class="operator">=</span> LazyManV3.class;</span><br><span class="line">        <span class="type">Constructor</span> <span class="variable">constructor</span> <span class="operator">=</span> c1.getDeclaredConstructor();</span><br><span class="line">        constructor.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        <span class="type">LazyManV3</span> <span class="variable">lazyMan_2</span> <span class="operator">=</span> (LazyManV3) constructor.newInstance();</span><br><span class="line">        <span class="type">LazyManV3</span> <span class="variable">lazyMan_1</span> <span class="operator">=</span> (LazyManV3) constructor.newInstance();</span><br><span class="line">        System.out.println(lazyMan_1);</span><br><span class="line">        System.out.println(lazyMan_2);</span><br><span class="line"></span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>两个对象都通过反射方式创建，这样LazyMan的类变量不会得到赋值，可以成功创建两个不同的对象。</p>
+<h2 id="DCL懒汉式单例3-0"><a href="#DCL懒汉式单例3-0" class="headerlink" title="DCL懒汉式单例3.0"></a>DCL懒汉式单例3.0</h2><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//懒汉式单例</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LazyManV4</span> {</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> LazyManV4 lazyMan;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">boolean</span> <span class="variable">awsl</span> <span class="operator">=</span> <span class="literal">false</span>;<span class="comment">//红绿灯  awsl换成加密的字符串，这里学习用</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//双重监测锁模式的 懒汉式单例  DCL懒汉式</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> LazyManV4 <span class="title function_">getInstance</span><span class="params">()</span>{</span><br><span class="line">        <span class="keyword">if</span>(lazyMan==<span class="literal">null</span>){</span><br><span class="line">            <span class="keyword">synchronized</span> (LazyManV4.class){</span><br><span class="line">                <span class="keyword">if</span>(lazyMan==<span class="literal">null</span>){</span><br><span class="line">                    lazyMan = <span class="keyword">new</span> <span class="title class_">LazyManV4</span>();</span><br><span class="line">                }</span><br><span class="line"></span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">return</span> lazyMan;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">LazyManV4</span><span class="params">()</span>{</span><br><span class="line">        <span class="comment">//防止对象反复创建 防止通过反射破坏单例</span></span><br><span class="line">        <span class="keyword">synchronized</span> (LazyManV4.class){</span><br><span class="line">            <span class="keyword">if</span>(!awsl){<span class="comment">//创建红绿灯，用于判断对象是否被反复创建</span></span><br><span class="line">                awsl=<span class="literal">true</span>;</span><br><span class="line">            }<span class="keyword">else</span>{</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(<span class="string">"不要试图使用反射破坏异常"</span>);</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">        System.out.println(Thread.currentThread().getName()+ <span class="string">"线程创建了一个DCL LazyMan"</span>);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>添加红绿灯，用于判断对象是否被反复创建。</p>
+<p>构造方法被重复调用，除第一次外，后面都会抛出异常。</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">main线程创建了一个DCL LazyMan</span><br><span class="line">Exception in thread <span class="string">"main"</span> java.lang.reflect.InvocationTargetException</span><br><span class="line">	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)</span><br><span class="line">	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:<span class="number">62</span>)</span><br><span class="line">	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:<span class="number">45</span>)</span><br><span class="line">	at java.lang.reflect.Constructor.newInstance(Constructor.java:<span class="number">423</span>)</span><br><span class="line">	at com.yn.Demo31_懒汉式单例破解攻坚战.Crack3.main(Crack3.java:<span class="number">14</span>)</span><br><span class="line">Caused by: java.lang.RuntimeException: 不要试图使用反射破坏异常</span><br><span class="line">	at com.yn.Demo31_懒汉式单例破解攻坚战.LazyManV4.&lt;init&gt;(LazyManV4.java:<span class="number">27</span>)</span><br><span class="line">	... <span class="number">5</span> more</span><br><span class="line"></span><br><span class="line">Process finished with exit code <span class="number">1</span></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+
+
+<h2 id="通过反射破解DCL懒汉式单例3-0"><a href="#通过反射破解DCL懒汉式单例3-0" class="headerlink" title="通过反射破解DCL懒汉式单例3.0"></a>通过反射破解DCL懒汉式单例3.0</h2><p>解密并想办法获得红绿灯的变量，然后修改红绿灯的值。</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Crack3</span> {</span><br><span class="line">    <span class="comment">//通过反射获取多个LazyManV2</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchFieldException {</span><br><span class="line"><span class="comment">//        LazyManV3 lazyMan_1 = LazyManV3.getInstance();//第一个</span></span><br><span class="line">        <span class="type">Class</span> <span class="variable">c1</span> <span class="operator">=</span> LazyManV4.class;</span><br><span class="line">        <span class="type">Constructor</span> <span class="variable">constructor</span> <span class="operator">=</span> c1.getDeclaredConstructor();</span><br><span class="line">        constructor.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        <span class="type">LazyManV4</span> <span class="variable">lazyMan_2</span> <span class="operator">=</span> (LazyManV4) constructor.newInstance();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//先想办法解密获得awsl变量，然后通过反射修改awsl的值，然后破坏单例</span></span><br><span class="line"><span class="comment">//        String awsl = c1.getDeclaredFields()[1].getName();</span></span><br><span class="line">        <span class="type">Field</span> <span class="variable">awsl</span> <span class="operator">=</span> c1.getDeclaredField(<span class="string">"awsl"</span>);</span><br><span class="line">        awsl.setAccessible(<span class="literal">true</span>);<span class="comment">//破坏权限</span></span><br><span class="line">        awsl.set(LazyManV4.class,<span class="literal">false</span>);<span class="comment">//设置值</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="type">LazyManV4</span> <span class="variable">lazyMan_1</span> <span class="operator">=</span> (LazyManV4) constructor.newInstance();</span><br><span class="line">        System.out.println(lazyMan_1);</span><br><span class="line">        System.out.println(lazyMan_2);</span><br><span class="line"></span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="枚举是一个单例对象"><a href="#枚举是一个单例对象" class="headerlink" title="枚举是一个单例对象"></a>枚举是一个单例对象</h2><blockquote>
+<p> newInstance()的源代码：不能通过反射破坏枚举类型。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">public T newInstance(Object ... initargs)</span><br><span class="line">    throws InstantiationException, IllegalAccessException,</span><br><span class="line">           IllegalArgumentException, InvocationTargetException</span><br><span class="line">{</span><br><span class="line">    if (!override) {</span><br><span class="line">        if (!Reflection.quickCheckMemberAccess(clazz, modifiers)) {</span><br><span class="line">            Class&lt;?&gt; caller = Reflection.getCallerClass();</span><br><span class="line">            checkAccess(caller, clazz, null, modifiers);</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    if ((clazz.getModifiers() &amp; Modifier.ENUM) != 0)</span><br><span class="line">        throw new IllegalArgumentException("Cannot reflectively create enum objects");</span><br><span class="line">    ConstructorAccessor ca = constructorAccessor;   // read volatile</span><br><span class="line">    if (ca == null) {</span><br><span class="line">        ca = acquireConstructorAccessor();</span><br><span class="line">    }</span><br><span class="line">    @SuppressWarnings("unchecked")</span><br><span class="line">    T inst = (T) ca.newInstance(initargs);</span><br><span class="line">    return inst;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>通过newInstance()的源代码发现，newInstance()不能通过反射破坏枚举类型。</p>
+<p>枚举自带单例模式。</p>
+<blockquote>
+<p>枚举</p>
+</blockquote>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> <span class="title class_">Enum1</span> {</span><br><span class="line">    INSTANCE;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Enum1 <span class="title function_">getInstance</span><span class="params">()</span>{</span><br><span class="line">        <span class="keyword">return</span> INSTANCE;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="通过反射破解枚举的单例对象"><a href="#通过反射破解枚举的单例对象" class="headerlink" title="通过反射破解枚举的单例对象"></a>通过反射破解枚举的单例对象</h2><blockquote>
+<p>Idea反编译Enmu1的class，发现代码里面有一个无参构造方法。</p>
+</blockquote>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> <span class="title class_">Enum1</span> {</span><br><span class="line">    INSTANCE;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> asd;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">Enum1</span><span class="params">()</span> {</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Enum1 <span class="title function_">getInstance</span><span class="params">()</span> {</span><br><span class="line">        <span class="keyword">return</span> INSTANCE;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">toString</span><span class="params">()</span> {</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Enum1{asd="</span> + <span class="built_in">this</span>.asd + <span class="string">'}'</span>;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>用反射的方式，通过无参构造方法创建对象。</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Crack4</span> {</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchFieldException {</span><br><span class="line">        <span class="type">Enum1</span> <span class="variable">enum1</span> <span class="operator">=</span> Enum1.getInstance();</span><br><span class="line"></span><br><span class="line">        Constructor&lt;Enum1&gt; constructor = Enum1.class.getDeclaredConstructor();<span class="comment">//获取无参构造方法</span></span><br><span class="line">        constructor.setAccessible(<span class="literal">true</span>);<span class="comment">//设置权限</span></span><br><span class="line">        <span class="type">Enum1</span> <span class="variable">enum2</span> <span class="operator">=</span> constructor.newInstance();<span class="comment">//创建对象</span></span><br><span class="line">        System.out.println(enum1);</span><br><span class="line">        System.out.println(enum2);</span><br><span class="line"></span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Exception in thread "main" java.lang.NoSuchMethodException: com.yn.Demo31_懒汉式单例破解攻坚战.Enum1.&lt;init&gt;()</span><br><span class="line">	at java.lang.Class.getConstructor0(Class.java:3082)</span><br><span class="line">	at java.lang.Class.getDeclaredConstructor(Class.java:2178)</span><br><span class="line">	at com.yn.Demo31_懒汉式单例破解攻坚战.Crack4.main(Crack4.java:11)</span><br><span class="line"></span><br><span class="line">Process finished with exit code 1</span><br></pre></td></tr></tbody></table></figure>
+
+<p>出现错误：没有这个方法。</p>
+<p>结论：没有相关的无参构造方法。</p>
+<blockquote>
+<p>通过javap -p 反编译class字节码文件，查看源代码。</p>
+</blockquote>
+<p><em>也许Idea骗了我们？</em></p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Compiled from <span class="string">"Enum1.java"</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">class</span> <span class="title class_">com</span>.yn.Demo31_懒汉式单例破解攻坚战.Enum1 <span class="keyword">extends</span> <span class="title class_">java</span>.lang.Enum&lt;com.yn.Demo31_懒汉式单例破解攻坚战.Enum1&gt; {</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> com.yn.Demo31_懒汉式单例破解攻坚战.Enum1 INSTANCE;</span><br><span class="line">  <span class="keyword">private</span> <span class="type">int</span> asd;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> com.yn.Demo31_懒汉式单例破解攻坚战.Enum1[] $VALUES;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> com.yn.Demo31_懒汉式单例破解攻坚战.Enum1[] values();</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> com.yn.Demo31_懒汉式单例破解攻坚战.Enum1 <span class="title function_">valueOf</span><span class="params">(java.lang.String)</span>;</span><br><span class="line">  <span class="keyword">private</span> com.yn.Demo31_懒汉式单例破解攻坚战.Enum1();</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> com.yn.Demo31_懒汉式单例破解攻坚战.Enum1 <span class="title function_">getInstance</span><span class="params">()</span>;</span><br><span class="line">  <span class="keyword">public</span> java.lang.String <span class="title function_">toString</span><span class="params">()</span>;</span><br><span class="line">  <span class="keyword">static</span> {};</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>通过反编译得知</p>
+<ol>
+<li><code>public final class com.yn.Demo31_懒汉式单例破解攻坚战.Enum1 extends java.lang.Enum&lt;com.yn.Demo31_懒汉式单例破解攻坚战.Enum1&gt;</code>。枚举确实是一个用class修饰的类，不过是继承了java.lang.Enum成为枚举。</li>
+<li><code>private com.yn.Demo31_懒汉式单例破解攻坚战.Enum1();</code>。Enmu1类确实有一个无参构造方法。？！</li>
+</ol>
+<blockquote>
+<p>尝试使用jad反编译class字节码文件</p>
+</blockquote>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.yn.Demo31_61D26C495F0F53554F8B783489E3653B575A6218;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">class</span> <span class="title class_">Enum1</span> <span class="keyword">extends</span> <span class="title class_">Enum</span></span><br><span class="line">{</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Enum1[] values()</span><br><span class="line">    {</span><br><span class="line">        <span class="keyword">return</span> (Enum1[])$VALUES.clone();</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Enum1 <span class="title function_">valueOf</span><span class="params">(String name)</span></span><br><span class="line">    {</span><br><span class="line">        <span class="keyword">return</span> (Enum1)Enum.valueOf(com/yn/Demo31_61D26C495F0F53554F8B783489E3653B575A6218/Enum1, name);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">Enum1</span><span class="params">(String s, <span class="type">int</span> i)</span></span><br><span class="line">    {</span><br><span class="line">        <span class="built_in">super</span>(s, i);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Enum1 <span class="title function_">getInstance</span><span class="params">()</span></span><br><span class="line">    {</span><br><span class="line">        <span class="keyword">return</span> INSTANCE;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">toString</span><span class="params">()</span></span><br><span class="line">    {</span><br><span class="line">        <span class="keyword">return</span> (<span class="keyword">new</span> <span class="title class_">StringBuilder</span>()).append(<span class="string">"Enum1{asd="</span>).append(asd).append(<span class="string">'}'</span>).toString();</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Enum1 INSTANCE;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> asd;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Enum1 $VALUES[];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> </span><br><span class="line">    {</span><br><span class="line">        INSTANCE = <span class="keyword">new</span> <span class="title class_">Enum1</span>(<span class="string">"INSTANCE"</span>, <span class="number">0</span>);</span><br><span class="line">        $VALUES = (<span class="keyword">new</span> <span class="title class_">Enum1</span>[] {</span><br><span class="line">            INSTANCE</span><br><span class="line">        });</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>由反编译结果可知，<code>private Enum1(String s, int i)</code>是一个有参构造方法。</p>
+<blockquote>
+<p>通过有参构造方法创建对象</p>
+</blockquote>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Crack4</span> {</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchFieldException {</span><br><span class="line">        <span class="type">Enum1</span> <span class="variable">enum1</span> <span class="operator">=</span> Enum1.getInstance();</span><br><span class="line"></span><br><span class="line">        Constructor&lt;Enum1&gt; constructor = Enum1.class.getDeclaredConstructor(String.class,<span class="type">int</span>.class);<span class="comment">//获取有参构造方法</span></span><br><span class="line">        constructor.setAccessible(<span class="literal">true</span>);<span class="comment">//设置权限</span></span><br><span class="line">        <span class="type">Enum1</span> <span class="variable">enum2</span> <span class="operator">=</span> constructor.newInstance();<span class="comment">//创建对象</span></span><br><span class="line">        System.out.println(enum1);</span><br><span class="line">        System.out.println(enum2);</span><br><span class="line"></span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Exception in thread <span class="string">"main"</span> java.lang.IllegalArgumentException: Cannot reflectively create <span class="keyword">enum</span> <span class="title class_">objects</span></span><br><span class="line">	at java.lang.reflect.Constructor.newInstance(Constructor.java:<span class="number">417</span>)</span><br><span class="line">	at com.yn.Demo31_懒汉式单例破解攻坚战.Crack4.main(Crack4.java:<span class="number">13</span>)</span><br><span class="line"></span><br><span class="line">Process finished with exit code <span class="number">1</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>通过输出得知，不能通过反射创建枚举对象。</p>
+<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><blockquote>
+<p>enum枚举</p>
+</blockquote>
+<p>枚举本身是一个class类</p>
+<blockquote>
+<p>使用jad将class文件转换为java文件</p>
+</blockquote>
+<p>jad -sjava 字节码文件.class</p>
+
+                </div>
+
+                
+                        
+<div class="article-copyright-info-container border-box">
+    <div class="copyright-info-content border-box">
+        <div class="copyright-info-top border-box">
+            <div class="post-title border-box text-ellipsis">
+                Day11 DCL懒汉式单例反破解攻坚战 (๑•̀ㅂ•́)و✧
+            </div>
+
+            <div class="post-link border-box text-ellipsis">
+                2022/09/03/Day/Day11-Crack-DCL-LayMan/
+            </div>
+        </div>
+
+        <div class="copyright-info-bottom border-box">
+            <div class="post-author bottom-item">
+                <div class="type">
+                    作者
+                </div>
+                <div class="content">uwupu</div>
+            </div>
+
+            <div class="post-time bottom-item">
+                <div class="type">
+                    發布于
+                </div>
+                <div class="content">2022-09-03 12:03</div>
+            </div>
+
+
+            <div class="post-license bottom-item">
+                <div class="type">
+                    許可
+                </div>
+                <div class="content tooltip" data-tooltip-content="CC BY-NC-SA 4.0">
+                    <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed">
+                        <i class="fa-brands fa-creative-commons"></i>
+                        <i class="fa-brands fa-creative-commons-by"></i>
+                        <i class="fa-brands fa-creative-commons-nc"></i>
+                        <i class="fa-brands fa-creative-commons-sa"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <i class="copyright-bg fa-solid fa-copyright"></i>
+    </div>
+    <div class="copy-copyright-info flex-center tooltip" data-tooltip-content="復製版權信息" data-tooltip-offset-y="-2px">
+        <i class="fa-solid fa-copy"></i>
+    </div>
+</div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Java/">Java</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="article-nav">
+                        
+                            <div class="article-prev">
+                                <a class="prev" rel="prev" href="/2022/09/03/Day/Day11-Multithreading2-9/" title="Day11 多线程进阶 9 CAS 原子引用">
+                                    <span class="left arrow-icon flex-center">
+                                      <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                            <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Day11 多线程进阶 9 CAS 原子引用</span>
+                                        <span class="post-nav-item">上一篇</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="article-next">
+                                <a class="next" rel="next" href="/2022/09/03/Day/Day11-Multithreading2-8/" title="Day11 多线程进阶 8 单例模式">
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Day11 多线程进阶 8 单例模式</span>
+                                        <span class="post-nav-item">下一篇</span>
+                                    </span>
+                                            <span class="right arrow-icon flex-center">
+                                      <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#DCL%E6%87%92%E6%B1%89%E5%BC%8F%E5%8D%95%E4%BE%8B%E5%8F%8D%E7%A0%B4%E8%A7%A3%E6%94%BB%E5%9D%9A%E6%88%98-%E0%B9%91%E2%80%A2%CC%80%E3%85%82%E2%80%A2%CC%81-%D9%88%E2%9C%A7"><span class="nav-number">1.</span> <span class="nav-text">DCL懒汉式单例反破解攻坚战 (๑•̀ㅂ•́)و✧</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#DCL%E6%87%92%E6%B1%89%E5%BC%8F%E5%8D%95%E4%BE%8B"><span class="nav-number">1.1.</span> <span class="nav-text">DCL懒汉式单例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E5%8F%8D%E5%B0%84%E7%A0%B4%E8%A7%A3DCL%E6%87%92%E6%B1%89%E5%BC%8F%E5%8D%95%E4%BE%8B"><span class="nav-number">1.2.</span> <span class="nav-text">通过反射破解DCL懒汉式单例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DCL%E6%87%92%E6%B1%89%E5%BC%8F%E5%8D%95%E4%BE%8B2-0"><span class="nav-number">1.3.</span> <span class="nav-text">DCL懒汉式单例2.0</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E5%8F%8D%E5%B0%84%E7%A0%B4%E8%A7%A3DCL%E6%87%92%E6%B1%89%E5%BC%8F%E5%8D%95%E4%BE%8B2-0"><span class="nav-number">1.4.</span> <span class="nav-text">通过反射破解DCL懒汉式单例2.0</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DCL%E6%87%92%E6%B1%89%E5%BC%8F%E5%8D%95%E4%BE%8B3-0"><span class="nav-number">1.5.</span> <span class="nav-text">DCL懒汉式单例3.0</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E5%8F%8D%E5%B0%84%E7%A0%B4%E8%A7%A3DCL%E6%87%92%E6%B1%89%E5%BC%8F%E5%8D%95%E4%BE%8B3-0"><span class="nav-number">1.6.</span> <span class="nav-text">通过反射破解DCL懒汉式单例3.0</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9E%9A%E4%B8%BE%E6%98%AF%E4%B8%80%E4%B8%AA%E5%8D%95%E4%BE%8B%E5%AF%B9%E8%B1%A1"><span class="nav-number">1.7.</span> <span class="nav-text">枚举是一个单例对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E5%8F%8D%E5%B0%84%E7%A0%B4%E8%A7%A3%E6%9E%9A%E4%B8%BE%E7%9A%84%E5%8D%95%E4%BE%8B%E5%AF%B9%E8%B1%A1"><span class="nav-number">1.8.</span> <span class="nav-text">通过反射破解枚举的单例对象</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">2.</span> <span class="nav-text">其他</span></a></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="border-box website-info-box default">
+        
+            <div class="copyright-info info-item default">
+                ©&nbsp;<span>2020</span>&nbsp;-&nbsp;2023
+                
+                    &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">uwupu</a>
+                
+            </div>
+
+            <div class="theme-info info-item default">
+                <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;框架&nbsp;&amp;&nbsp;主題&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a>
+            </div>
+
+            
+
+            
+        
+
+        <div class="count-item info-item default">
+            
+                <span class="count-box border-box word">
+                    <span class="item-type border-box">總字數</span>
+                    <span class="item-value border-box word">161.4k</span>
+                </span>
+            
+
+            
+                <span class="count-box border-box uv">
+                    <span class="item-type border-box">讀者</span>
+                    <span class="item-value border-box uv" id="busuanzi_value_site_uv"></span>
+                </span>
+            
+
+            
+                <span class="count-box border-box pv">
+                    <span class="item-type border-box">閱覽</span>
+                    <span class="item-value border-box pv" id="busuanzi_value_site_pv"></span>
+                </span>
+            
+        </div>
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="tools-list border-box">
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="搜尋..." spellcheck="false" type="search" class="search-input">
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#DCL%E6%87%92%E6%B1%89%E5%BC%8F%E5%8D%95%E4%BE%8B%E5%8F%8D%E7%A0%B4%E8%A7%A3%E6%94%BB%E5%9D%9A%E6%88%98-%E0%B9%91%E2%80%A2%CC%80%E3%85%82%E2%80%A2%CC%81-%D9%88%E2%9C%A7"><span class="nav-number">1.</span> <span class="nav-text">DCL懒汉式单例反破解攻坚战 (๑•̀ㅂ•́)و✧</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#DCL%E6%87%92%E6%B1%89%E5%BC%8F%E5%8D%95%E4%BE%8B"><span class="nav-number">1.1.</span> <span class="nav-text">DCL懒汉式单例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E5%8F%8D%E5%B0%84%E7%A0%B4%E8%A7%A3DCL%E6%87%92%E6%B1%89%E5%BC%8F%E5%8D%95%E4%BE%8B"><span class="nav-number">1.2.</span> <span class="nav-text">通过反射破解DCL懒汉式单例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DCL%E6%87%92%E6%B1%89%E5%BC%8F%E5%8D%95%E4%BE%8B2-0"><span class="nav-number">1.3.</span> <span class="nav-text">DCL懒汉式单例2.0</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E5%8F%8D%E5%B0%84%E7%A0%B4%E8%A7%A3DCL%E6%87%92%E6%B1%89%E5%BC%8F%E5%8D%95%E4%BE%8B2-0"><span class="nav-number">1.4.</span> <span class="nav-text">通过反射破解DCL懒汉式单例2.0</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DCL%E6%87%92%E6%B1%89%E5%BC%8F%E5%8D%95%E4%BE%8B3-0"><span class="nav-number">1.5.</span> <span class="nav-text">DCL懒汉式单例3.0</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E5%8F%8D%E5%B0%84%E7%A0%B4%E8%A7%A3DCL%E6%87%92%E6%B1%89%E5%BC%8F%E5%8D%95%E4%BE%8B3-0"><span class="nav-number">1.6.</span> <span class="nav-text">通过反射破解DCL懒汉式单例3.0</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9E%9A%E4%B8%BE%E6%98%AF%E4%B8%80%E4%B8%AA%E5%8D%95%E4%BE%8B%E5%AF%B9%E8%B1%A1"><span class="nav-number">1.7.</span> <span class="nav-text">枚举是一个单例对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E5%8F%8D%E5%B0%84%E7%A0%B4%E8%A7%A3%E6%9E%9A%E4%B8%BE%E7%9A%84%E5%8D%95%E4%BE%8B%E5%AF%B9%E8%B1%A1"><span class="nav-number">1.8.</span> <span class="nav-text">通过反射破解枚举的单例对象</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">2.</span> <span class="nav-text">其他</span></a></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+<!-- common -->
+<script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/utils.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/header-shrink.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/back2top.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/dark-light-toggle.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/main.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/libs/anime.min.js"></script>
+
+<!-- local-search -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/local-search.js"></script>
+
+
+<!-- code-block -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/code-block.js"></script>
+
+
+<!-- lazyload -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/lazyload.js"></script>
+
+
+<div class="pjax">
+    
+        <!-- post-helper -->
+        <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/post-helper.js"></script>
+
+        <!-- toc -->
+        
+            <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/toc.js"></script>
+        
+
+        <!-- copyright-info -->
+        
+            <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/copyright-info.js"></script>
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- category-page -->
+    
+
+    <!-- links-page -->
+    
+</div>
+
+<!-- mermaid -->
+
+
+<!-- pjax -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/libs/pjax.min.js"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax'
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            KEEP.utils.pjaxProgressBarStart()
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            KEEP.utils.pjaxProgressBarEnd()
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'))
+            KEEP.initExecute()
+        });
+    });
+</script>
+
+
+
+
+
+
+</body></html>

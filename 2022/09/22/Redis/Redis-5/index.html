@@ -1,0 +1,785 @@
+<!DOCTYPE html><html lang="zh-Hans"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="一个包含有学习日记的博客">
+    <meta name="author" content="uwupu">
+    
+    <title>
+        
+            Redis 5 HyperLogLogs Bitmaps  Geospatial |
+        
+        uwupu 学习日志
+    </title>
+    
+
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+    
+    
+    
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"zswh33.github.io","root":"/","language":"zh-Hans","path":"search.json"}
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":true,"init_open":true,"layout":"right"},"style":{"primary_color":"#F099BC","logo":"/images/logo.svg","favicon":"/images/logo.svg","avatar":"/images/avatar.svg","first_screen":{"enable":false,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"scroll":{"progress_bar":false,"percent":false}},"local_search":{"enable":true,"preload":true},"code_block":{"tools":{"enable":true,"style":"mac"},"highlight_theme":"obsidian"},"pjax":{"enable":true},"lazyload":{"enable":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.21"},"waline":{"server_url":null,"reaction":false,"version":2},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false}},"post":{"author_label":{"enable":true,"auto":false,"custom_label_list":["啦啦啦啦啦"]},"word_count":{"wordcount":true,"min2read":true},"datetime_format":"YYYY-MM-DD HH:mm","copyright_info":true,"share":false,"reward":{"enable":false,"img_link":null,"text":null}},"website_count":{"busuanzi_count":{"enable":true,"site_uv":true,"site_pv":true,"page_pv":true}},"version":"3.8.6"}
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
+    KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
+    KEEP.language_copy_copyright = {"copy":"Copy copyright info","copied":"Copied","title":"Original article title","author":"Original article author","link":"Original article link"}
+  </script>
+<meta name="generator" content="Hexo 6.2.0"><link rel="alternate" href="/atom.xml" title="uwupu Blog" type="application/atom+xml">
+<script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/fontawesome.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/regular.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/solid.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/brands.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/fontawesome.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/regular.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/solid.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/brands.min.css"></noscript></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <i class="pjax-progress-icon fas fa-circle-notch fa-spin"></i>
+    
+</div>
+
+
+<main class="page-container border-box">
+
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.svg">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               uwupu 学习日志
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class="" href="/">
+                                首頁
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/archives">
+                                歸檔
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/tags">
+                                標籤
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/categories">
+                                分類
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/links">
+                                友鏈
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/about">
+                                關於
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/">首頁</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/archives">歸檔</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/tags">標籤</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/categories">分類</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/links">友鏈</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/about">關於</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+
+                
+
+                    <div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+
+        <div class="article-content-container border-box">
+
+            
+
+            <div class="article-content-bottom border-box">
+                
+                    <div class="article-title">
+                        Redis 5 HyperLogLogs Bitmaps  Geospatial
+                    </div>
+                
+
+                
+                    <div class="article-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/avatar.svg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author">
+                                <span class="name">uwupu</span>
+                                
+                                    <span class="author-label">啦啦啦啦啦</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="article-meta-info-container border-box post">
+    <div class="article-meta-info border-box">
+        
+
+
+        
+            <span class="meta-info-item article-create-date">
+                <i class="icon fa-solid fa-calendar-check"></i>&nbsp;
+                <span class="pc">2022-09-22 11:12</span>
+                <span class="mobile">2022-09-22 11:12</span>
+            </span>
+
+            <span class="meta-info-item article-update-date">
+                <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                <span class="pc" data-updated="Fri Nov 10 2023 23:15:32 GMT+0800">2023-11-10 23:15</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item article-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="article-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="article-tag meta-info-item border-box">
+                <i class="icon fas fa-tags"></i>&nbsp;
+                <ul class="article-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Redis/">Redis</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+            <span class="meta-info-item article-wordcount">
+                <i class="icon fas fa-file-word"></i>&nbsp;<span>2.1k 字數</span>
+            </span>
+        
+        
+            <span class="meta-info-item article-min2read">
+                <i class="icon fas fa-clock"></i>&nbsp;<span>9 分鐘</span>
+            </span>
+        
+        
+            <span class="meta-info-item article-pv">
+                <i class="icon fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="article-content keep-markdown-body">
+                    
+
+                    <h1 id="Redis-三种特殊类型"><a href="#Redis-三种特殊类型" class="headerlink" title="Redis 三种特殊类型"></a>Redis 三种特殊类型</h1><h2 id="HyperLogLogs（基数统计）"><a href="#HyperLogLogs（基数统计）" class="headerlink" title="HyperLogLogs（基数统计）"></a>HyperLogLogs（基数统计）</h2><p>用于统计一些准确度要求不高的数据；</p>
+<ul>
+<li>允许容错，可以接受一定误差；</li>
+<li>基数，指内容不可重复；A={1,2,3,4,5}，B={3,5,6,7,9}，基数=1,2,4,6,7,9；</li>
+</ul>
+<h3 id="用来做什么"><a href="#用来做什么" class="headerlink" title="用来做什么"></a>用来做什么</h3><p>可以用来统计各种计数，如注册IP数，每日访问IP数，在线用户数，共同好友数等；</p>
+<h3 id="优势"><a href="#优势" class="headerlink" title="优势"></a>优势</h3><p>可以使用少量固定的内存去存储并识别集合中的唯一元素，估算的基数不一定准确，有0.81%标准错误近似值；</p>
+<p>如：</p>
+<p>一个IP消耗15个字节，100W个IP就是15M，HyperLogLog在Redis中每个键占用内容都是12K，理论存储近似接近2^64个值；不论存储的内容是什么，它有一个基于基数估算的算法，只能比较准确地估算出基数，可以使用少量固定的内存去存储并识别集合的唯一元素；</p>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; pfadd k1 a b c d e f g h i  # k1 ={a,b,c,d,e,f,g,h,i}</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; pfcount k1  # 获取数量</span><br><span class="line">(integer) 9</span><br><span class="line">127.0.0.1:6379&gt; pfadd k2 a z b x c s d r e  # k2 = {a,b,c,d,e,z,x,s,r}</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; pfcount k2 </span><br><span class="line">(integer) 9</span><br><span class="line">127.0.0.1:6379&gt; pfmerge k3 k1 k2  # 合并k1和k2 存放到k3</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; pfcount k3  # k3的数量</span><br><span class="line">(integer) 13</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="Bitmap（位存储）"><a href="#Bitmap（位存储）" class="headerlink" title="Bitmap（位存储）"></a>Bitmap（位存储）</h2><p>位图数据结构，通过操作二进制数来进行记录，只有0和1两个状态；</p>
+<h3 id="用来做什么-1"><a href="#用来做什么-1" class="headerlink" title="用来做什么"></a>用来做什么</h3><p>比如用户每天的打卡情况；</p>
+<p>设置打卡情况</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; setbit sign:year 0 1  # 用户第0天打卡了</span><br><span class="line">(integer) 0 </span><br><span class="line">127.0.0.1:6379&gt; setbit sign:year 1 0 # 用户第1天没打卡</span><br><span class="line">(integer) 0</span><br><span class="line">127.0.0.1:6379&gt; setbit sign:year 2 1 # 用户第二天打卡了</span><br><span class="line">(integer) 0</span><br><span class="line">127.0.0.1:6379&gt; setbit sign:year 3 1</span><br><span class="line">(integer) 0</span><br><span class="line">127.0.0.1:6379&gt; setbit sign:year 4 0  # 用户第4天没打卡</span><br><span class="line">(integer) 0</span><br></pre></td></tr></tbody></table></figure>
+
+<p>获取打卡情况</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; getbit sign:year 4  # 用户第4天没打卡</span><br><span class="line">(integer) 0</span><br><span class="line">127.0.0.1:6379&gt; getbit sign:year 3  # 用户第三天打卡了</span><br><span class="line">(integer) 1</span><br></pre></td></tr></tbody></table></figure>
+
+<p>获取所有的打卡情况</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; bitcount sign:year</span><br><span class="line">(integer) 3</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="Geospatial（地理位置）"><a href="#Geospatial（地理位置）" class="headerlink" title="Geospatial（地理位置）"></a>Geospatial（地理位置）</h2><p>geospatial可以存放一个坐标，地理位置，基于经纬度；</p>
+<h3 id="底层实现原理"><a href="#底层实现原理" class="headerlink" title="底层实现原理"></a>底层实现原理</h3><p>Geo的底层实现就是SortedSet，可以通过SortedSet命令控制geo；</p>
+<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>Redis Geo使用<strong>Geohash</strong>实现位置的存储；</p>
+<p>Geohash将经纬度编码成为一个52bit的整型，而此时有序集合的score就可以存储52bit的整型且不失精度；</p>
+<h3 id="一些命令"><a href="#一些命令" class="headerlink" title="一些命令"></a>一些命令</h3><h4 id="geoadd-添加地理位置"><a href="#geoadd-添加地理位置" class="headerlink" title="geoadd 添加地理位置"></a>geoadd 添加地理位置</h4><h5 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h5><p><code>GEOADD key [NX | XX] [CH] longitude latitude member [longitude latitude member ...]</code></p>
+<p>添加指定的位置信息到key中；</p>
+<p>数据存储为一个有序集合；</p>
+<p>可以通过GEOSEARCH命令获取这些信息；</p>
+<h5 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h5><blockquote>
+<p>longitude 经度   latitude 纬度</p>
+</blockquote>
+<p>命令支持标准的x，y坐标，经度必须放置在纬度的前面；</p>
+<p>极其接近极点的坐标无法被索引：</p>
+<ul>
+<li>有效经度范围：-180到180；</li>
+<li>有效纬度范围：-85.05112878到85.05112878</li>
+</ul>
+<p>若使用范围之外的经纬度会返回错误；</p>
+<blockquote>
+<p>XX</p>
+</blockquote>
+<p>仅更新已有元素，不添加新元素；</p>
+<blockquote>
+<p>NX</p>
+</blockquote>
+<p>不更新已有元素，只添加新元素；</p>
+<blockquote>
+<p>CH</p>
+</blockquote>
+<p>GEOADD默认返回值为新添加的元素的数量，使用CH之后将返回值改为<strong>改变的元素的数量</strong>，不计入原值和输入值相同的情况。一个双score有序集合可以存储一个52bit的整数且不失精度；</p>
+<p>注意：XX与NX不可一起使用</p>
+<h4 id="geopos-获取指定成员经纬度"><a href="#geopos-获取指定成员经纬度" class="headerlink" title="geopos 获取指定成员经纬度"></a>geopos 获取指定成员经纬度</h4><p><code>GEOPOS key member [member ...]</code></p>
+<p>返回所有指定成员的经度和纬度；</p>
+<p>通过key使用有序集合进行索引；</p>
+<p>由于存储数据时采用geohash方法，获取到的数据可能会出现一些误差；</p>
+<p>若元素不存在则返回一个由null组成的数组；</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; geoadd g1 116 40 "BeiJing" 112 37 "TaiYuan"  # 添加TaiYuan和BeiJing的经纬度</span><br><span class="line">(integer) 2</span><br><span class="line">127.0.0.1:6379&gt; GEOPOS g1 BeiJing TaiYuan NonExistMember # 查询TaiYuan和BeiJing还有一个没有输入的值的经纬度</span><br><span class="line">1) 1) "116.00000113248825073"</span><br><span class="line">   2) "39.99999991084916218"</span><br><span class="line">2) 1) "112.00000137090682983"</span><br><span class="line">   2) "37.00000026605963654"</span><br><span class="line">3) (nil) # member不存在，返回nil</span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="geodist-两个成员的距离"><a href="#geodist-两个成员的距离" class="headerlink" title="geodist 两个成员的距离"></a>geodist 两个成员的距离</h4><p><code>GEODIST key member1 member2 [M | KM | FT | MI]</code></p>
+<p>返回两个成员之间的距离；</p>
+<p>如果有一个或两个成员不存在，则返回null；</p>
+<p>最后的参数为<strong>单位</strong>，默认为米：</p>
+<ul>
+<li>m 米；</li>
+<li>km 千米；</li>
+<li>mi 英里；</li>
+<li>ft 尺  <del style="color:rgba(0,0,0,0.2)">步数</del></li>
+</ul>
+<p>距离的计算基于假定地球是一个完美的球体，所以计算结果会有0.5%的误差；</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; GEOPOS g1 BeiJing TaiYuan</span><br><span class="line">1) 1) "116.00000113248825073"</span><br><span class="line">   2) "39.99999991084916218"</span><br><span class="line">2) 1) "112.00000137090682983"</span><br><span class="line">   2) "37.00000026605963654"</span><br><span class="line">127.0.0.1:6379&gt; GEODIST g1 BeiJing TaiYuan m</span><br><span class="line">"482157.6407"</span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="geohash"><a href="#geohash" class="headerlink" title="geohash"></a>geohash</h4><p>GEOHASH key member [memebr …]</p>
+<p>返回geohash字符串</p>
+<p>（geohash是一个可以将纬度和精度编码为一个52bit的散列函数）</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; GEOHASH g1 BeiJing TaiYuan</span><br><span class="line">1) "wx47x9u8gu0"</span><br><span class="line">2) "wqxdkxeut50"</span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="geosearch"><a href="#geosearch" class="headerlink" title="geosearch"></a>geosearch</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">GEOSEARCH key </span><br><span class="line">	&lt;</span><br><span class="line">		FROMMEMBER member | </span><br><span class="line">		FROMLONLAT longitude latitude</span><br><span class="line"><span class="meta prompt_">	&gt; </span><span class="language-bash"><span class="comment"># 二选一  从成员   从经纬度</span></span></span><br><span class="line">	&lt;</span><br><span class="line">		BYRADIUS radius &lt;M | KM | FT | MI&gt; | </span><br><span class="line">		BYBOX width height &lt;M | KM | FI | MI&gt;</span><br><span class="line"><span class="meta prompt_">	&gt; </span><span class="language-bash"><span class="comment"># 通过圆形  通过矩形</span></span></span><br><span class="line">	[ASC | DESC] </span><br><span class="line">	[COUNT count [ANY]] </span><br><span class="line">	[WITHCOORD] </span><br><span class="line">	[WITHDIST] </span><br><span class="line">	[WITHHASH]</span><br></pre></td></tr></tbody></table></figure>
+
+<h5 id="介绍-1"><a href="#介绍-1" class="headerlink" title="介绍"></a>介绍</h5><p>返回给定形状范围内的member列表；</p>
+<p>支持搜索圆形区域和方形取悦；</p>
+<p>命令代替了GEORADIUS和GEORADIUSBYMEMBER；</p>
+<h5 id="参数-1"><a href="#参数-1" class="headerlink" title="参数"></a>参数</h5><blockquote>
+<p>形状的中心</p>
+</blockquote>
+<p><strong>FROMMEMBER</strong>：以成员为形状的原点；</p>
+<p><strong>FROMLONLAT</strong>：以指定经纬度为形状的原点；</p>
+<blockquote>
+<p>形状的参数</p>
+</blockquote>
+<p><strong>BYRADIUS</strong>：形状为圆形，根据给定radius参数为圆形的半径</p>
+<p><strong>BYBOX</strong>：形状为矩形，根据给定的width和height为形状的长宽；</p>
+<blockquote>
+<p>需要返回对象的其他参数</p>
+</blockquote>
+<p><strong>WITHDIST</strong>：返回原点到各个成员的距离；</p>
+<p><strong>WITHCOORD</strong>：返回成员的经纬度；</p>
+<p><strong>WITHHASH</strong>：返回成员的GEOHASH值。</p>
+<blockquote>
+<p>是否排序</p>
+</blockquote>
+<p>若未指定以下两个参数，则默认不排序；</p>
+<p><strong>ASC</strong>：排序顺序为距离原点，最近的元素到最远的元素；</p>
+<p><strong>DESC</strong>：距离原点，最远的元素到最近的元素；</p>
+<blockquote>
+<p>返回数量</p>
+</blockquote>
+<p><code>COUNT &lt;count&gt; [ANY]</code></p>
+<p>默认返回所有的元素；</p>
+<p>通过<code>COUNT &lt;count&gt;</code>参数可以限制返回的数量；</p>
+<p>若提供ANY，Redis查询过程会在查到指定数量的结果后直接返回不排序，且不考虑远近问题；</p>
+<p>若不提供ANY，Redis会返回排序后的所有结果。不提供ANY时，命令执行的速度会相对慢一点；</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; GEODIST g1 BeiJing TaiYuan m # 查询得知，TaiYuan到BeiJing的距离为482157m，换算48.22km</span><br><span class="line">"482157.6407"</span><br><span class="line">127.0.0.1:6379&gt; GEOSEARCH g1 FROMMEMBER TaiYuan BYRADIUS 500 KM ASC COUNT 2 WITHCOORD WITHDIST WITHHASH</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查询g1中 以TaiYuan为圆心，半径为500KM，两个对象， 要求返回结果中有距离圆心的距离、对象的经纬度还有对象的GEOHASH</span></span><br><span class="line">1) 1) "TaiYuan"</span><br><span class="line">   2) "0.0000"</span><br><span class="line">   3) (integer) 4041790908459398</span><br><span class="line">   4) 1) "112.00000137090682983"</span><br><span class="line">      2) "37.00000026605963654"</span><br><span class="line">2) 1) "BeiJing"</span><br><span class="line">   2) "482.1576"</span><br><span class="line">   3) (integer) 4069855081124858</span><br><span class="line">   4) 1) "116.00000113248825073"</span><br><span class="line">      2) "39.99999991084916218"</span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="geosearchstore"><a href="#geosearchstore" class="headerlink" title="geosearchstore"></a>geosearchstore</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">GEOSEARCHSTORE destination source</span><br><span class="line">	&lt;</span><br><span class="line">		FROMMEMBER member |  # 原点为对象</span><br><span class="line">		FROMLONLAT logitude latitude  # 原点为经纬度</span><br><span class="line">    &gt;</span><br><span class="line">    &lt;</span><br><span class="line">    	BYRADIUS radius &lt;M | KM | FT |MI&gt; | # 圆，半径，单位</span><br><span class="line">    	BYBOX width height &lt;M | KM | FT | MI&gt; # 矩形，宽，高，单位</span><br><span class="line">   	&gt;</span><br><span class="line">   	[ASC | DESC] # 从近到远 从远到近</span><br><span class="line">   	[COUNT count [ANY]] # 数量  ANY任意对象</span><br><span class="line">   	[STOREDIST] # </span><br></pre></td></tr></tbody></table></figure>
+
+<p>与GEOSEARCH类似；</p>
+<p>不同的是，GEOSEARCHSTORE会将获得的结果存放到destination中；</p>
+<p>默认将<strong>获得的对象以及其GEOHASH</strong>以SortedSet方式存放；</p>
+<p>使用STOREDIST参数后，存放内容为<strong>获得的对象和距离原点的距离</strong>。</p>
+<p>STOREDIST，</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; GEOSEARCHSTORE ss1 g1 FROMMEMBER BeiJing BYRADIUS 500 KM ASC COUNT 2 ANY</span><br><span class="line">(integer) 2</span><br><span class="line">127.0.0.1:6379&gt; GEOSEARCHSTORE ss2 g1 FROMMEMBER BeiJing BYRADIUS 500 KM ASC COUNT 2 ANY STOREDIST</span><br><span class="line">(integer) 2</span><br><span class="line">127.0.0.1:6379&gt; zrange ss1 0 -1 WITHSCORES</span><br><span class="line">1) "TaiYuan"</span><br><span class="line">2) "4041790908459398"</span><br><span class="line">3) "BeiJing"</span><br><span class="line">4) "4069855081124858"</span><br><span class="line">127.0.0.1:6379&gt; zrange ss2 0 -1 WITHSCORES</span><br><span class="line">1) "BeiJing"</span><br><span class="line">2) "0"</span><br><span class="line">3) "TaiYuan"</span><br><span class="line">4) "482.15764068388631"</span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="georadius-通过半径获取附近的人的地址（弃用）"><a href="#georadius-通过半径获取附近的人的地址（弃用）" class="headerlink" title="georadius 通过半径获取附近的人的地址（弃用）"></a>georadius 通过半径获取附近的人的地址（弃用）</h4><p><code>GEORADIUS key longitud latitude raduis &lt;M | KM | FI | MI&gt; [WITHCOORD] [WITHDIST] [WITHHASH] [COUNT count [ANY]] [ASC | DESC] [STORE key] [STOREDIST key]</code></p>
+<h4 id="georadiusbymember-通过半径获取成员附近的地址（弃用）"><a href="#georadiusbymember-通过半径获取成员附近的地址（弃用）" class="headerlink" title="georadiusbymember 通过半径获取成员附近的地址（弃用）"></a>georadiusbymember 通过半径获取成员附近的地址（弃用）</h4><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">GEORADIUSBYMEMBER key member radius &lt;M | KM | FT | MI&gt; [WITHCOORD]</span><br><span class="line">  [WITHDIST] [WITHHASH] [COUNT count [ANY]] [ASC | DESC] [STORE key]</span><br><span class="line">  [STOREDIST key]</span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id=""><a href="#" class="headerlink" title=""></a></h4>
+                </div>
+
+                
+                        
+<div class="article-copyright-info-container border-box">
+    <div class="copyright-info-content border-box">
+        <div class="copyright-info-top border-box">
+            <div class="post-title border-box text-ellipsis">
+                Redis 5 HyperLogLogs Bitmaps  Geospatial
+            </div>
+
+            <div class="post-link border-box text-ellipsis">
+                2022/09/22/Redis/Redis-5/
+            </div>
+        </div>
+
+        <div class="copyright-info-bottom border-box">
+            <div class="post-author bottom-item">
+                <div class="type">
+                    作者
+                </div>
+                <div class="content">uwupu</div>
+            </div>
+
+            <div class="post-time bottom-item">
+                <div class="type">
+                    發布于
+                </div>
+                <div class="content">2022-09-22 11:12</div>
+            </div>
+
+
+            <div class="post-license bottom-item">
+                <div class="type">
+                    許可
+                </div>
+                <div class="content tooltip" data-tooltip-content="CC BY-NC-SA 4.0">
+                    <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed">
+                        <i class="fa-brands fa-creative-commons"></i>
+                        <i class="fa-brands fa-creative-commons-by"></i>
+                        <i class="fa-brands fa-creative-commons-nc"></i>
+                        <i class="fa-brands fa-creative-commons-sa"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <i class="copyright-bg fa-solid fa-copyright"></i>
+    </div>
+    <div class="copy-copyright-info flex-center tooltip" data-tooltip-content="復製版權信息" data-tooltip-offset-y="-2px">
+        <i class="fa-solid fa-copy"></i>
+    </div>
+</div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Redis/">Redis</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="article-nav">
+                        
+                            <div class="article-prev">
+                                <a class="prev" rel="prev" href="/2022/09/23/Redis/Redis-6/" title="Redis 6 Stream消息队列">
+                                    <span class="left arrow-icon flex-center">
+                                      <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                            <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Redis 6 Stream消息队列</span>
+                                        <span class="post-nav-item">上一篇</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="article-next">
+                                <a class="next" rel="next" href="/2022/09/21/Redis/Redis-4/" title="Redis 4 Stream">
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Redis 4 Stream</span>
+                                        <span class="post-nav-item">下一篇</span>
+                                    </span>
+                                            <span class="right arrow-icon flex-center">
+                                      <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis-%E4%B8%89%E7%A7%8D%E7%89%B9%E6%AE%8A%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.</span> <span class="nav-text">Redis 三种特殊类型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#HyperLogLogs%EF%BC%88%E5%9F%BA%E6%95%B0%E7%BB%9F%E8%AE%A1%EF%BC%89"><span class="nav-number">1.1.</span> <span class="nav-text">HyperLogLogs（基数统计）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8%E6%9D%A5%E5%81%9A%E4%BB%80%E4%B9%88"><span class="nav-number">1.1.1.</span> <span class="nav-text">用来做什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E5%8A%BF"><span class="nav-number">1.1.2.</span> <span class="nav-text">优势</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8"><span class="nav-number">1.1.3.</span> <span class="nav-text">使用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Bitmap%EF%BC%88%E4%BD%8D%E5%AD%98%E5%82%A8%EF%BC%89"><span class="nav-number">1.2.</span> <span class="nav-text">Bitmap（位存储）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8%E6%9D%A5%E5%81%9A%E4%BB%80%E4%B9%88-1"><span class="nav-number">1.2.1.</span> <span class="nav-text">用来做什么</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Geospatial%EF%BC%88%E5%9C%B0%E7%90%86%E4%BD%8D%E7%BD%AE%EF%BC%89"><span class="nav-number">1.3.</span> <span class="nav-text">Geospatial（地理位置）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="nav-number">1.3.1.</span> <span class="nav-text">底层实现原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E7%90%86"><span class="nav-number">1.3.2.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B%E5%91%BD%E4%BB%A4"><span class="nav-number">1.3.3.</span> <span class="nav-text">一些命令</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#geoadd-%E6%B7%BB%E5%8A%A0%E5%9C%B0%E7%90%86%E4%BD%8D%E7%BD%AE"><span class="nav-number">1.3.3.1.</span> <span class="nav-text">geoadd 添加地理位置</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.3.3.1.1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8F%82%E6%95%B0"><span class="nav-number">1.3.3.1.2.</span> <span class="nav-text">参数</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#geopos-%E8%8E%B7%E5%8F%96%E6%8C%87%E5%AE%9A%E6%88%90%E5%91%98%E7%BB%8F%E7%BA%AC%E5%BA%A6"><span class="nav-number">1.3.3.2.</span> <span class="nav-text">geopos 获取指定成员经纬度</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#geodist-%E4%B8%A4%E4%B8%AA%E6%88%90%E5%91%98%E7%9A%84%E8%B7%9D%E7%A6%BB"><span class="nav-number">1.3.3.3.</span> <span class="nav-text">geodist 两个成员的距离</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#geohash"><span class="nav-number">1.3.3.4.</span> <span class="nav-text">geohash</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#geosearch"><span class="nav-number">1.3.3.5.</span> <span class="nav-text">geosearch</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D-1"><span class="nav-number">1.3.3.5.1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8F%82%E6%95%B0-1"><span class="nav-number">1.3.3.5.2.</span> <span class="nav-text">参数</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#geosearchstore"><span class="nav-number">1.3.3.6.</span> <span class="nav-text">geosearchstore</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#georadius-%E9%80%9A%E8%BF%87%E5%8D%8A%E5%BE%84%E8%8E%B7%E5%8F%96%E9%99%84%E8%BF%91%E7%9A%84%E4%BA%BA%E7%9A%84%E5%9C%B0%E5%9D%80%EF%BC%88%E5%BC%83%E7%94%A8%EF%BC%89"><span class="nav-number">1.3.3.7.</span> <span class="nav-text">georadius 通过半径获取附近的人的地址（弃用）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#georadiusbymember-%E9%80%9A%E8%BF%87%E5%8D%8A%E5%BE%84%E8%8E%B7%E5%8F%96%E6%88%90%E5%91%98%E9%99%84%E8%BF%91%E7%9A%84%E5%9C%B0%E5%9D%80%EF%BC%88%E5%BC%83%E7%94%A8%EF%BC%89"><span class="nav-number">1.3.3.8.</span> <span class="nav-text">georadiusbymember 通过半径获取成员附近的地址（弃用）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link"><span class="nav-number">1.3.3.9.</span> <span class="nav-text"></span></a></li></ol></li></ol></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="border-box website-info-box default">
+        
+            <div class="copyright-info info-item default">
+                ©&nbsp;<span>2020</span>&nbsp;-&nbsp;2023
+                
+                    &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">uwupu</a>
+                
+            </div>
+
+            <div class="theme-info info-item default">
+                <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;框架&nbsp;&amp;&nbsp;主題&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a>
+            </div>
+
+            
+
+            
+        
+
+        <div class="count-item info-item default">
+            
+                <span class="count-box border-box word">
+                    <span class="item-type border-box">總字數</span>
+                    <span class="item-value border-box word">161.4k</span>
+                </span>
+            
+
+            
+                <span class="count-box border-box uv">
+                    <span class="item-type border-box">讀者</span>
+                    <span class="item-value border-box uv" id="busuanzi_value_site_uv"></span>
+                </span>
+            
+
+            
+                <span class="count-box border-box pv">
+                    <span class="item-type border-box">閱覽</span>
+                    <span class="item-value border-box pv" id="busuanzi_value_site_pv"></span>
+                </span>
+            
+        </div>
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="tools-list border-box">
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="搜尋..." spellcheck="false" type="search" class="search-input">
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis-%E4%B8%89%E7%A7%8D%E7%89%B9%E6%AE%8A%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.</span> <span class="nav-text">Redis 三种特殊类型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#HyperLogLogs%EF%BC%88%E5%9F%BA%E6%95%B0%E7%BB%9F%E8%AE%A1%EF%BC%89"><span class="nav-number">1.1.</span> <span class="nav-text">HyperLogLogs（基数统计）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8%E6%9D%A5%E5%81%9A%E4%BB%80%E4%B9%88"><span class="nav-number">1.1.1.</span> <span class="nav-text">用来做什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E5%8A%BF"><span class="nav-number">1.1.2.</span> <span class="nav-text">优势</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8"><span class="nav-number">1.1.3.</span> <span class="nav-text">使用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Bitmap%EF%BC%88%E4%BD%8D%E5%AD%98%E5%82%A8%EF%BC%89"><span class="nav-number">1.2.</span> <span class="nav-text">Bitmap（位存储）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8%E6%9D%A5%E5%81%9A%E4%BB%80%E4%B9%88-1"><span class="nav-number">1.2.1.</span> <span class="nav-text">用来做什么</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Geospatial%EF%BC%88%E5%9C%B0%E7%90%86%E4%BD%8D%E7%BD%AE%EF%BC%89"><span class="nav-number">1.3.</span> <span class="nav-text">Geospatial（地理位置）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="nav-number">1.3.1.</span> <span class="nav-text">底层实现原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E7%90%86"><span class="nav-number">1.3.2.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B%E5%91%BD%E4%BB%A4"><span class="nav-number">1.3.3.</span> <span class="nav-text">一些命令</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#geoadd-%E6%B7%BB%E5%8A%A0%E5%9C%B0%E7%90%86%E4%BD%8D%E7%BD%AE"><span class="nav-number">1.3.3.1.</span> <span class="nav-text">geoadd 添加地理位置</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.3.3.1.1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8F%82%E6%95%B0"><span class="nav-number">1.3.3.1.2.</span> <span class="nav-text">参数</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#geopos-%E8%8E%B7%E5%8F%96%E6%8C%87%E5%AE%9A%E6%88%90%E5%91%98%E7%BB%8F%E7%BA%AC%E5%BA%A6"><span class="nav-number">1.3.3.2.</span> <span class="nav-text">geopos 获取指定成员经纬度</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#geodist-%E4%B8%A4%E4%B8%AA%E6%88%90%E5%91%98%E7%9A%84%E8%B7%9D%E7%A6%BB"><span class="nav-number">1.3.3.3.</span> <span class="nav-text">geodist 两个成员的距离</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#geohash"><span class="nav-number">1.3.3.4.</span> <span class="nav-text">geohash</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#geosearch"><span class="nav-number">1.3.3.5.</span> <span class="nav-text">geosearch</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D-1"><span class="nav-number">1.3.3.5.1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8F%82%E6%95%B0-1"><span class="nav-number">1.3.3.5.2.</span> <span class="nav-text">参数</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#geosearchstore"><span class="nav-number">1.3.3.6.</span> <span class="nav-text">geosearchstore</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#georadius-%E9%80%9A%E8%BF%87%E5%8D%8A%E5%BE%84%E8%8E%B7%E5%8F%96%E9%99%84%E8%BF%91%E7%9A%84%E4%BA%BA%E7%9A%84%E5%9C%B0%E5%9D%80%EF%BC%88%E5%BC%83%E7%94%A8%EF%BC%89"><span class="nav-number">1.3.3.7.</span> <span class="nav-text">georadius 通过半径获取附近的人的地址（弃用）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#georadiusbymember-%E9%80%9A%E8%BF%87%E5%8D%8A%E5%BE%84%E8%8E%B7%E5%8F%96%E6%88%90%E5%91%98%E9%99%84%E8%BF%91%E7%9A%84%E5%9C%B0%E5%9D%80%EF%BC%88%E5%BC%83%E7%94%A8%EF%BC%89"><span class="nav-number">1.3.3.8.</span> <span class="nav-text">georadiusbymember 通过半径获取成员附近的地址（弃用）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link"><span class="nav-number">1.3.3.9.</span> <span class="nav-text"></span></a></li></ol></li></ol></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+<!-- common -->
+<script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/utils.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/header-shrink.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/back2top.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/dark-light-toggle.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/main.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/libs/anime.min.js"></script>
+
+<!-- local-search -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/local-search.js"></script>
+
+
+<!-- code-block -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/code-block.js"></script>
+
+
+<!-- lazyload -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/lazyload.js"></script>
+
+
+<div class="pjax">
+    
+        <!-- post-helper -->
+        <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/post-helper.js"></script>
+
+        <!-- toc -->
+        
+            <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/toc.js"></script>
+        
+
+        <!-- copyright-info -->
+        
+            <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/copyright-info.js"></script>
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- category-page -->
+    
+
+    <!-- links-page -->
+    
+</div>
+
+<!-- mermaid -->
+
+
+<!-- pjax -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/libs/pjax.min.js"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax'
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            KEEP.utils.pjaxProgressBarStart()
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            KEEP.utils.pjaxProgressBarEnd()
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'))
+            KEEP.initExecute()
+        });
+    });
+</script>
+
+
+
+
+
+
+</body></html>

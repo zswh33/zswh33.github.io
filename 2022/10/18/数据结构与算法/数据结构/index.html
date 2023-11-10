@@ -1,0 +1,779 @@
+<!DOCTYPE html><html lang="zh-Hans"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="一个包含有学习日记的博客">
+    <meta name="author" content="uwupu">
+    
+    <title>
+        
+            数据结构 |
+        
+        uwupu 学习日志
+    </title>
+    
+
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+    
+    
+    
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"zswh33.github.io","root":"/","language":"zh-Hans","path":"search.json"}
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":true,"init_open":true,"layout":"right"},"style":{"primary_color":"#F099BC","logo":"/images/logo.svg","favicon":"/images/logo.svg","avatar":"/images/avatar.svg","first_screen":{"enable":false,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"scroll":{"progress_bar":false,"percent":false}},"local_search":{"enable":true,"preload":true},"code_block":{"tools":{"enable":true,"style":"mac"},"highlight_theme":"obsidian"},"pjax":{"enable":true},"lazyload":{"enable":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.21"},"waline":{"server_url":null,"reaction":false,"version":2},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false}},"post":{"author_label":{"enable":true,"auto":false,"custom_label_list":["啦啦啦啦啦"]},"word_count":{"wordcount":true,"min2read":true},"datetime_format":"YYYY-MM-DD HH:mm","copyright_info":true,"share":false,"reward":{"enable":false,"img_link":null,"text":null}},"website_count":{"busuanzi_count":{"enable":true,"site_uv":true,"site_pv":true,"page_pv":true}},"version":"3.8.6"}
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
+    KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
+    KEEP.language_copy_copyright = {"copy":"Copy copyright info","copied":"Copied","title":"Original article title","author":"Original article author","link":"Original article link"}
+  </script>
+<meta name="generator" content="Hexo 6.2.0"><link rel="alternate" href="/atom.xml" title="uwupu Blog" type="application/atom+xml">
+<script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/fontawesome.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/regular.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/solid.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/brands.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/fontawesome.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/regular.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/solid.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/brands.min.css"></noscript></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <i class="pjax-progress-icon fas fa-circle-notch fa-spin"></i>
+    
+</div>
+
+
+<main class="page-container border-box">
+
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.svg">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               uwupu 学习日志
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class="" href="/">
+                                首頁
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/archives">
+                                歸檔
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/tags">
+                                標籤
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/categories">
+                                分類
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/links">
+                                友鏈
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/about">
+                                關於
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/">首頁</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/archives">歸檔</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/tags">標籤</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/categories">分類</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/links">友鏈</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/about">關於</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+
+                
+
+                    <div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+
+        <div class="article-content-container border-box">
+
+            
+
+            <div class="article-content-bottom border-box">
+                
+                    <div class="article-title">
+                        数据结构
+                    </div>
+                
+
+                
+                    <div class="article-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/avatar.svg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author">
+                                <span class="name">uwupu</span>
+                                
+                                    <span class="author-label">啦啦啦啦啦</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="article-meta-info-container border-box post">
+    <div class="article-meta-info border-box">
+        
+
+
+        
+            <span class="meta-info-item article-create-date">
+                <i class="icon fa-solid fa-calendar-check"></i>&nbsp;
+                <span class="pc">2022-10-18 15:11</span>
+                <span class="mobile">2022-10-18 15:11</span>
+            </span>
+
+            <span class="meta-info-item article-update-date">
+                <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                <span class="pc" data-updated="Fri Nov 10 2023 23:06:10 GMT+0800">2023-11-10 23:06</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item article-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="article-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="article-tag meta-info-item border-box">
+                <i class="icon fas fa-tags"></i>&nbsp;
+                <ul class="article-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+            <span class="meta-info-item article-wordcount">
+                <i class="icon fas fa-file-word"></i>&nbsp;<span>1.2k 字數</span>
+            </span>
+        
+        
+            <span class="meta-info-item article-min2read">
+                <i class="icon fas fa-clock"></i>&nbsp;<span>4 分鐘</span>
+            </span>
+        
+        
+            <span class="meta-info-item article-pv">
+                <i class="icon fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="article-content keep-markdown-body">
+                    
+
+                    <p>静态链表</p>
+<p><img lazyload="" alt="image" data-src="/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/image-20221018151443290.png"></p>
+<p>right为链表每个元素的后继下标；</p>
+<p>双向静态链表</p>
+<p><img lazyload="" alt="image" data-src="/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/image-20221018152051057.png"></p>
+<p>双向链表，有前驱有后继。</p>
+<p>8的后继为0，表示这是一个循环链表 </p>
+<p>​      56 9 12 23 49 20 16 62</p>
+<p>0 &gt; 1 &gt;2&gt;3&gt; 4 &gt;5 &gt;6 &gt;7 &gt; 8 &gt; 0</p>
+<h1 id="树"><a href="#树" class="headerlink" title="树"></a>树</h1><p>n个节点可以构成不相似的二叉树的数量有：</p>
+<p>b<sub>n</sub>表示n个结点构成的不同形态的二叉树的数量。<br>$$<br>b_n=<br>\begin{cases}<br>b_0=1\<br>b_n=\sum_{i=0}^{n-1}b_ib_{n-i-1}<br>\end{cases}<br>$$<br>结论：<br>$$<br>b_n = \frac{1}{n+1}·C^n_{2n}<br>$$</p>
+<h1 id="图"><a href="#图" class="headerlink" title="图"></a>图</h1><p>vertex n.顶点</p>
+<h1 id="重连通图"><a href="#重连通图" class="headerlink" title="重连通图"></a>重连通图</h1><p>即，任意两个顶点之间含有不止一条通路，这个图就称为<strong>重连通图</strong>；</p>
+<p><strong>关节点：</strong>如果删除某个顶点及其相关联的边后，原来的图被分割为两个及以上的联通分量，则称该顶点为无向图的一个关节点。</p>
+<h2 id="判断一个重连通图"><a href="#判断一个重连通图" class="headerlink" title="判断一个重连通图"></a>判断一个重连通图</h2><p>判断图中是否有关节点，没有则表示图为重连通图。</p>
+<h1 id="拓扑算法"><a href="#拓扑算法" class="headerlink" title="拓扑算法"></a>拓扑算法</h1><p>n: 拓扑序列</p>
+<p>拓扑排序：从某个集合上的一个偏序得到该集合上的一个全序，这个操作称之为拓扑排序。</p>
+<h1 id="Dijkstra算法"><a href="#Dijkstra算法" class="headerlink" title="Dijkstra算法"></a>Dijkstra算法</h1><p>带权单源最短路径算法。</p>
+<p>图来源：<a class="link" target="_blank" rel="noopener" href="https://blog.csdn.net/xiaoxi_hahaha/article/details/110257368">https://blog.csdn.net/xiaoxi_hahaha/article/details/110257368<i class="fas fa-external-link-alt"></i></a></p>
+<p><img lazyload="" alt="image" data-src="https://img2.uwupu.win/dijkstra.gif"></p>
+<h1 id="Floyd算法"><a href="#Floyd算法" class="headerlink" title="Floyd算法"></a>Floyd算法</h1><p>带权最短路径</p>
+<h1 id="查找表"><a href="#查找表" class="headerlink" title="查找表"></a>查找表</h1><h2 id="静态查找表和动态查找表"><a href="#静态查找表和动态查找表" class="headerlink" title="静态查找表和动态查找表"></a>静态查找表和动态查找表</h2><p>静态查找表：只进行查找操作，不改动表中数据元素；</p>
+<p>动态查找表：在查找的同时进行数据的增加和删除操作。</p>
+<h2 id="关键字"><a href="#关键字" class="headerlink" title="关键字"></a>关键字</h2><p>表中元素的属性，可以作为关键字。比如学生有<strong>姓名、学号、年龄</strong>等属性，这些都可以作为关键字。</p>
+<h3 id="主关键字和次关键字"><a href="#主关键字和次关键字" class="headerlink" title="主关键字和次关键字"></a>主关键字和次关键字</h3><p>主关键字：唯一标识一个数据元素，比如学号；</p>
+<p>次关键字：与主关键字相反，如姓名、年龄。</p>
+<h1 id="一些名词"><a href="#一些名词" class="headerlink" title="一些名词"></a>一些名词</h1><ul>
+<li>静态查找树<ul>
+<li>次优查找树</li>
+<li>二叉排序树</li>
+</ul>
+</li>
+</ul>
+<h1 id="哈希表"><a href="#哈希表" class="headerlink" title="哈希表"></a>哈希表</h1><p><a class="link" target="_blank" rel="noopener" href="http://c.biancheng.net/view/3437.html">http://c.biancheng.net/view/3437.html<i class="fas fa-external-link-alt"></i></a></p>
+<h2 id="哈希函数"><a href="#哈希函数" class="headerlink" title="哈希函数"></a>哈希函数</h2><ul>
+<li><p>直接定值法：<code>H(key) = key</code>  或 <code>H(key) = a * key + b</code></p>
+</li>
+<li><p>数字分析法：取出每个值中不同部分较多的地方作为哈希地址；</p>
+</li>
+<li><p>平方取中法：对关键字进行平方操作，取中间几位作为哈希地址；</p>
+</li>
+<li><p>折叠法：将关键字分为几个部分，然后取这几部分的叠加和作为哈希地址；</p>
+</li>
+<li><p>除留余数法：若已知哈希表长度m，取一个不大于m的数字p，然后对关键字进行取余运算</p>
+<ul>
+<li><code>H(key) = key % p</code></li>
+</ul>
+</li>
+<li><p>随机数法：取关键字的一个随机函数值作为哈希地址，即<code>H(key) = random(key)</code>;</p>
+</li>
+</ul>
+<h2 id="选择一个哈希函数"><a href="#选择一个哈希函数" class="headerlink" title="选择一个哈希函数"></a>选择一个哈希函数</h2><p>需要注意的地方：</p>
+<ul>
+<li><p>若关键字长度不等，可以用随机数法；</p>
+</li>
+<li><p>关键字位数多，折叠法或数字分析法；</p>
+</li>
+<li><p>关键字位数较短，平方取中法；</p>
+</li>
+<li><p>哈希表大小已知，可以选择除留余数法；</p>
+</li>
+<li><p>关键字分布情况；</p>
+</li>
+<li><p>查找表的查找频率；</p>
+</li>
+<li><p>计算哈希函数需要的时间；</p>
+</li>
+</ul>
+<h2 id="处理冲突"><a href="#处理冲突" class="headerlink" title="处理冲突"></a>处理冲突</h2><ul>
+<li><p>开放定址法：H(key) = [ H(key) + d ] MOD m;</p>
+<ul>
+<li><p>$$<br>H(key) = [ H(key) + d ]\ %\ m<br>$$</p>
+</li>
+<li><p>m为哈希表表长</p>
+</li>
+<li><p>d的取值</p>
+<ul>
+<li>线性探测法：d = 1,2,3, …, m-1</li>
+<li>二次探测法：d=12, -12, 22 , -22, 32 …</li>
+<li>伪随机数探测法：d=伪随机数</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>再哈希法：</p>
+<ul>
+<li>若发生冲突，再使用另一个哈希函数进行计算，直到冲突不再发生；</li>
+</ul>
+</li>
+<li><p>链地址法</p>
+<ul>
+<li>将处于一个地址的值放在一个链表中；</li>
+</ul>
+</li>
+<li><p>建立一个公共溢出区</p>
+<ul>
+<li>建立两张表，一张基本表，一张溢出表；</li>
+<li>将哈希函数结果产生冲突，就将数据放到公共溢出区；</li>
+</ul>
+</li>
+</ul>
+<h1 id="B-树-B-Tree"><a href="#B-树-B-Tree" class="headerlink" title="B-树 (B-Tree)"></a>B-树 (B-Tree)</h1><h2 id="名字"><a href="#名字" class="headerlink" title="名字"></a>名字</h2><p><strong>这里不是B减树</strong>，B-树，指的就是B树。换言之，B树，就是B-树。</p>
+<p><strong>B+树</strong>是B树的plus，不存在B减树；</p>
+<h2 id="满足下列要求的m叉树"><a href="#满足下列要求的m叉树" class="headerlink" title="满足下列要求的m叉树"></a>满足下列要求的m叉树</h2><ol>
+<li><p>树中每个结点至多有m个孩子结点（即，至多有m-1个关键字）</p>
+</li>
+<li><p>每个结点的结构如下：</p>
+<p><img lazyload="" alt="image" data-src="/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/m%E5%8F%89%E6%A0%91%E8%8A%82%E7%82%B9%E7%BB%93%E6%9E%84.svg"></p>
+<p>\</p>
+<p>\</p>
+<p><img lazyload="" alt="image" data-src="/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/m%E5%8F%89%E6%A0%91%E8%8A%82%E7%82%B9%E7%BB%93%E6%9E%842.svg"></p>
+</li>
+<li><p>除根节点外，其他结点至少有<code>⌈m/2⌉</code>个孩子结点；</p>
+</li>
+<li><p>若根节点不是叶子节点，则根节点至少有两个孩子结点，（即根节点没有只有一个孩子结点的情况）；</p>
+</li>
+<li><p>所有的叶子节点都在同一层上，即<strong>B树是所有节点平衡因子均等于0的多路查找树</strong>。</p>
+</li>
+<li><p>除根节点外，其他结点都包含n个key，这里<code>⌈m/2⌉-1 &lt;= n &lt;= m-1</code><br>$$<br>\lceil m/2 \rceil - 1 \leq n \leq m-1<br>$$</p>
+</li>
+</ol>
+
+                </div>
+
+                
+                        
+<div class="article-copyright-info-container border-box">
+    <div class="copyright-info-content border-box">
+        <div class="copyright-info-top border-box">
+            <div class="post-title border-box text-ellipsis">
+                数据结构
+            </div>
+
+            <div class="post-link border-box text-ellipsis">
+                2022/10/18/数据结构与算法/数据结构/
+            </div>
+        </div>
+
+        <div class="copyright-info-bottom border-box">
+            <div class="post-author bottom-item">
+                <div class="type">
+                    作者
+                </div>
+                <div class="content">uwupu</div>
+            </div>
+
+            <div class="post-time bottom-item">
+                <div class="type">
+                    發布于
+                </div>
+                <div class="content">2022-10-18 15:11</div>
+            </div>
+
+
+            <div class="post-license bottom-item">
+                <div class="type">
+                    許可
+                </div>
+                <div class="content tooltip" data-tooltip-content="CC BY-NC-SA 4.0">
+                    <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed">
+                        <i class="fa-brands fa-creative-commons"></i>
+                        <i class="fa-brands fa-creative-commons-by"></i>
+                        <i class="fa-brands fa-creative-commons-nc"></i>
+                        <i class="fa-brands fa-creative-commons-sa"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <i class="copyright-bg fa-solid fa-copyright"></i>
+    </div>
+    <div class="copy-copyright-info flex-center tooltip" data-tooltip-content="復製版權信息" data-tooltip-offset-y="-2px">
+        <i class="fa-solid fa-copy"></i>
+    </div>
+</div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="article-nav">
+                        
+                            <div class="article-prev">
+                                <a class="prev" rel="prev" href="/2022/10/19/Java/Java%E5%B9%B6%E5%8F%91-1/" title="Java并发 1">
+                                    <span class="left arrow-icon flex-center">
+                                      <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                            <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Java并发 1</span>
+                                        <span class="post-nav-item">上一篇</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="article-next">
+                                <a class="next" rel="next" href="/2022/10/17/Java/Effective-2/" title="Effective Java 2">
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Effective Java 2</span>
+                                        <span class="post-nav-item">下一篇</span>
+                                    </span>
+                                            <span class="right arrow-icon flex-center">
+                                      <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A0%91"><span class="nav-number">1.</span> <span class="nav-text">树</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%BE"><span class="nav-number">2.</span> <span class="nav-text">图</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%87%8D%E8%BF%9E%E9%80%9A%E5%9B%BE"><span class="nav-number">3.</span> <span class="nav-text">重连通图</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%A4%E6%96%AD%E4%B8%80%E4%B8%AA%E9%87%8D%E8%BF%9E%E9%80%9A%E5%9B%BE"><span class="nav-number">3.1.</span> <span class="nav-text">判断一个重连通图</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8B%93%E6%89%91%E7%AE%97%E6%B3%95"><span class="nav-number">4.</span> <span class="nav-text">拓扑算法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Dijkstra%E7%AE%97%E6%B3%95"><span class="nav-number">5.</span> <span class="nav-text">Dijkstra算法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Floyd%E7%AE%97%E6%B3%95"><span class="nav-number">6.</span> <span class="nav-text">Floyd算法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9F%A5%E6%89%BE%E8%A1%A8"><span class="nav-number">7.</span> <span class="nav-text">查找表</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E6%9F%A5%E6%89%BE%E8%A1%A8%E5%92%8C%E5%8A%A8%E6%80%81%E6%9F%A5%E6%89%BE%E8%A1%A8"><span class="nav-number">7.1.</span> <span class="nav-text">静态查找表和动态查找表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E5%AD%97"><span class="nav-number">7.2.</span> <span class="nav-text">关键字</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E5%85%B3%E9%94%AE%E5%AD%97%E5%92%8C%E6%AC%A1%E5%85%B3%E9%94%AE%E5%AD%97"><span class="nav-number">7.2.1.</span> <span class="nav-text">主关键字和次关键字</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B%E5%90%8D%E8%AF%8D"><span class="nav-number">8.</span> <span class="nav-text">一些名词</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%93%88%E5%B8%8C%E8%A1%A8"><span class="nav-number">9.</span> <span class="nav-text">哈希表</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%93%88%E5%B8%8C%E5%87%BD%E6%95%B0"><span class="nav-number">9.1.</span> <span class="nav-text">哈希函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%89%E6%8B%A9%E4%B8%80%E4%B8%AA%E5%93%88%E5%B8%8C%E5%87%BD%E6%95%B0"><span class="nav-number">9.2.</span> <span class="nav-text">选择一个哈希函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%84%E7%90%86%E5%86%B2%E7%AA%81"><span class="nav-number">9.3.</span> <span class="nav-text">处理冲突</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#B-%E6%A0%91-B-Tree"><span class="nav-number">10.</span> <span class="nav-text">B-树 (B-Tree)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8D%E5%AD%97"><span class="nav-number">10.1.</span> <span class="nav-text">名字</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%BB%A1%E8%B6%B3%E4%B8%8B%E5%88%97%E8%A6%81%E6%B1%82%E7%9A%84m%E5%8F%89%E6%A0%91"><span class="nav-number">10.2.</span> <span class="nav-text">满足下列要求的m叉树</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="border-box website-info-box default">
+        
+            <div class="copyright-info info-item default">
+                ©&nbsp;<span>2020</span>&nbsp;-&nbsp;2023
+                
+                    &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">uwupu</a>
+                
+            </div>
+
+            <div class="theme-info info-item default">
+                <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;框架&nbsp;&amp;&nbsp;主題&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a>
+            </div>
+
+            
+
+            
+        
+
+        <div class="count-item info-item default">
+            
+                <span class="count-box border-box word">
+                    <span class="item-type border-box">總字數</span>
+                    <span class="item-value border-box word">161.4k</span>
+                </span>
+            
+
+            
+                <span class="count-box border-box uv">
+                    <span class="item-type border-box">讀者</span>
+                    <span class="item-value border-box uv" id="busuanzi_value_site_uv"></span>
+                </span>
+            
+
+            
+                <span class="count-box border-box pv">
+                    <span class="item-type border-box">閱覽</span>
+                    <span class="item-value border-box pv" id="busuanzi_value_site_pv"></span>
+                </span>
+            
+        </div>
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="tools-list border-box">
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="搜尋..." spellcheck="false" type="search" class="search-input">
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A0%91"><span class="nav-number">1.</span> <span class="nav-text">树</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%BE"><span class="nav-number">2.</span> <span class="nav-text">图</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%87%8D%E8%BF%9E%E9%80%9A%E5%9B%BE"><span class="nav-number">3.</span> <span class="nav-text">重连通图</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%A4%E6%96%AD%E4%B8%80%E4%B8%AA%E9%87%8D%E8%BF%9E%E9%80%9A%E5%9B%BE"><span class="nav-number">3.1.</span> <span class="nav-text">判断一个重连通图</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8B%93%E6%89%91%E7%AE%97%E6%B3%95"><span class="nav-number">4.</span> <span class="nav-text">拓扑算法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Dijkstra%E7%AE%97%E6%B3%95"><span class="nav-number">5.</span> <span class="nav-text">Dijkstra算法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Floyd%E7%AE%97%E6%B3%95"><span class="nav-number">6.</span> <span class="nav-text">Floyd算法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9F%A5%E6%89%BE%E8%A1%A8"><span class="nav-number">7.</span> <span class="nav-text">查找表</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E6%9F%A5%E6%89%BE%E8%A1%A8%E5%92%8C%E5%8A%A8%E6%80%81%E6%9F%A5%E6%89%BE%E8%A1%A8"><span class="nav-number">7.1.</span> <span class="nav-text">静态查找表和动态查找表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E5%AD%97"><span class="nav-number">7.2.</span> <span class="nav-text">关键字</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E5%85%B3%E9%94%AE%E5%AD%97%E5%92%8C%E6%AC%A1%E5%85%B3%E9%94%AE%E5%AD%97"><span class="nav-number">7.2.1.</span> <span class="nav-text">主关键字和次关键字</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B%E5%90%8D%E8%AF%8D"><span class="nav-number">8.</span> <span class="nav-text">一些名词</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%93%88%E5%B8%8C%E8%A1%A8"><span class="nav-number">9.</span> <span class="nav-text">哈希表</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%93%88%E5%B8%8C%E5%87%BD%E6%95%B0"><span class="nav-number">9.1.</span> <span class="nav-text">哈希函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%89%E6%8B%A9%E4%B8%80%E4%B8%AA%E5%93%88%E5%B8%8C%E5%87%BD%E6%95%B0"><span class="nav-number">9.2.</span> <span class="nav-text">选择一个哈希函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%84%E7%90%86%E5%86%B2%E7%AA%81"><span class="nav-number">9.3.</span> <span class="nav-text">处理冲突</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#B-%E6%A0%91-B-Tree"><span class="nav-number">10.</span> <span class="nav-text">B-树 (B-Tree)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8D%E5%AD%97"><span class="nav-number">10.1.</span> <span class="nav-text">名字</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%BB%A1%E8%B6%B3%E4%B8%8B%E5%88%97%E8%A6%81%E6%B1%82%E7%9A%84m%E5%8F%89%E6%A0%91"><span class="nav-number">10.2.</span> <span class="nav-text">满足下列要求的m叉树</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+<!-- common -->
+<script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/utils.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/header-shrink.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/back2top.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/dark-light-toggle.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/main.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/libs/anime.min.js"></script>
+
+<!-- local-search -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/local-search.js"></script>
+
+
+<!-- code-block -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/code-block.js"></script>
+
+
+<!-- lazyload -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/lazyload.js"></script>
+
+
+<div class="pjax">
+    
+        <!-- post-helper -->
+        <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/post-helper.js"></script>
+
+        <!-- toc -->
+        
+            <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/toc.js"></script>
+        
+
+        <!-- copyright-info -->
+        
+            <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/copyright-info.js"></script>
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- category-page -->
+    
+
+    <!-- links-page -->
+    
+</div>
+
+<!-- mermaid -->
+
+
+<!-- pjax -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/libs/pjax.min.js"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax'
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            KEEP.utils.pjaxProgressBarStart()
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            KEEP.utils.pjaxProgressBarEnd()
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'))
+            KEEP.initExecute()
+        });
+    });
+</script>
+
+
+
+
+
+
+</body></html>

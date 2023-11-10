@@ -1,0 +1,1139 @@
+<!DOCTYPE html><html lang="zh-Hans"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="一个包含有学习日记的博客">
+    <meta name="author" content="uwupu">
+    
+    <title>
+        
+            openEuler 1 Linux操作系统 版本更新 登录和电源管理 文件管理 文件查看 文件查找 压缩解压 软链接硬链接 |
+        
+        uwupu 学习日志
+    </title>
+    
+
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+    
+    
+    
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"zswh33.github.io","root":"/","language":"zh-Hans","path":"search.json"}
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":true,"init_open":true,"layout":"right"},"style":{"primary_color":"#F099BC","logo":"/images/logo.svg","favicon":"/images/logo.svg","avatar":"/images/avatar.svg","first_screen":{"enable":false,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"scroll":{"progress_bar":false,"percent":false}},"local_search":{"enable":true,"preload":true},"code_block":{"tools":{"enable":true,"style":"mac"},"highlight_theme":"obsidian"},"pjax":{"enable":true},"lazyload":{"enable":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.21"},"waline":{"server_url":null,"reaction":false,"version":2},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false}},"post":{"author_label":{"enable":true,"auto":false,"custom_label_list":["啦啦啦啦啦"]},"word_count":{"wordcount":true,"min2read":true},"datetime_format":"YYYY-MM-DD HH:mm","copyright_info":true,"share":false,"reward":{"enable":false,"img_link":null,"text":null}},"website_count":{"busuanzi_count":{"enable":true,"site_uv":true,"site_pv":true,"page_pv":true}},"version":"3.8.6"}
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
+    KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
+    KEEP.language_copy_copyright = {"copy":"Copy copyright info","copied":"Copied","title":"Original article title","author":"Original article author","link":"Original article link"}
+  </script>
+<meta name="generator" content="Hexo 6.2.0"><link rel="alternate" href="/atom.xml" title="uwupu Blog" type="application/atom+xml">
+<script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/fontawesome.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/regular.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/solid.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/brands.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/fontawesome.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/regular.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/solid.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/brands.min.css"></noscript></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <i class="pjax-progress-icon fas fa-circle-notch fa-spin"></i>
+    
+</div>
+
+
+<main class="page-container border-box">
+
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.svg">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               uwupu 学习日志
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class="" href="/">
+                                首頁
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/archives">
+                                歸檔
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/tags">
+                                標籤
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/categories">
+                                分類
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/links">
+                                友鏈
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/about">
+                                關於
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/">首頁</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/archives">歸檔</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/tags">標籤</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/categories">分類</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/links">友鏈</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/about">關於</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+
+                
+
+                    <div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+
+        <div class="article-content-container border-box">
+
+            
+
+            <div class="article-content-bottom border-box">
+                
+                    <div class="article-title">
+                        openEuler 1 Linux操作系统 版本更新 登录和电源管理 文件管理 文件查看 文件查找 压缩解压 软链接硬链接
+                    </div>
+                
+
+                
+                    <div class="article-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/avatar.svg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author">
+                                <span class="name">uwupu</span>
+                                
+                                    <span class="author-label">啦啦啦啦啦</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="article-meta-info-container border-box post">
+    <div class="article-meta-info border-box">
+        
+
+
+        
+            <span class="meta-info-item article-create-date">
+                <i class="icon fa-solid fa-calendar-check"></i>&nbsp;
+                <span class="pc">2022-10-23 15:58</span>
+                <span class="mobile">2022-10-23 15:58</span>
+            </span>
+
+            <span class="meta-info-item article-update-date">
+                <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                <span class="pc" data-updated="Fri Nov 10 2023 23:13:46 GMT+0800">2023-11-10 23:13</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item article-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="article-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/Linux/">Linux</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="article-tag meta-info-item border-box">
+                <i class="icon fas fa-tags"></i>&nbsp;
+                <ul class="article-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Linux/">Linux</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/openEuler/">openEuler</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+            <span class="meta-info-item article-wordcount">
+                <i class="icon fas fa-file-word"></i>&nbsp;<span>3.4k 字數</span>
+            </span>
+        
+        
+            <span class="meta-info-item article-min2read">
+                <i class="icon fas fa-clock"></i>&nbsp;<span>12 分鐘</span>
+            </span>
+        
+        
+            <span class="meta-info-item article-pv">
+                <i class="icon fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="article-content keep-markdown-body">
+                    
+
+                    <p><a class="link" target="_blank" rel="noopener" href="https://ilearningx.huawei.com/courses/course-v1:HuaweiX+EBG2020CCHW1100063+Self-paced/courseware/6abdf02386a84e38b9fd85e020966057/fccbc4b5a17b45d99cbef50dd9ff5466/">https://ilearningx.huawei.com/courses/course-v1:HuaweiX+EBG2020CCHW1100063+Self-paced/courseware/6abdf02386a84e38b9fd85e020966057/fccbc4b5a17b45d99cbef50dd9ff5466/<i class="fas fa-external-link-alt"></i></a></p>
+<h1 id="操作系统"><a href="#操作系统" class="headerlink" title="操作系统"></a>操作系统</h1><p><strong>操作系统</strong>：是指控制和管理整个计算机系统的<strong>硬件和软件资源</strong>、并合理地组织调度<strong>计算机的工作</strong>和<strong>资源的分配</strong>，以提供给<strong>用户和其他软件</strong>方便的<strong>接口和环境</strong>的<strong>程序集合</strong>。</p>
+<h1 id="Linux版本介绍"><a href="#Linux版本介绍" class="headerlink" title="Linux版本介绍"></a>Linux版本介绍</h1><ul>
+<li>内核版本<ul>
+<li>Linux内核版本号由3个数字组成：<strong>5.19.16</strong><ul>
+<li>第一个数字：目前发布的内核版本</li>
+<li>第二个数字：偶数表示<strong>稳定版本</strong>，奇数表示<strong>开发中版本</strong>。</li>
+<li>第三个数字：错误修补的次数。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>发行版本<ul>
+<li>商业发行版：由商业公司维护，提供收费的服务，如升级补丁；</li>
+<li>社区发行版：由社区组织维护。</li>
+</ul>
+</li>
+</ul>
+<h1 id="openEuler操作系统"><a href="#openEuler操作系统" class="headerlink" title="openEuler操作系统"></a>openEuler操作系统</h1><p>是一款开源、免费的操作系统，由openEuler社区运作。内核源于Linux，支持鲲鹏及其他多种处理器，适用于数据库、大数据、云计算、人工智能等应用场景。</p>
+<h2 id="版本号"><a href="#版本号" class="headerlink" title="版本号"></a>版本号</h2><ul>
+<li>创新版本：相对较新，半年一版本；</li>
+<li>LTS：稳定版，两年一版本。</li>
+</ul>
+<h2 id="分区"><a href="#分区" class="headerlink" title="分区"></a>分区</h2><ul>
+<li>swap：交换分区。在内存空间不足时，用于置换内存中的脏数据。<ul>
+<li>内存较小时建议为<strong>内存大小的两倍</strong>；</li>
+<li>内存较大时，根据情况分配。</li>
+</ul>
+</li>
+<li>boot：系统引导程序</li>
+<li>boot/efi：EFI固件要启动的引导器和应用程序</li>
+<li>/：根分区</li>
+</ul>
+<h2 id="安装选择"><a href="#安装选择" class="headerlink" title="安装选择"></a>安装选择</h2><ul>
+<li>最小安装<ul>
+<li>最小化安装Linux。</li>
+</ul>
+</li>
+<li>服务器<ul>
+<li>安装服务器场景涉及到的软件。</li>
+</ul>
+</li>
+<li>虚拟化主机<ul>
+<li>虚拟化场景设计的相关软件。</li>
+</ul>
+</li>
+</ul>
+<h1 id="Linux的GUI和CLI"><a href="#Linux的GUI和CLI" class="headerlink" title="Linux的GUI和CLI"></a>Linux的GUI和CLI</h1><p>GUI，图形用户界面；</p>
+<p>CLI，命令行界面；</p>
+<h1 id="登录Linux"><a href="#登录Linux" class="headerlink" title="登录Linux"></a>登录Linux</h1><ul>
+<li>本地登录<ul>
+<li>一个典型的Linux将运行6个虚拟控制台和1个图形控制台。openEuler目前没有图形控制台；</li>
+<li>可以通过ctrl + alt + F1-F6 在虚拟控制台之间切换；</li>
+</ul>
+</li>
+<li>远程登录<ul>
+<li>软件：putty，xshell等。</li>
+</ul>
+</li>
+</ul>
+<h1 id="Shell"><a href="#Shell" class="headerlink" title="Shell"></a>Shell</h1><ul>
+<li><p><strong>常见的Shell</strong>：bash，sh，csh，ksh。</p>
+</li>
+<li><p>系统默认提示符：[当前用户名@主机名 当前所在位置]$</p>
+<ul>
+<li>其中最后的符号，root用户为#，其他用户为$</li>
+</ul>
+</li>
+</ul>
+<h1 id="用户"><a href="#用户" class="headerlink" title="用户"></a>用户</h1><ul>
+<li>为保障系统安全：<ul>
+<li>初次登录系统修改密码</li>
+<li>定期修改密码</li>
+<li>设计高复杂度密码<ul>
+<li>八位以上字符，包含大写、小写字母，数字和特殊字符中三种及以上的字符。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>修改密码：passwd</li>
+<li>root用户拥有最高权限</li>
+<li>切换用户使用：su [用户名]<ul>
+<li>无参默认切换root用户</li>
+</ul>
+</li>
+</ul>
+<h1 id="Shell快捷操作"><a href="#Shell快捷操作" class="headerlink" title="Shell快捷操作"></a>Shell快捷操作</h1><ul>
+<li><p>tab：命令补全；</p>
+</li>
+<li><p>history：查看历史命令；</p>
+<ul>
+<li>history n：执行编号为n的历史命令；</li>
+</ul>
+</li>
+<li><p>↑/↓：历史命令切换，上一个命令/下一个命令；</p>
+</li>
+<li><p>home/end：切换到行首/行尾；</p>
+</li>
+<li><p>Ctrl + A 移动光标到行首</p>
+</li>
+<li><p>Ctrl + E 移动光标到行尾</p>
+</li>
+<li><p>Ctrl + C 终止当前程序</p>
+</li>
+<li><p>clear或Ctrl + L：快速清屏。</p>
+</li>
+</ul>
+<h2 id="二"><a href="#二" class="headerlink" title="二"></a>二</h2><ul>
+<li>双击Tab可以列出所有可用命令；</li>
+</ul>
+<h1 id="Linux命令分类"><a href="#Linux命令分类" class="headerlink" title="Linux命令分类"></a>Linux命令分类</h1><table>
+<thead>
+<tr>
+<th>分类</th>
+<th>命令</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>登录和电源管理</td>
+<td>login, shutdown, halt, reboot, install, exit, last等</td>
+</tr>
+<tr>
+<td>文件处理</td>
+<td>file, mkdir, grep, dd, find, mv, ls, diff, cat, ln等</td>
+</tr>
+<tr>
+<td>系统管理</td>
+<td>df, top, free, quota, at, ip, kill, crontab等</td>
+</tr>
+<tr>
+<td>网络操作</td>
+<td>ifconfig, ip, ping, netstat, telnet, ftp, route, rlogin, rcp, finger, mail, nslookup等</td>
+</tr>
+<tr>
+<td>系统安全</td>
+<td>passwd, su, umask, chgrp, chmod, chown, chattr, sudo ps, who等</td>
+</tr>
+<tr>
+<td>其他</td>
+<td>tar, unzip, gunzip, unarj, mtools, man</td>
+</tr>
+</tbody></table>
+<h2 id="登录和管理电源"><a href="#登录和管理电源" class="headerlink" title="登录和管理电源"></a>登录和管理电源</h2><h3 id="login"><a href="#login" class="headerlink" title="login"></a>login</h3><p>Linux是一个多用户操作系统，可以同时接收多个用户登录，还允许一个用户进行多次登录；</p>
+<p>虚拟控制台切换使用“<strong>alt和一个功能键</strong>”实现，通常使用<strong>F1-F6</strong>；</p>
+<h3 id="last"><a href="#last" class="headerlink" title="last"></a>last</h3><p>查看最近的登录记录</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# last</span><br><span class="line">root     pts/0        192.168.227.1    Sun Oct 23 23:01   still logged in</span><br><span class="line">yyn      tty1                          Sun Oct 23 18:39   still logged in</span><br><span class="line">reboot   system boot  5.10.0-106.18.0. Mon Oct 24 02:38   still running</span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>last -n 3或 last -3</strong>：显示最近的3条登录记录；</p>
+<p><strong>last tty2</strong>：tty2虚拟控制台的登录记录；</p>
+<p><strong>last root</strong>：root用户的登录记录；</p>
+<h3 id="exit"><a href="#exit" class="headerlink" title="exit"></a>exit</h3><p>退出登录。</p>
+<h3 id="shutdown"><a href="#shutdown" class="headerlink" title="shutdown"></a>shutdown</h3><h4 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h4><ul>
+<li><p>shutdown作用是关闭计算机，权限是超级用户。</p>
+</li>
+<li><p>参数：</p>
+<ul>
+<li>-h：关机后关闭电源；</li>
+<li>-r：关机后打开电源（重启）；</li>
+<li>-t：改变到其他运行级别之前，告诉init程序多久以后关机；</li>
+<li>-k：不关机，送警告信号给每位登陆者；</li>
+<li>-F：在重启计算机时强迫fsck；</li>
+<li>-f：关机时，不做fsck动作；</li>
+<li>-t seconds：设定关机前时间；</li>
+<li>-C：取消自动关机</li>
+</ul>
+</li>
+<li><p>shutdown命令可以安全地将系统关机，直接断掉电源方式关闭Linux十分危险；</p>
+<ul>
+<li>Linux后台运行着许多进程；强制关机会导致进程数据丢失；使系统处于不稳定状态，甚至可能损坏硬件设备。</li>
+</ul>
+</li>
+<li><p>使用shutdown可以向其他用户通知警告信息，并冻结login命令，禁止登录。</p>
+</li>
+</ul>
+<h3 id="halt"><a href="#halt" class="headerlink" title="halt"></a>halt</h3><p>halt命令的作用是关闭系统，使用权限是超级用户；</p>
+<ul>
+<li>主要参数<ul>
+<li>-n：方式sync系统调用，它用在用fsck修复根分区后，以阻止内核用老版本的超级块覆盖修补过的超级块；</li>
+<li>-w：不重启和关机，只是写wtmp（/var/log/wtmp）记录；</li>
+<li>-f：不调用shutdown，强制关机或重启；</li>
+<li>-i：关机或重启前，关闭所有网络接口；</li>
+<li>-d：关闭系统，不留下记录。</li>
+</ul>
+</li>
+</ul>
+<h3 id="reboot"><a href="#reboot" class="headerlink" title="reboot"></a>reboot</h3><p>reboot命令作用是重启计算机，权限：系统管理者；</p>
+<ul>
+<li>主要参数：<ul>
+<li>-n：保存数据后重启系统；</li>
+<li>-w：不重启，只是把记录写到/var/log/wtmp文件里；</li>
+<li>-d：不写记录到/var/log/wtmp文件里；</li>
+<li>-i：关闭网络设置后再重启系统；</li>
+<li></li>
+</ul>
+</li>
+</ul>
+<h2 id="文件管理"><a href="#文件管理" class="headerlink" title="文件管理"></a>文件管理</h2><h3 id="目录介绍"><a href="#目录介绍" class="headerlink" title="目录介绍"></a>目录介绍</h3><ul>
+<li><p>/：根目录</p>
+<ul>
+<li><p>/bin：所有用户使用的二进制程序目录</p>
+</li>
+<li><p>/boot：引导加载程序文件目录</p>
+</li>
+<li><p>/dev：设备文件目录</p>
+</li>
+<li><p>/etc：配置文件目录</p>
+</li>
+<li><p>/lib：系统库目录，动态链接共享库</p>
+</li>
+<li><p>/lib64：64位的系统库目录</p>
+</li>
+<li><p>/media：可移动媒体设备目录</p>
+</li>
+<li><p>/mnt：挂载目录</p>
+</li>
+<li><p>/opt：应用软件存放目录</p>
+</li>
+<li><p>/proc：进程信息目录</p>
+</li>
+<li><p>/root：root用户主目录</p>
+</li>
+<li><p>/run：内存文件系统目录，临时文件目录，存储系统运行以来的文件目录，系统重启后目录会被清空；</p>
+</li>
+<li><p>/sbin：系统管理员用户使用的二进制程序目录；</p>
+</li>
+<li><p>/srv：服务数据目录；</p>
+</li>
+<li><p>/sys：内核设备树目录，Linux2.6内核新出现的文件系统sysfs；</p>
+</li>
+<li><p>/tmp：存放临时文件的目录</p>
+</li>
+<li><p>/usr：用户应用程序和配置目录，类似于windows的Program Files目录；</p>
+</li>
+<li><p>/var：动态目录，用于存放经常被修改的文件，比如日志；</p>
+</li>
+<li><p>/home：用户用其存储个人配置。</p>
+</li>
+</ul>
+</li>
+<li><p>路径分为<strong>绝对路径</strong>和<strong>相对路径</strong>；</p>
+</li>
+</ul>
+<h3 id="pwd"><a href="#pwd" class="headerlink" title="pwd"></a>pwd</h3><p>打印当前的工作目录；</p>
+<ul>
+<li>运行参数：<ul>
+<li>-L，目录连接链接时，输出连接路径；</li>
+<li>-P：输出物理路径，即文件在设备中的路径；</li>
+</ul>
+</li>
+</ul>
+<h3 id="cd"><a href="#cd" class="headerlink" title="cd"></a>cd</h3><p>用于改变当前工作目录；</p>
+<ul>
+<li>使用<ul>
+<li>cd /usr：进入/usr目录</li>
+<li>cd ..</li>
+<li>cd . 进入当前目录</li>
+<li><code>cd</code> 或 <code>cd ~</code> ：回到家目录</li>
+<li><code>cd -</code> ：回到前一个目录，可以在两个目录间跳转；</li>
+</ul>
+</li>
+</ul>
+<h3 id="ls"><a href="#ls" class="headerlink" title="ls"></a>ls</h3><p>列出目录内容或文件信息</p>
+<ul>
+<li>参数<ul>
+<li>-a：显示所有文件及目录，包括隐藏文件和目录；</li>
+<li>-l：除文件名外，打印另包含文件形态，权限，拥有者，文件大小等；</li>
+<li>-t：将文件按照建立时间先后次序列出；</li>
+<li>-S：将文件按文件大小依次列出；</li>
+<li>-R：若目录下有文件，则将目录下文件也列出；</li>
+</ul>
+</li>
+</ul>
+<h3 id="mkdir"><a href="#mkdir" class="headerlink" title="mkdir"></a>mkdir</h3><p>创建目录（文件夹）</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir dir1 # 创建一个dir1文件夹</span><br><span class="line">mkdir dir2 dir3 dir4 # 创建三个文件夹</span><br><span class="line">mkdir -p dir/dir5 # 创建dir，然后在dir下创建dir5；若dir不存在，需要添加 -p 参数</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="cp"><a href="#cp" class="headerlink" title="cp"></a>cp</h3><p>复制文件或目录，可以复制单个文件，可以复制多个文件；</p>
+<ul>
+<li>语法：cp [OPTION]… SOURCE… DIRECTORY<ul>
+<li>-a：保留链接，文件属性，并复制目录下所有内容；</li>
+<li>-p：除文件内容外，还把修改时间和放文件权限也复制到新文件；</li>
+<li>-r：若源文件是目录文件，则复制包含目录下<strong>所有子目录和文件</strong>；</li>
+<li>-l：不复制文件，只是生成链接文件。</li>
+</ul>
+</li>
+</ul>
+<h3 id="mv"><a href="#mv" class="headerlink" title="mv"></a>mv</h3><p>移动文件或目录。</p>
+<p>若源文件和目标文件在同一个父目录里面，则mv命令效果相当于给文件命名；</p>
+<ul>
+<li>语法：mv [选项] 源文件或目录 目标文件或目录<ul>
+<li>-b：若需要覆盖文件，覆盖前进行备份；</li>
+<li>-f：force强制，若目标文件存在，不询问直接覆盖；</li>
+<li>-i：若目标文件存在，询问是否覆盖；</li>
+<li>-u：若目标文件存在，且源文件比较新，则覆盖；</li>
+</ul>
+</li>
+</ul>
+<h3 id="rm"><a href="#rm" class="headerlink" title="rm"></a>rm</h3><p>删除文件或目录；</p>
+<ul>
+<li>语法：rm [OPTION] file_or_dir<ul>
+<li>-f，–force：忽略不存在的文件，不给出提示，直接删除；</li>
+<li>-i，–interactive：进行交互式删除；</li>
+<li>-r，-R，–recursive：指示rm将参数中列出的全部目录和子目录递归删除，即删除目标目录包含其子目录及文件；</li>
+<li>-v，–verbose：输出删除日志；</li>
+</ul>
+</li>
+</ul>
+<h3 id="cat"><a href="#cat" class="headerlink" title="cat"></a>cat</h3><p>读取文件全部内容，或将几个文件合并为一个文件；</p>
+<ul>
+<li>语法：cat [OPTION] [FILE]<ul>
+<li>-A，–show-all：等价于-vET；</li>
+<li>-b，–number-nonblank：对非空输出行编号；</li>
+<li>-E，–show-ends：每行结尾处显示$；</li>
+<li>-n，–number：所有行显示行号，从1开始；</li>
+</ul>
+</li>
+</ul>
+<h3 id="head"><a href="#head" class="headerlink" title="head"></a>head</h3><p>显示文件开头的内容，head命令默认打印文件开头10行；</p>
+<ul>
+<li>语法：head [OPTION] [FILE]<ul>
+<li>-q：隐藏文件名，默认开启；</li>
+<li>-v：显示文件名；</li>
+<li>-c&lt;字节&gt; 指定打印结果的字节数；</li>
+<li>-n&lt;行数&gt;：指定打印行数。</li>
+</ul>
+</li>
+</ul>
+<h3 id="tail"><a href="#tail" class="headerlink" title="tail"></a>tail</h3><p>读取文件尾部；</p>
+<ul>
+<li>语法：tail [OPTION]… [FILE]…<ul>
+<li>-f：循环读取；</li>
+<li>-q：不显示处理信息；</li>
+<li>-v：显示详细的处理信息；</li>
+<li>-c&lt;数目&gt; 指定打印结果的字节数；</li>
+<li>-n&lt;行数&gt; 指定显示行数；</li>
+</ul>
+</li>
+</ul>
+<h3 id="more"><a href="#more" class="headerlink" title="more"></a>more</h3><p>逐页阅读文件。more会加载整个文件；</p>
+<ul>
+<li>使用按键<ul>
+<li><strong>space</strong> 或 <strong>Ctrl+F</strong>：下一页</li>
+<li><strong>b,back</strong> 或 <strong>Ctrl+B</strong>：上一页</li>
+<li><strong>Enter</strong>：<strong>向下</strong>n行，默认n为1；</li>
+<li>**=**：输出当前行行号；</li>
+<li><strong>v</strong>：使用vi编辑器</li>
+<li>!：调用Shell，并执行命令；</li>
+<li>q：退出</li>
+</ul>
+</li>
+<li>语法：more [OPTION] [FILE]<ul>
+<li>+n 从第n行开始显示；</li>
+<li>-n 定义屏幕大小为n行；</li>
+<li>+/pattern 在文件打开前进行表达式搜索，然后从该子串之后开始显示；</li>
+<li>-c 先进行清屏，然后显示</li>
+</ul>
+</li>
+</ul>
+<h3 id="less"><a href="#less" class="headerlink" title="less"></a>less</h3><p>可以随意浏览文件；less运行后不会加载整个文件。</p>
+<ul>
+<li><p>语法：less [OPTION]… [FILE]…</p>
+</li>
+<li><p>操作：</p>
+<ul>
+<li><p>/字符串：向下搜索字符串；</p>
+</li>
+<li><p>?字符串：向上搜索字符串；</p>
+</li>
+<li><p>q：退出；</p>
+</li>
+<li><p>space：下一页；</p>
+</li>
+<li><p>Enter：下一行；</p>
+</li>
+<li><p>PageUp：上一页；</p>
+</li>
+<li><p>PageDown：下一页。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="find"><a href="#find" class="headerlink" title="find"></a>find</h3><p>查找指定目录下的文件；</p>
+<p>可以指定一些匹配条件，如按文件名、文件类型、用户甚至是时间戳查找文件；</p>
+<ul>
+<li>语法：find [path…] [expression]<ul>
+<li>-name 按照文件名查找文件；</li>
+<li>-perm 按照文件权限查找文件；</li>
+<li>-user 按照文件属主来查找文件；</li>
+<li>-mtime -n +n 按照文件更改时间来查找文件；</li>
+<li>-type，按照类型查找文件<ul>
+<li>d 目录</li>
+<li>f 一般文件 </li>
+<li>l 软链接</li>
+<li>使用：-type d 表示查找目录文件</li>
+</ul>
+</li>
+<li>-empty 查找空文件和空目录</li>
+<li>-empty -delete 找到空文件并删除</li>
+</ul>
+</li>
+</ul>
+<h3 id="which"><a href="#which" class="headerlink" title="which"></a>which</h3><p>在PATH指定目录主查找可执行文件；</p>
+<p>查找命令的执行文件的路径；</p>
+<ul>
+<li>语法：which [options] programname […]</li>
+</ul>
+<h3 id="gzip"><a href="#gzip" class="headerlink" title="gzip"></a>gzip</h3><p>压缩和解压缩；</p>
+<p>存疑：不能将多个文件打包到同一个文件夹中。</p>
+<p>压缩率60%-70%；</p>
+<p>压缩结果为gzip文件；</p>
+<ul>
+<li>语法：gzip [options] [file or directory]<ul>
+<li>-d，–decompress或–uncompress，解压缩文件；</li>
+<li>-f或–force，强行压缩文件，不考虑<strong>文件名是否存在</strong>或<strong>文件是否为符号链接</strong>；</li>
+<li>-l或–list，列出压缩文件的相关信息；</li>
+<li>-r或–recursive，递归处理，将指定目录下所有文件和子目录一并处理；</li>
+<li>-v或–verbose，显示指令执行过程。</li>
+</ul>
+</li>
+</ul>
+<h3 id="tar"><a href="#tar" class="headerlink" title="tar"></a>tar</h3><p>将多个文件打包为一个文件；</p>
+<ul>
+<li>语法：tar [OPTION…] [FILE]<ul>
+<li>-c 建立新的压缩文件；</li>
+<li>-x 从压缩的文件中提取文件；</li>
+<li>-t 显示压缩文件的内容；</li>
+<li>-z 支持gzip解压文件</li>
+<li>-j 支持bzip2解压文件；</li>
+<li>-v 显示操作过程；</li>
+<li>-C 指定操作目录</li>
+</ul>
+</li>
+<li>实战<ul>
+<li><strong>tar -czf dir.tar.gz dir</strong>，创建压缩文件；</li>
+<li><strong>tar -xvf dir.tar.gz -C dir2</strong> ，解压缩文件；</li>
+</ul>
+</li>
+</ul>
+<h3 id="ln"><a href="#ln" class="headerlink" title="ln"></a>ln</h3><p>创建链接文件；</p>
+<p>Linux中链接分为软链接和硬链接；</p>
+<ul>
+<li>软链接：<ul>
+<li>以路径形式存在，类似于Windows的快捷方式</li>
+<li>删除源文件后链接失效；</li>
+<li>可以对目录进行链接；</li>
+<li>可以跨文件系统；</li>
+</ul>
+</li>
+<li>硬链接：<ul>
+<li>以文件副本形式存在，不占用实际空间；</li>
+<li>删除源文件后无影响；</li>
+<li>不可以对目录进行链接；</li>
+<li>不可以跨文件系统。</li>
+</ul>
+</li>
+</ul>
+<p>ln命令默认创建硬链接；</p>
+<ul>
+<li><p>语法：ln [-f | -n] [ -s ] SourceFile [Targetfile]</p>
+<ul>
+<li>-b，删除，覆盖以前建立的链接；</li>
+<li>-d，允许超级用户制作目录的硬链接；</li>
+<li>-f，强制执行；</li>
+<li>-i，交互模式，文件存在提示用户是否覆盖；</li>
+<li>-n，对目录创建符号链接时，创建的符号链接可以视为一般目录，也就是可以cd；</li>
+<li>-s，软链接（符号链接）。</li>
+</ul>
+</li>
+<li><p>注意</p>
+<ul>
+<li>SourceFile为一个路径表达式，若为“./w.c”表示当前目录的w.c文件；若为”/home/yyn/w.c”则表示yyn目录下的w.c文件；<strong>这里可以是相对位置也可以是绝对位置</strong>，创建时源文件可以不存在；</li>
+</ul>
+</li>
+</ul>
+<p>​	</p>
+
+                </div>
+
+                
+                        
+<div class="article-copyright-info-container border-box">
+    <div class="copyright-info-content border-box">
+        <div class="copyright-info-top border-box">
+            <div class="post-title border-box text-ellipsis">
+                openEuler 1 Linux操作系统 版本更新 登录和电源管理 文件管理 文件查看 文件查找 压缩解压 软链接硬链接
+            </div>
+
+            <div class="post-link border-box text-ellipsis">
+                2022/10/23/openEuler/openEuler-1/
+            </div>
+        </div>
+
+        <div class="copyright-info-bottom border-box">
+            <div class="post-author bottom-item">
+                <div class="type">
+                    作者
+                </div>
+                <div class="content">uwupu</div>
+            </div>
+
+            <div class="post-time bottom-item">
+                <div class="type">
+                    發布于
+                </div>
+                <div class="content">2022-10-23 15:58</div>
+            </div>
+
+
+            <div class="post-license bottom-item">
+                <div class="type">
+                    許可
+                </div>
+                <div class="content tooltip" data-tooltip-content="CC BY-NC-SA 4.0">
+                    <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed">
+                        <i class="fa-brands fa-creative-commons"></i>
+                        <i class="fa-brands fa-creative-commons-by"></i>
+                        <i class="fa-brands fa-creative-commons-nc"></i>
+                        <i class="fa-brands fa-creative-commons-sa"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <i class="copyright-bg fa-solid fa-copyright"></i>
+    </div>
+    <div class="copy-copyright-info flex-center tooltip" data-tooltip-content="復製版權信息" data-tooltip-offset-y="-2px">
+        <i class="fa-solid fa-copy"></i>
+    </div>
+</div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Linux/">Linux</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/openEuler/">openEuler</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="article-nav">
+                        
+                            <div class="article-prev">
+                                <a class="prev" rel="prev" href="/2022/10/30/Java/Java-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-Note/" title="Java 数据结构 Note">
+                                    <span class="left arrow-icon flex-center">
+                                      <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                            <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Java 数据结构 Note</span>
+                                        <span class="post-nav-item">上一篇</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="article-next">
+                                <a class="next" rel="next" href="/2022/10/20/Java/Java%E5%B9%B6%E5%8F%91-2/" title="Java并发 2">
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Java并发 2</span>
+                                        <span class="post-nav-item">下一篇</span>
+                                    </span>
+                                            <span class="right arrow-icon flex-center">
+                                      <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F"><span class="nav-number">1.</span> <span class="nav-text">操作系统</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Linux%E7%89%88%E6%9C%AC%E4%BB%8B%E7%BB%8D"><span class="nav-number">2.</span> <span class="nav-text">Linux版本介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#openEuler%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F"><span class="nav-number">3.</span> <span class="nav-text">openEuler操作系统</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%88%E6%9C%AC%E5%8F%B7"><span class="nav-number">3.1.</span> <span class="nav-text">版本号</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E5%8C%BA"><span class="nav-number">3.2.</span> <span class="nav-text">分区</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E9%80%89%E6%8B%A9"><span class="nav-number">3.3.</span> <span class="nav-text">安装选择</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Linux%E7%9A%84GUI%E5%92%8CCLI"><span class="nav-number">4.</span> <span class="nav-text">Linux的GUI和CLI</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%99%BB%E5%BD%95Linux"><span class="nav-number">5.</span> <span class="nav-text">登录Linux</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Shell"><span class="nav-number">6.</span> <span class="nav-text">Shell</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%94%A8%E6%88%B7"><span class="nav-number">7.</span> <span class="nav-text">用户</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Shell%E5%BF%AB%E6%8D%B7%E6%93%8D%E4%BD%9C"><span class="nav-number">8.</span> <span class="nav-text">Shell快捷操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C"><span class="nav-number">8.1.</span> <span class="nav-text">二</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Linux%E5%91%BD%E4%BB%A4%E5%88%86%E7%B1%BB"><span class="nav-number">9.</span> <span class="nav-text">Linux命令分类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%99%BB%E5%BD%95%E5%92%8C%E7%AE%A1%E7%90%86%E7%94%B5%E6%BA%90"><span class="nav-number">9.1.</span> <span class="nav-text">登录和管理电源</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#login"><span class="nav-number">9.1.1.</span> <span class="nav-text">login</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#last"><span class="nav-number">9.1.2.</span> <span class="nav-text">last</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#exit"><span class="nav-number">9.1.3.</span> <span class="nav-text">exit</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#shutdown"><span class="nav-number">9.1.4.</span> <span class="nav-text">shutdown</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="nav-number">9.1.4.1.</span> <span class="nav-text">介绍</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#halt"><span class="nav-number">9.1.5.</span> <span class="nav-text">halt</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#reboot"><span class="nav-number">9.1.6.</span> <span class="nav-text">reboot</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86"><span class="nav-number">9.2.</span> <span class="nav-text">文件管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%AE%E5%BD%95%E4%BB%8B%E7%BB%8D"><span class="nav-number">9.2.1.</span> <span class="nav-text">目录介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pwd"><span class="nav-number">9.2.2.</span> <span class="nav-text">pwd</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cd"><span class="nav-number">9.2.3.</span> <span class="nav-text">cd</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ls"><span class="nav-number">9.2.4.</span> <span class="nav-text">ls</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mkdir"><span class="nav-number">9.2.5.</span> <span class="nav-text">mkdir</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cp"><span class="nav-number">9.2.6.</span> <span class="nav-text">cp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mv"><span class="nav-number">9.2.7.</span> <span class="nav-text">mv</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rm"><span class="nav-number">9.2.8.</span> <span class="nav-text">rm</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cat"><span class="nav-number">9.2.9.</span> <span class="nav-text">cat</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#head"><span class="nav-number">9.2.10.</span> <span class="nav-text">head</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tail"><span class="nav-number">9.2.11.</span> <span class="nav-text">tail</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#more"><span class="nav-number">9.2.12.</span> <span class="nav-text">more</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#less"><span class="nav-number">9.2.13.</span> <span class="nav-text">less</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#find"><span class="nav-number">9.2.14.</span> <span class="nav-text">find</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#which"><span class="nav-number">9.2.15.</span> <span class="nav-text">which</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gzip"><span class="nav-number">9.2.16.</span> <span class="nav-text">gzip</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tar"><span class="nav-number">9.2.17.</span> <span class="nav-text">tar</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ln"><span class="nav-number">9.2.18.</span> <span class="nav-text">ln</span></a></li></ol></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="border-box website-info-box default">
+        
+            <div class="copyright-info info-item default">
+                ©&nbsp;<span>2020</span>&nbsp;-&nbsp;2023
+                
+                    &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">uwupu</a>
+                
+            </div>
+
+            <div class="theme-info info-item default">
+                <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;框架&nbsp;&amp;&nbsp;主題&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a>
+            </div>
+
+            
+
+            
+        
+
+        <div class="count-item info-item default">
+            
+                <span class="count-box border-box word">
+                    <span class="item-type border-box">總字數</span>
+                    <span class="item-value border-box word">161.4k</span>
+                </span>
+            
+
+            
+                <span class="count-box border-box uv">
+                    <span class="item-type border-box">讀者</span>
+                    <span class="item-value border-box uv" id="busuanzi_value_site_uv"></span>
+                </span>
+            
+
+            
+                <span class="count-box border-box pv">
+                    <span class="item-type border-box">閱覽</span>
+                    <span class="item-value border-box pv" id="busuanzi_value_site_pv"></span>
+                </span>
+            
+        </div>
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="tools-list border-box">
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="搜尋..." spellcheck="false" type="search" class="search-input">
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F"><span class="nav-number">1.</span> <span class="nav-text">操作系统</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Linux%E7%89%88%E6%9C%AC%E4%BB%8B%E7%BB%8D"><span class="nav-number">2.</span> <span class="nav-text">Linux版本介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#openEuler%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F"><span class="nav-number">3.</span> <span class="nav-text">openEuler操作系统</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%88%E6%9C%AC%E5%8F%B7"><span class="nav-number">3.1.</span> <span class="nav-text">版本号</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E5%8C%BA"><span class="nav-number">3.2.</span> <span class="nav-text">分区</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E9%80%89%E6%8B%A9"><span class="nav-number">3.3.</span> <span class="nav-text">安装选择</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Linux%E7%9A%84GUI%E5%92%8CCLI"><span class="nav-number">4.</span> <span class="nav-text">Linux的GUI和CLI</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%99%BB%E5%BD%95Linux"><span class="nav-number">5.</span> <span class="nav-text">登录Linux</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Shell"><span class="nav-number">6.</span> <span class="nav-text">Shell</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%94%A8%E6%88%B7"><span class="nav-number">7.</span> <span class="nav-text">用户</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Shell%E5%BF%AB%E6%8D%B7%E6%93%8D%E4%BD%9C"><span class="nav-number">8.</span> <span class="nav-text">Shell快捷操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C"><span class="nav-number">8.1.</span> <span class="nav-text">二</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Linux%E5%91%BD%E4%BB%A4%E5%88%86%E7%B1%BB"><span class="nav-number">9.</span> <span class="nav-text">Linux命令分类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%99%BB%E5%BD%95%E5%92%8C%E7%AE%A1%E7%90%86%E7%94%B5%E6%BA%90"><span class="nav-number">9.1.</span> <span class="nav-text">登录和管理电源</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#login"><span class="nav-number">9.1.1.</span> <span class="nav-text">login</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#last"><span class="nav-number">9.1.2.</span> <span class="nav-text">last</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#exit"><span class="nav-number">9.1.3.</span> <span class="nav-text">exit</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#shutdown"><span class="nav-number">9.1.4.</span> <span class="nav-text">shutdown</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="nav-number">9.1.4.1.</span> <span class="nav-text">介绍</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#halt"><span class="nav-number">9.1.5.</span> <span class="nav-text">halt</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#reboot"><span class="nav-number">9.1.6.</span> <span class="nav-text">reboot</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86"><span class="nav-number">9.2.</span> <span class="nav-text">文件管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%AE%E5%BD%95%E4%BB%8B%E7%BB%8D"><span class="nav-number">9.2.1.</span> <span class="nav-text">目录介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pwd"><span class="nav-number">9.2.2.</span> <span class="nav-text">pwd</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cd"><span class="nav-number">9.2.3.</span> <span class="nav-text">cd</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ls"><span class="nav-number">9.2.4.</span> <span class="nav-text">ls</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mkdir"><span class="nav-number">9.2.5.</span> <span class="nav-text">mkdir</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cp"><span class="nav-number">9.2.6.</span> <span class="nav-text">cp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mv"><span class="nav-number">9.2.7.</span> <span class="nav-text">mv</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rm"><span class="nav-number">9.2.8.</span> <span class="nav-text">rm</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cat"><span class="nav-number">9.2.9.</span> <span class="nav-text">cat</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#head"><span class="nav-number">9.2.10.</span> <span class="nav-text">head</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tail"><span class="nav-number">9.2.11.</span> <span class="nav-text">tail</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#more"><span class="nav-number">9.2.12.</span> <span class="nav-text">more</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#less"><span class="nav-number">9.2.13.</span> <span class="nav-text">less</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#find"><span class="nav-number">9.2.14.</span> <span class="nav-text">find</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#which"><span class="nav-number">9.2.15.</span> <span class="nav-text">which</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gzip"><span class="nav-number">9.2.16.</span> <span class="nav-text">gzip</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tar"><span class="nav-number">9.2.17.</span> <span class="nav-text">tar</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ln"><span class="nav-number">9.2.18.</span> <span class="nav-text">ln</span></a></li></ol></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+<!-- common -->
+<script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/utils.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/header-shrink.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/back2top.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/dark-light-toggle.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/main.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/libs/anime.min.js"></script>
+
+<!-- local-search -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/local-search.js"></script>
+
+
+<!-- code-block -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/code-block.js"></script>
+
+
+<!-- lazyload -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/lazyload.js"></script>
+
+
+<div class="pjax">
+    
+        <!-- post-helper -->
+        <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/post-helper.js"></script>
+
+        <!-- toc -->
+        
+            <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/toc.js"></script>
+        
+
+        <!-- copyright-info -->
+        
+            <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/copyright-info.js"></script>
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- category-page -->
+    
+
+    <!-- links-page -->
+    
+</div>
+
+<!-- mermaid -->
+
+
+<!-- pjax -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/libs/pjax.min.js"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax'
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            KEEP.utils.pjaxProgressBarStart()
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            KEEP.utils.pjaxProgressBarEnd()
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'))
+            KEEP.initExecute()
+        });
+    });
+</script>
+
+
+
+
+
+
+</body></html>

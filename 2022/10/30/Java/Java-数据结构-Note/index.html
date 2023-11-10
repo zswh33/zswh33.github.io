@@ -1,0 +1,902 @@
+<!DOCTYPE html><html lang="zh-Hans"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="一个包含有学习日记的博客">
+    <meta name="author" content="uwupu">
+    
+    <title>
+        
+            Java 数据结构 Note |
+        
+        uwupu 学习日志
+    </title>
+    
+
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+    
+    
+    
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"zswh33.github.io","root":"/","language":"zh-Hans","path":"search.json"}
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":true,"init_open":true,"layout":"right"},"style":{"primary_color":"#F099BC","logo":"/images/logo.svg","favicon":"/images/logo.svg","avatar":"/images/avatar.svg","first_screen":{"enable":false,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"scroll":{"progress_bar":false,"percent":false}},"local_search":{"enable":true,"preload":true},"code_block":{"tools":{"enable":true,"style":"mac"},"highlight_theme":"obsidian"},"pjax":{"enable":true},"lazyload":{"enable":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.21"},"waline":{"server_url":null,"reaction":false,"version":2},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false}},"post":{"author_label":{"enable":true,"auto":false,"custom_label_list":["啦啦啦啦啦"]},"word_count":{"wordcount":true,"min2read":true},"datetime_format":"YYYY-MM-DD HH:mm","copyright_info":true,"share":false,"reward":{"enable":false,"img_link":null,"text":null}},"website_count":{"busuanzi_count":{"enable":true,"site_uv":true,"site_pv":true,"page_pv":true}},"version":"3.8.6"}
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
+    KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
+    KEEP.language_copy_copyright = {"copy":"Copy copyright info","copied":"Copied","title":"Original article title","author":"Original article author","link":"Original article link"}
+  </script>
+<meta name="generator" content="Hexo 6.2.0"><link rel="alternate" href="/atom.xml" title="uwupu Blog" type="application/atom+xml">
+<script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/fontawesome.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/regular.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/solid.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/brands.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/fontawesome.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/regular.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/solid.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/brands.min.css"></noscript></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <i class="pjax-progress-icon fas fa-circle-notch fa-spin"></i>
+    
+</div>
+
+
+<main class="page-container border-box">
+
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.svg">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               uwupu 学习日志
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class="" href="/">
+                                首頁
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/archives">
+                                歸檔
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/tags">
+                                標籤
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/categories">
+                                分類
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/links">
+                                友鏈
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/about">
+                                關於
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/">首頁</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/archives">歸檔</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/tags">標籤</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/categories">分類</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/links">友鏈</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/about">關於</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+
+                
+
+                    <div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+
+        <div class="article-content-container border-box">
+
+            
+
+            <div class="article-content-bottom border-box">
+                
+                    <div class="article-title">
+                        Java 数据结构 Note
+                    </div>
+                
+
+                
+                    <div class="article-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/avatar.svg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author">
+                                <span class="name">uwupu</span>
+                                
+                                    <span class="author-label">啦啦啦啦啦</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="article-meta-info-container border-box post">
+    <div class="article-meta-info border-box">
+        
+
+
+        
+            <span class="meta-info-item article-create-date">
+                <i class="icon fa-solid fa-calendar-check"></i>&nbsp;
+                <span class="pc">2022-10-30 20:04</span>
+                <span class="mobile">2022-10-30 20:04</span>
+            </span>
+
+            <span class="meta-info-item article-update-date">
+                <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                <span class="pc" data-updated="Fri Nov 10 2023 23:12:37 GMT+0800">2023-11-10 23:12</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item article-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="article-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="article-tag meta-info-item border-box">
+                <i class="icon fas fa-tags"></i>&nbsp;
+                <ul class="article-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Java/">Java</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+            <span class="meta-info-item article-wordcount">
+                <i class="icon fas fa-file-word"></i>&nbsp;<span>1.4k 字數</span>
+            </span>
+        
+        
+            <span class="meta-info-item article-min2read">
+                <i class="icon fas fa-clock"></i>&nbsp;<span>5 分鐘</span>
+            </span>
+        
+        
+            <span class="meta-info-item article-pv">
+                <i class="icon fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="article-content keep-markdown-body">
+                    
+
+                    <h1 id="Java中的队列"><a href="#Java中的队列" class="headerlink" title="Java中的队列"></a>Java中的队列</h1><h2 id="Queue"><a href="#Queue" class="headerlink" title="Queue"></a>Queue</h2><h3 id="API"><a href="#API" class="headerlink" title="API"></a>API</h3><table>
+<thead>
+<tr>
+<th>功能</th>
+<th>抛出异常</th>
+<th>返回false或null</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>添加</td>
+<td>add()</td>
+<td>offer()</td>
+</tr>
+<tr>
+<td>查询不删除</td>
+<td>element()</td>
+<td>peek()</td>
+</tr>
+<tr>
+<td>查询并删除</td>
+<td>remove()</td>
+<td>poll()</td>
+</tr>
+</tbody></table>
+<h3 id="Deque"><a href="#Deque" class="headerlink" title="Deque"></a>Deque</h3><p>双端队列</p>
+<table>
+<thead>
+<tr>
+<th>功能</th>
+<th>抛出异常</th>
+<th>返回false或null</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>添加到队列尾部</td>
+<td>add()</td>
+<td>offer()</td>
+</tr>
+<tr>
+<td></td>
+<td>addLast()</td>
+<td>offerLast()</td>
+</tr>
+<tr>
+<td>添加到队列头部</td>
+<td>push()</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>addFirst()</td>
+<td>offerFirst()</td>
+</tr>
+<tr>
+<td>查询不删除头部</td>
+<td>element()</td>
+<td>peek()</td>
+</tr>
+<tr>
+<td></td>
+<td>getFirst()</td>
+<td>peekFirst()</td>
+</tr>
+<tr>
+<td>查询不删除尾部</td>
+<td>getLast()</td>
+<td>peekLast()</td>
+</tr>
+<tr>
+<td>查询并删除头部</td>
+<td>remove()/pop()</td>
+<td>poll()</td>
+</tr>
+<tr>
+<td></td>
+<td>removeFirst()</td>
+<td>pollFirst()</td>
+</tr>
+<tr>
+<td>查询并删除尾部</td>
+<td>removeLast()</td>
+<td>pollLast()</td>
+</tr>
+</tbody></table>
+<h3 id="BlockingQueue"><a href="#BlockingQueue" class="headerlink" title="BlockingQueue"></a>BlockingQueue</h3><p>阻塞队列，线程安全</p>
+<table>
+<thead>
+<tr>
+<th>功能</th>
+<th>抛出异常</th>
+<th>返回false或null</th>
+<th>阻塞</th>
+<th>阻塞等待，超时抛出异常</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>添加</td>
+<td>add()</td>
+<td>offer()</td>
+<td>put()</td>
+<td>offer(E e,long timeout,TimeUnit unit)</td>
+</tr>
+<tr>
+<td>查询并删除</td>
+<td></td>
+<td></td>
+<td>take()</td>
+<td>poll(long timeout,TimeUnit unit)</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>其他API</p>
+</blockquote>
+<p><code>int remainingCapacity()</code>：返回剩余容量；</p>
+<p><code>boolean remove(Object o)</code>：删除一个指定元素，成功返回true；</p>
+<p><code>boolean contains(Object o)</code>：若队列包含指定元素，返回true；</p>
+<p><code>int drainTo(Collection&lt;? super E&gt; c)</code>：队列中删除所有元素，并将元素添加到指定集合；</p>
+<p><code>int drainTo(Collection&lt;? super E&gt; c,int maxElements)</code>：同上，可以指定最大元素数量；</p>
+<h3 id="BlockingDeque"><a href="#BlockingDeque" class="headerlink" title="BlockingDeque"></a>BlockingDeque</h3><p>阻塞队列和双端队列的结合；</p>
+<blockquote>
+<p> 新增的API</p>
+</blockquote>
+<p><strong>等待</strong></p>
+<p><code>takeFirst</code> / <code>take</code>：查询并删除队列第一个元素，如果没有则阻塞；</p>
+<p><code>takeLast</code>：查询并删除队列最后一个元素，没有则阻塞；</p>
+<p><code>putFirst</code> / <code>putLast</code>：插入元素，若队列满则阻塞等待；</p>
+<p><strong>等待超时</strong></p>
+<p><code>offerFirst(E e, long timeout,TimeUnit unit)</code>：添加元素到队首，若队列满则等待；</p>
+<p><code>offer</code> 或 <code>offerLast(E e,long timeout,TimeUnit unit)</code>：同上；</p>
+<p><code>pollFirst(long timeout,TimeUnit unit)</code>：查询并删除第一个元素，队列空则等待，超时则抛出错误；</p>
+<p><code>pollLast(long timeout,TimeUnit unit)</code>：同上；</p>
+<h4 id="LinkedBlockingDeque"><a href="#LinkedBlockingDeque" class="headerlink" title="LinkedBlockingDeque"></a>LinkedBlockingDeque</h4><p>链表实现的双端阻塞队列</p>
+<h4 id="ArrayBlockingQueue"><a href="#ArrayBlockingQueue" class="headerlink" title="ArrayBlockingQueue"></a>ArrayBlockingQueue</h4><p>数组实现的阻塞队列</p>
+<p>可以给定容量和访问策略</p>
+<ul>
+<li>ArrayBlockingQueue(int capacity)</li>
+<li>ArrayBlockingQueue(int capacity,boolean fair)</li>
+<li>ArrayBlockingQueue(int capacity,boolean fair,Collection&lt;?extends E&gt; c)</li>
+</ul>
+<h4 id="PriorityBlockingQueue"><a href="#PriorityBlockingQueue" class="headerlink" title="PriorityBlockingQueue"></a>PriorityBlockingQueue</h4><p>优先队列的阻塞版本</p>
+<p>不允许有null元素</p>
+<h4 id="SynchronousQueue"><a href="#SynchronousQueue" class="headerlink" title="SynchronousQueue"></a>SynchronousQueue</h4><ul>
+<li><p>没有容量的同步队列。</p>
+</li>
+<li><p>一旦有<strong>消费或生产</strong>过程，就必须有<strong>相应的生产或消费</strong>过程，否则阻塞；</p>
+</li>
+<li><p>队列中没有容量，在这个队列中，不参与等待的API一律返回null，比如：</p>
+<ul>
+<li>remove、containsAll、removeAll、retainAll永远返回false；</li>
+<li>peek永远返回null。</li>
+</ul>
+</li>
+</ul>
+<p>可以指定访问策略</p>
+<ul>
+<li>SynchronousQueue()，创建一个不公平的同步队列；</li>
+<li>SynchronousQueue(boolean fair)，指定公平/不公平。</li>
+</ul>
+<h5 id="API-1"><a href="#API-1" class="headerlink" title="API"></a>API</h5><p>put(E e)：将元素添加到队列，然后阻塞等待另一个线程接收元素；</p>
+<p>offer(E e, long timeout,TimeUnit unit)：将元素插入到队列中，等待消费者消费，超时则hole..；</p>
+<p>offer(E e)：若有另一个线程在等待接收元素，则将元素插入到队列中，否则返回false；</p>
+<p>take()：查询队列首元素，删除元素并返回，若队列中没有数据则阻塞等待；</p>
+<p>poll(long timeout,TimeUnit unit)：查询队列首元素，删除元素并返回，若队列空则等待，超时返回null；</p>
+<p>poll()：查询队列首元素，删除元素并返回，若队列空则返回null；</p>
+<h3 id="TransferQueue"><a href="#TransferQueue" class="headerlink" title="TransferQueue"></a>TransferQueue</h3><p>这个队列可以实现<strong>生产者消费者程序</strong>，并<strong>协调消息</strong>使消息能够从生产者传输到消费者；</p>
+<h4 id="新增API"><a href="#新增API" class="headerlink" title="新增API"></a>新增API</h4><p><code>getWaitingConsumerCount()</code>：获取等待的消费者数量；</p>
+<p><code>hasWaitingConsumer()</code>：获取是否有消费者在等待；</p>
+<p><code>transfer()</code>：将元素交给消费者，如果没有消费者，则等待；</p>
+<p><code>tryTransfer()</code>：将元素交给消费者，若没有消费者，则抛弃元素，返回false；</p>
+<p><code>tryTransfer(E e,long timeout,Timeunit unit)</code>：将元素交给消费者，若没有消费者，则等待，超时则抛弃元素，返回false；</p>
+<h4 id="LinkedTransferQueue"><a href="#LinkedTransferQueue" class="headerlink" title="LinkedTransferQueue"></a>LinkedTransferQueue</h4><p>链表实现的TransferQueue。</p>
+<h5 id="特别的API"><a href="#特别的API" class="headerlink" title="特别的API"></a>特别的API</h5><ul>
+<li>transfer：将元素转移给消费者，若没有消费者，则等待；<ul>
+<li>将元素插入到队列尾部，然后等待消费者消费；</li>
+</ul>
+</li>
+<li>tryTransfer(E e, long timeout, TimeUnit unit)：将元素插入队列，然后等待消费者消费；若超时，则取消阻塞，返回false；成功返回true；</li>
+<li>take：从队列的头中取出元素，若没有元素则等待；</li>
+<li>poll(long timeout, TimeUnit unit)：take的超时版本，从队列的头中取出元素，若没有元素则等待，超时返回null；</li>
+<li>poll()：从队列头部取出元素，若没有元素，则返回null；</li>
+<li>peek()：查询不删除队列头部元素，若队列空，则返回null；</li>
+</ul>
+<h3 id="AbstractQueue"><a href="#AbstractQueue" class="headerlink" title="AbstractQueue"></a>AbstractQueue</h3><h4 id="API-2"><a href="#API-2" class="headerlink" title="API"></a>API</h4><p>add(E e)：添加元素，失败抛出异常；</p>
+<p>addAll(Collection&lt;? extends E&gt; c)：添加元素，失败抛出异常；</p>
+<p>clear：删除所有元素；</p>
+<p>element：查询不删除头部元素；</p>
+<p>remove：查询并删除头部元素；</p>
+<h4 id="ConcurrentLinkedQueue"><a href="#ConcurrentLinkedQueue" class="headerlink" title="ConcurrentLinkedQueue"></a>ConcurrentLinkedQueue</h4><p>基于<strong>链表</strong>，<strong>无界</strong>的<strong>线程安全</strong>队列；</p>
+<h3 id="LinkList"><a href="#LinkList" class="headerlink" title="LinkList"></a>LinkList</h3><p><strong>线程不安全</strong>，基于<strong>链表</strong>的队列；</p>
+<h3 id="PriorityQueue优先队列"><a href="#PriorityQueue优先队列" class="headerlink" title="PriorityQueue优先队列"></a>PriorityQueue优先队列</h3><h4 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h4><ol>
+<li>无限长的队列，并且动态增长，默认初始容量可以用构造参数initialCapacity参数覆盖；</li>
+<li>不允许有NULL对象；</li>
+<li>添加到PriorityQueue的对象必须有可比性；</li>
+<li>默认情况下，队列按自然顺序排序；</li>
+<li>比较器可用于队列中对象的自定义排序；</li>
+<li>线程不安全；</li>
+<li>add和poll方法复杂度：O(log(n))</li>
+</ol>
+<h4 id="API-3"><a href="#API-3" class="headerlink" title="API"></a>API</h4><ul>
+<li><p>boolean add(object) 将指定对象插入；</p>
+</li>
+<li><p>boolean offer(object) 将指定对象插入；</p>
+</li>
+<li><p>boolean remove(object) 从此队列删除指定元素的单个实例；</p>
+</li>
+<li><p>Object poll()：删除并返回队列的头部，若队列为空，返回null；</p>
+</li>
+<li><p>Object element()：获取队列头部；</p>
+</li>
+<li><p>Object peek()：获取队列头部；</p>
+</li>
+<li><p>clear()：从队列中删除所有元素；</p>
+</li>
+<li><p>comparator()：返回队列的比较器；</p>
+</li>
+<li><p>contains(Object o)：是否包含指定元素。</p>
+</li>
+</ul>
+<h4 id="一些API的区别"><a href="#一些API的区别" class="headerlink" title="一些API的区别"></a>一些API的区别</h4><p>add、remove、element：抛出异常；</p>
+<p>offer、poll、peek：不抛出异常，返回null；</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>抛出异常</th>
+<th>不抛出异常</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>添加</td>
+<td>add</td>
+<td>offer</td>
+</tr>
+<tr>
+<td>删除</td>
+<td>remove</td>
+<td>poll</td>
+</tr>
+<tr>
+<td>获取首元素</td>
+<td>element</td>
+<td>peek</td>
+</tr>
+</tbody></table>
+
+                </div>
+
+                
+                        
+<div class="article-copyright-info-container border-box">
+    <div class="copyright-info-content border-box">
+        <div class="copyright-info-top border-box">
+            <div class="post-title border-box text-ellipsis">
+                Java 数据结构 Note
+            </div>
+
+            <div class="post-link border-box text-ellipsis">
+                2022/10/30/Java/Java-数据结构-Note/
+            </div>
+        </div>
+
+        <div class="copyright-info-bottom border-box">
+            <div class="post-author bottom-item">
+                <div class="type">
+                    作者
+                </div>
+                <div class="content">uwupu</div>
+            </div>
+
+            <div class="post-time bottom-item">
+                <div class="type">
+                    發布于
+                </div>
+                <div class="content">2022-10-30 20:04</div>
+            </div>
+
+
+            <div class="post-license bottom-item">
+                <div class="type">
+                    許可
+                </div>
+                <div class="content tooltip" data-tooltip-content="CC BY-NC-SA 4.0">
+                    <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed">
+                        <i class="fa-brands fa-creative-commons"></i>
+                        <i class="fa-brands fa-creative-commons-by"></i>
+                        <i class="fa-brands fa-creative-commons-nc"></i>
+                        <i class="fa-brands fa-creative-commons-sa"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <i class="copyright-bg fa-solid fa-copyright"></i>
+    </div>
+    <div class="copy-copyright-info flex-center tooltip" data-tooltip-content="復製版權信息" data-tooltip-offset-y="-2px">
+        <i class="fa-solid fa-copy"></i>
+    </div>
+</div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Java/">Java</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="article-nav">
+                        
+                            <div class="article-prev">
+                                <a class="prev" rel="prev" href="/2022/11/01/Other/Nginx-Note/" title="Nginx Note">
+                                    <span class="left arrow-icon flex-center">
+                                      <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                            <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Nginx Note</span>
+                                        <span class="post-nav-item">上一篇</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="article-next">
+                                <a class="next" rel="next" href="/2022/10/23/openEuler/openEuler-1/" title="openEuler 1 Linux操作系统 版本更新 登录和电源管理 文件管理 文件查看 文件查找 压缩解压 软链接硬链接">
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">openEuler 1 Linux操作系统 版本更新 登录和电源管理 文件管理 文件查看 文件查找 压缩解压 软链接硬链接</span>
+                                        <span class="post-nav-item">下一篇</span>
+                                    </span>
+                                            <span class="right arrow-icon flex-center">
+                                      <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Java%E4%B8%AD%E7%9A%84%E9%98%9F%E5%88%97"><span class="nav-number">1.</span> <span class="nav-text">Java中的队列</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Queue"><span class="nav-number">1.1.</span> <span class="nav-text">Queue</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#API"><span class="nav-number">1.1.1.</span> <span class="nav-text">API</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Deque"><span class="nav-number">1.1.2.</span> <span class="nav-text">Deque</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BlockingQueue"><span class="nav-number">1.1.3.</span> <span class="nav-text">BlockingQueue</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BlockingDeque"><span class="nav-number">1.1.4.</span> <span class="nav-text">BlockingDeque</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#LinkedBlockingDeque"><span class="nav-number">1.1.4.1.</span> <span class="nav-text">LinkedBlockingDeque</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ArrayBlockingQueue"><span class="nav-number">1.1.4.2.</span> <span class="nav-text">ArrayBlockingQueue</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#PriorityBlockingQueue"><span class="nav-number">1.1.4.3.</span> <span class="nav-text">PriorityBlockingQueue</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SynchronousQueue"><span class="nav-number">1.1.4.4.</span> <span class="nav-text">SynchronousQueue</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#API-1"><span class="nav-number">1.1.4.4.1.</span> <span class="nav-text">API</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TransferQueue"><span class="nav-number">1.1.5.</span> <span class="nav-text">TransferQueue</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B0%E5%A2%9EAPI"><span class="nav-number">1.1.5.1.</span> <span class="nav-text">新增API</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#LinkedTransferQueue"><span class="nav-number">1.1.5.2.</span> <span class="nav-text">LinkedTransferQueue</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%89%B9%E5%88%AB%E7%9A%84API"><span class="nav-number">1.1.5.2.1.</span> <span class="nav-text">特别的API</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AbstractQueue"><span class="nav-number">1.1.6.</span> <span class="nav-text">AbstractQueue</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#API-2"><span class="nav-number">1.1.6.1.</span> <span class="nav-text">API</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ConcurrentLinkedQueue"><span class="nav-number">1.1.6.2.</span> <span class="nav-text">ConcurrentLinkedQueue</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LinkList"><span class="nav-number">1.1.7.</span> <span class="nav-text">LinkList</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PriorityQueue%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97"><span class="nav-number">1.1.8.</span> <span class="nav-text">PriorityQueue优先队列</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%89%B9%E7%82%B9"><span class="nav-number">1.1.8.1.</span> <span class="nav-text">特点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#API-3"><span class="nav-number">1.1.8.2.</span> <span class="nav-text">API</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%80%E4%BA%9BAPI%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">1.1.8.3.</span> <span class="nav-text">一些API的区别</span></a></li></ol></li></ol></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="border-box website-info-box default">
+        
+            <div class="copyright-info info-item default">
+                ©&nbsp;<span>2020</span>&nbsp;-&nbsp;2023
+                
+                    &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">uwupu</a>
+                
+            </div>
+
+            <div class="theme-info info-item default">
+                <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;框架&nbsp;&amp;&nbsp;主題&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a>
+            </div>
+
+            
+
+            
+        
+
+        <div class="count-item info-item default">
+            
+                <span class="count-box border-box word">
+                    <span class="item-type border-box">總字數</span>
+                    <span class="item-value border-box word">161.4k</span>
+                </span>
+            
+
+            
+                <span class="count-box border-box uv">
+                    <span class="item-type border-box">讀者</span>
+                    <span class="item-value border-box uv" id="busuanzi_value_site_uv"></span>
+                </span>
+            
+
+            
+                <span class="count-box border-box pv">
+                    <span class="item-type border-box">閱覽</span>
+                    <span class="item-value border-box pv" id="busuanzi_value_site_pv"></span>
+                </span>
+            
+        </div>
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="tools-list border-box">
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="搜尋..." spellcheck="false" type="search" class="search-input">
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Java%E4%B8%AD%E7%9A%84%E9%98%9F%E5%88%97"><span class="nav-number">1.</span> <span class="nav-text">Java中的队列</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Queue"><span class="nav-number">1.1.</span> <span class="nav-text">Queue</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#API"><span class="nav-number">1.1.1.</span> <span class="nav-text">API</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Deque"><span class="nav-number">1.1.2.</span> <span class="nav-text">Deque</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BlockingQueue"><span class="nav-number">1.1.3.</span> <span class="nav-text">BlockingQueue</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BlockingDeque"><span class="nav-number">1.1.4.</span> <span class="nav-text">BlockingDeque</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#LinkedBlockingDeque"><span class="nav-number">1.1.4.1.</span> <span class="nav-text">LinkedBlockingDeque</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ArrayBlockingQueue"><span class="nav-number">1.1.4.2.</span> <span class="nav-text">ArrayBlockingQueue</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#PriorityBlockingQueue"><span class="nav-number">1.1.4.3.</span> <span class="nav-text">PriorityBlockingQueue</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SynchronousQueue"><span class="nav-number">1.1.4.4.</span> <span class="nav-text">SynchronousQueue</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#API-1"><span class="nav-number">1.1.4.4.1.</span> <span class="nav-text">API</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TransferQueue"><span class="nav-number">1.1.5.</span> <span class="nav-text">TransferQueue</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B0%E5%A2%9EAPI"><span class="nav-number">1.1.5.1.</span> <span class="nav-text">新增API</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#LinkedTransferQueue"><span class="nav-number">1.1.5.2.</span> <span class="nav-text">LinkedTransferQueue</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%89%B9%E5%88%AB%E7%9A%84API"><span class="nav-number">1.1.5.2.1.</span> <span class="nav-text">特别的API</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AbstractQueue"><span class="nav-number">1.1.6.</span> <span class="nav-text">AbstractQueue</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#API-2"><span class="nav-number">1.1.6.1.</span> <span class="nav-text">API</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ConcurrentLinkedQueue"><span class="nav-number">1.1.6.2.</span> <span class="nav-text">ConcurrentLinkedQueue</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LinkList"><span class="nav-number">1.1.7.</span> <span class="nav-text">LinkList</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PriorityQueue%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97"><span class="nav-number">1.1.8.</span> <span class="nav-text">PriorityQueue优先队列</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%89%B9%E7%82%B9"><span class="nav-number">1.1.8.1.</span> <span class="nav-text">特点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#API-3"><span class="nav-number">1.1.8.2.</span> <span class="nav-text">API</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%80%E4%BA%9BAPI%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">1.1.8.3.</span> <span class="nav-text">一些API的区别</span></a></li></ol></li></ol></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+<!-- common -->
+<script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/utils.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/header-shrink.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/back2top.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/dark-light-toggle.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/main.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/libs/anime.min.js"></script>
+
+<!-- local-search -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/local-search.js"></script>
+
+
+<!-- code-block -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/code-block.js"></script>
+
+
+<!-- lazyload -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/lazyload.js"></script>
+
+
+<div class="pjax">
+    
+        <!-- post-helper -->
+        <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/post-helper.js"></script>
+
+        <!-- toc -->
+        
+            <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/toc.js"></script>
+        
+
+        <!-- copyright-info -->
+        
+            <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/copyright-info.js"></script>
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- category-page -->
+    
+
+    <!-- links-page -->
+    
+</div>
+
+<!-- mermaid -->
+
+
+<!-- pjax -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/libs/pjax.min.js"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax'
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            KEEP.utils.pjaxProgressBarStart()
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            KEEP.utils.pjaxProgressBarEnd()
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'))
+            KEEP.initExecute()
+        });
+    });
+</script>
+
+
+
+
+
+
+</body></html>

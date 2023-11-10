@@ -1,0 +1,787 @@
+<!DOCTYPE html><html lang="zh-Hans"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="一个包含有学习日记的博客">
+    <meta name="author" content="uwupu">
+    
+    <title>
+        
+            人工智能 1 |
+        
+        uwupu 学习日志
+    </title>
+    
+
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+    
+    
+    
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"zswh33.github.io","root":"/","language":"zh-Hans","path":"search.json"}
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":true,"init_open":true,"layout":"right"},"style":{"primary_color":"#F099BC","logo":"/images/logo.svg","favicon":"/images/logo.svg","avatar":"/images/avatar.svg","first_screen":{"enable":false,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"scroll":{"progress_bar":false,"percent":false}},"local_search":{"enable":true,"preload":true},"code_block":{"tools":{"enable":true,"style":"mac"},"highlight_theme":"obsidian"},"pjax":{"enable":true},"lazyload":{"enable":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.21"},"waline":{"server_url":null,"reaction":false,"version":2},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false}},"post":{"author_label":{"enable":true,"auto":false,"custom_label_list":["啦啦啦啦啦"]},"word_count":{"wordcount":true,"min2read":true},"datetime_format":"YYYY-MM-DD HH:mm","copyright_info":true,"share":false,"reward":{"enable":false,"img_link":null,"text":null}},"website_count":{"busuanzi_count":{"enable":true,"site_uv":true,"site_pv":true,"page_pv":true}},"version":"3.8.6"}
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
+    KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
+    KEEP.language_copy_copyright = {"copy":"Copy copyright info","copied":"Copied","title":"Original article title","author":"Original article author","link":"Original article link"}
+  </script>
+<meta name="generator" content="Hexo 6.2.0"><link rel="alternate" href="/atom.xml" title="uwupu Blog" type="application/atom+xml">
+<script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/fontawesome.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/regular.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/solid.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/brands.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/fontawesome.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/regular.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/solid.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/brands.min.css"></noscript></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <i class="pjax-progress-icon fas fa-circle-notch fa-spin"></i>
+    
+</div>
+
+
+<main class="page-container border-box">
+
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.svg">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               uwupu 学习日志
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class="" href="/">
+                                首頁
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/archives">
+                                歸檔
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/tags">
+                                標籤
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/categories">
+                                分類
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/links">
+                                友鏈
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/about">
+                                關於
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/">首頁</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/archives">歸檔</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/tags">標籤</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/categories">分類</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/links">友鏈</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/about">關於</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+
+                
+
+                    <div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+
+        <div class="article-content-container border-box">
+
+            
+
+            <div class="article-content-bottom border-box">
+                
+                    <div class="article-title">
+                        人工智能 1
+                    </div>
+                
+
+                
+                    <div class="article-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/avatar.svg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author">
+                                <span class="name">uwupu</span>
+                                
+                                    <span class="author-label">啦啦啦啦啦</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="article-meta-info-container border-box post">
+    <div class="article-meta-info border-box">
+        
+
+
+        
+            <span class="meta-info-item article-create-date">
+                <i class="icon fa-solid fa-calendar-check"></i>&nbsp;
+                <span class="pc">2023-07-27 01:52</span>
+                <span class="mobile">2023-07-27 01:52</span>
+            </span>
+
+            <span class="meta-info-item article-update-date">
+                <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                <span class="pc" data-updated="Fri Nov 10 2023 23:05:01 GMT+0800">2023-11-10 23:05</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item article-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="article-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="article-tag meta-info-item border-box">
+                <i class="icon fas fa-tags"></i>&nbsp;
+                <ul class="article-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/">人工智能</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+            <span class="meta-info-item article-wordcount">
+                <i class="icon fas fa-file-word"></i>&nbsp;<span>1.4k 字數</span>
+            </span>
+        
+        
+            <span class="meta-info-item article-min2read">
+                <i class="icon fas fa-clock"></i>&nbsp;<span>4 分鐘</span>
+            </span>
+        
+        
+            <span class="meta-info-item article-pv">
+                <i class="icon fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="article-content keep-markdown-body">
+                    
+
+                    <h1 id="工作流程"><a href="#工作流程" class="headerlink" title="工作流程"></a>工作流程</h1><ol>
+<li>获取数据</li>
+<li>数据基本处理</li>
+<li>特征工程</li>
+<li>机器学习（模型训练）</li>
+<li>模型评估</li>
+</ol>
+<h1 id="数据集介绍"><a href="#数据集介绍" class="headerlink" title="数据集介绍"></a>数据集介绍</h1><ol>
+<li><p>专有名词</p>
+<p>样本，特征，目标值（标签值），特征值</p>
+</li>
+<li><p>数据类型构成</p>
+<ol>
+<li>特征值 + 目标值<ul>
+<li>目标值可以是<strong>分散</strong>和<strong>连续</strong>两种情况</li>
+</ul>
+</li>
+<li>只有<strong>特征值</strong>，没有目标值</li>
+</ol>
+</li>
+<li><p>数据分割</p>
+<ul>
+<li>机器学习一般将数据集分为两部分<ul>
+<li>训练数据：用于训练和构建模型</li>
+<li>测试数据：检验模型，评估模型是否有效</li>
+</ul>
+</li>
+<li>划分比例<ul>
+<li>训练集：70% 80% 75%</li>
+<li>测试集：30% 20% 25%</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h1 id="特征工程"><a href="#特征工程" class="headerlink" title="特征工程"></a>特征工程</h1><h2 id="什么是特征工程"><a href="#什么是特征工程" class="headerlink" title="什么是特征工程"></a>什么是特征工程</h2><p>特征工程师使用专业背景知识和技巧处理数据，使得特征能在机器学习算法上发挥更好的作用的过程。</p>
+<h2 id="特征工程包含内容"><a href="#特征工程包含内容" class="headerlink" title="特征工程包含内容"></a>特征工程包含内容</h2><ul>
+<li>特征提取：将任意数据（如文本或图像）转换为可用于机器学习的数字特征。</li>
+<li>特征预处理：通过一些转换函数将特征数据转换成更加适合算法模型的特征数据过程。</li>
+<li>特征降维：在某些限定条件下，<strong>降低随机变量（特征）的个数</strong>，得到一组“不相关“主变量的过程</li>
+</ul>
+<h1 id="完整机械学习流程"><a href="#完整机械学习流程" class="headerlink" title="完整机械学习流程"></a>完整机械学习流程</h1><p><img lazyload="" alt="image" data-src="D:\YN\hexo\source_posts\人工智能-1\image-20230727021501797.png"></p>
+<p><img lazyload="" alt="image" data-src="D:\YN\hexo\source_posts\人工智能-1\image-20230727021550628.png"></p>
+<p><img lazyload="" alt="image" data-src="D:\YN\hexo\source_posts\人工智能-1\image-20230727021658371.png"></p>
+<p><img lazyload="" alt="image" data-src="D:\YN\hexo\source_posts\人工智能-1\image-20230727021725735.png"></p>
+<p><img lazyload="" alt="image" data-src="D:\YN\hexo\source_posts\人工智能-1\image-20230727021754655.png"></p>
+<p><img lazyload="" alt="image" data-src="D:\YN\hexo\source_posts\人工智能-1\image-20230727021814881.png"></p>
+<h1 id="算法分类"><a href="#算法分类" class="headerlink" title="算法分类"></a>算法分类</h1><p>分类：</p>
+<ul>
+<li>监督学习、无监督学习、半监督学习</li>
+<li>强化学习。</li>
+</ul>
+<h2 id="监督学习、无监督学习-、半监督学习"><a href="#监督学习、无监督学习-、半监督学习" class="headerlink" title="监督学习、无监督学习 、半监督学习"></a>监督学习、无监督学习 、半监督学习</h2><ul>
+<li><p>监督学习：输入数据是由输入特征值和目标值所组成。输入数据<strong>有</strong>特征<strong>有</strong>标签，即有标准答案。</p>
+<ul>
+<li>输出的数据可以是<strong>连续的值，即回归</strong>，也可以是输出<strong>有限个离散值，即分类</strong>。</li>
+<li>输入有标签，输出有反馈。</li>
+<li>目的：预测结果</li>
+<li>案例：猫狗分类 房价预测</li>
+<li>算法：<ul>
+<li>分类： K-近邻算法，贝叶斯分类，决策树与随机森林，逻辑回归和神经网络</li>
+<li>回归：线性回归，岭回归。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>无监督学习：聚类。输入数据<strong>有</strong>特征<strong>无</strong>标签，即没有标准答案。</p>
+<ul>
+<li><p>输入无标签，输出无反馈</p>
+</li>
+<li><p>目的：发现潜在结构。</p>
+</li>
+<li><p>算法：聚类k-means，降维</p>
+</li>
+</ul>
+</li>
+<li><p>半监督学习：有特征值，无目标值。 </p>
+<ul>
+<li>输入数据有特征，<strong>标签由专门的人进行标注</strong>，然后进行监督学习。</li>
+<li>已知训练样本数据和待分类的区别。</li>
+<li>场景：监督学习效果不能满足要求，使用半监督学习增强效果。</li>
+</ul>
+</li>
+</ul>
+<h2 id="强化学习"><a href="#强化学习" class="headerlink" title="强化学习"></a>强化学习</h2><p>In：决策流程及激励系统，Out：一系列行动</p>
+<p>目的：长期利益最大化，回报函数。</p>
+<p>案例：下棋</p>
+<p>算法：马尔科夫决策，动态规划。</p>
+<p>上一步学习的输出是下一步学习的输入。(将学习结果作为学习条件再次进行学习)</p>
+<ul>
+<li>四要素<ul>
+<li>agent，action，environment，reward</li>
+</ul>
+</li>
+</ul>
+<h1 id="模型评估"><a href="#模型评估" class="headerlink" title="模型评估"></a>模型评估</h1><ol>
+<li><p>分类模型评估</p>
+<ul>
+<li>准确率：预测正确的数占样本总数的比例。</li>
+<li>精确率：正确预测为正占全部预测为正的比例。</li>
+<li>召回率：正确预测为正占全部正样本的比例。</li>
+<li>F1-score：主要用于评估模型的稳健性。</li>
+<li>AUC指标：主要用于评估样本不均衡的情况。</li>
+</ul>
+</li>
+<li><p>回归模型评估</p>
+<ul>
+<li><p>均方根误差 RMSE</p>
+<p>RMSE是一个衡量回归模型误差率的常用公式，仅能比较误差是相同单位的模型。<br>$$<br>RMSE = \sqrt{\frac{\sum_{i=0}^n(p_i-a_i)^2}{n}}<br>$$<br>a = actual target</p>
+<p>p = predicted target</p>
+</li>
+<li><p>相对平方误差 RSE</p>
+<p>RSE比较误差是不同单位的模型。<br>$$<br>RSE = \frac{\sum_{i=1}^n(p_i-a_i)^2}{\sum_{i=1}^n(\bar{a}-a_i)^2}<br>$$</p>
+</li>
+<li><p>平均绝对误差MAE</p>
+<p>MAE与原始数据单位相同，仅能比较误差是相同单位的模型，量级近似于RMSE，误差值相对小一些。<br>$$<br>MAE = \frac{\sum^n_{i=1}|p_i-a_i|}{n}<br>$$</p>
+</li>
+<li><p>相对绝对误差RAE<br>$$<br>RAE = \frac{\sum_{i=1}^n|p_i-a_i|}{\sum_{i=1}^n|\bar{a}-a_i|}<br>$$</p>
+</li>
+<li><p>决定系数</p>
+<p>决定系数R<sup>2</sup>回归模型汇总了回归模型的解释度，由平方和术语计算而得。<br>$$<br>R^2 = 1 - \frac{\sum_{i=1}^n(p_i-a_i)^2}{\sum_{i=1}^n(a_i-\bar{a})^2}<br>$$<br>R<sup>2</sup>描述了回归模型所揭示的因变量方差在总方差中的比例。</p>
+<p>R<sup>2</sup>很大，即自变量和因变量之间存在线性关系，若回归模型是“完美的”，SSE为0，则R<sup>2</sup>为1。</p>
+<p>R<sup>2</sup>小，则自变量和因变量之间存在线性关系的证据不令人信服。</p>
+<p>如果回归模型完全失败，SSE等于SST，没有方差可悲回归解释，则R<sup>2</sup>为零。</p>
+</li>
+</ul>
+<h1 id="拟合"><a href="#拟合" class="headerlink" title="拟合"></a>拟合</h1><p>模型评估用于评价训练好的模型的表现效果，其表现效果大致可以分为两类：过拟合，欠拟合。</p>
+<ul>
+<li><p>欠拟合：机器学习到的特征太少，导致区分标准太粗糙，不能准确识别。</p>
+<ul>
+<li>假定要学习“天鹅”，学到了“长嘴巴”，“长脖子”。此时会把其他类似特征的动物也学习到。</li>
+</ul>
+</li>
+<li><p>过拟合：学习到的特征过多，没有符合需求。</p>
+<ul>
+<li>假定学习天鹅，在给出的特征中包含了”有翅膀“，”嘴巴长且弯曲“，这些是正确特征，同时不小心学到了”<strong>白色</strong>“。因为需求是”<strong>天鹅</strong>“，但此时只能识别到”<strong>白色的天鹅</strong>“，这就是<strong>过拟合</strong>。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+
+                </div>
+
+                
+                        
+<div class="article-copyright-info-container border-box">
+    <div class="copyright-info-content border-box">
+        <div class="copyright-info-top border-box">
+            <div class="post-title border-box text-ellipsis">
+                人工智能 1
+            </div>
+
+            <div class="post-link border-box text-ellipsis">
+                2023/07/27/人工智能/人工智能-1/
+            </div>
+        </div>
+
+        <div class="copyright-info-bottom border-box">
+            <div class="post-author bottom-item">
+                <div class="type">
+                    作者
+                </div>
+                <div class="content">uwupu</div>
+            </div>
+
+            <div class="post-time bottom-item">
+                <div class="type">
+                    發布于
+                </div>
+                <div class="content">2023-07-27 01:52</div>
+            </div>
+
+
+            <div class="post-license bottom-item">
+                <div class="type">
+                    許可
+                </div>
+                <div class="content tooltip" data-tooltip-content="CC BY-NC-SA 4.0">
+                    <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed">
+                        <i class="fa-brands fa-creative-commons"></i>
+                        <i class="fa-brands fa-creative-commons-by"></i>
+                        <i class="fa-brands fa-creative-commons-nc"></i>
+                        <i class="fa-brands fa-creative-commons-sa"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <i class="copyright-bg fa-solid fa-copyright"></i>
+    </div>
+    <div class="copy-copyright-info flex-center tooltip" data-tooltip-content="復製版權信息" data-tooltip-offset-y="-2px">
+        <i class="fa-solid fa-copy"></i>
+    </div>
+</div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/">人工智能</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="article-nav">
+                        
+                        
+                            <div class="article-next">
+                                <a class="next" rel="next" href="/2023/05/11/Other/%E4%B8%BAjar%E5%8C%85%E7%AD%BE%E5%90%8D%EF%BC%8C%E5%B9%B6%E9%AA%8C%E8%AF%81%E7%AD%BE%E5%90%8D%E3%80%82/" title="为jar包签名，并验证签名。">
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">为jar包签名，并验证签名。</span>
+                                        <span class="post-nav-item">下一篇</span>
+                                    </span>
+                                            <span class="right arrow-icon flex-center">
+                                      <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="nav-number">1.</span> <span class="nav-text">工作流程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E9%9B%86%E4%BB%8B%E7%BB%8D"><span class="nav-number">2.</span> <span class="nav-text">数据集介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B"><span class="nav-number">3.</span> <span class="nav-text">特征工程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B"><span class="nav-number">3.1.</span> <span class="nav-text">什么是特征工程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B%E5%8C%85%E5%90%AB%E5%86%85%E5%AE%B9"><span class="nav-number">3.2.</span> <span class="nav-text">特征工程包含内容</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%8C%E6%95%B4%E6%9C%BA%E6%A2%B0%E5%AD%A6%E4%B9%A0%E6%B5%81%E7%A8%8B"><span class="nav-number">4.</span> <span class="nav-text">完整机械学习流程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E5%88%86%E7%B1%BB"><span class="nav-number">5.</span> <span class="nav-text">算法分类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E3%80%81%E6%97%A0%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0-%E3%80%81%E5%8D%8A%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0"><span class="nav-number">5.1.</span> <span class="nav-text">监督学习、无监督学习 、半监督学习</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0"><span class="nav-number">5.2.</span> <span class="nav-text">强化学习</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BC%B0"><span class="nav-number">6.</span> <span class="nav-text">模型评估</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8B%9F%E5%90%88"><span class="nav-number">7.</span> <span class="nav-text">拟合</span></a></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="border-box website-info-box default">
+        
+            <div class="copyright-info info-item default">
+                ©&nbsp;<span>2020</span>&nbsp;-&nbsp;2023
+                
+                    &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">uwupu</a>
+                
+            </div>
+
+            <div class="theme-info info-item default">
+                <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;框架&nbsp;&amp;&nbsp;主題&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a>
+            </div>
+
+            
+
+            
+        
+
+        <div class="count-item info-item default">
+            
+                <span class="count-box border-box word">
+                    <span class="item-type border-box">總字數</span>
+                    <span class="item-value border-box word">161.4k</span>
+                </span>
+            
+
+            
+                <span class="count-box border-box uv">
+                    <span class="item-type border-box">讀者</span>
+                    <span class="item-value border-box uv" id="busuanzi_value_site_uv"></span>
+                </span>
+            
+
+            
+                <span class="count-box border-box pv">
+                    <span class="item-type border-box">閱覽</span>
+                    <span class="item-value border-box pv" id="busuanzi_value_site_pv"></span>
+                </span>
+            
+        </div>
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="tools-list border-box">
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="搜尋..." spellcheck="false" type="search" class="search-input">
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="nav-number">1.</span> <span class="nav-text">工作流程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E9%9B%86%E4%BB%8B%E7%BB%8D"><span class="nav-number">2.</span> <span class="nav-text">数据集介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B"><span class="nav-number">3.</span> <span class="nav-text">特征工程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B"><span class="nav-number">3.1.</span> <span class="nav-text">什么是特征工程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B%E5%8C%85%E5%90%AB%E5%86%85%E5%AE%B9"><span class="nav-number">3.2.</span> <span class="nav-text">特征工程包含内容</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%8C%E6%95%B4%E6%9C%BA%E6%A2%B0%E5%AD%A6%E4%B9%A0%E6%B5%81%E7%A8%8B"><span class="nav-number">4.</span> <span class="nav-text">完整机械学习流程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E5%88%86%E7%B1%BB"><span class="nav-number">5.</span> <span class="nav-text">算法分类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E3%80%81%E6%97%A0%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0-%E3%80%81%E5%8D%8A%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0"><span class="nav-number">5.1.</span> <span class="nav-text">监督学习、无监督学习 、半监督学习</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0"><span class="nav-number">5.2.</span> <span class="nav-text">强化学习</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BC%B0"><span class="nav-number">6.</span> <span class="nav-text">模型评估</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8B%9F%E5%90%88"><span class="nav-number">7.</span> <span class="nav-text">拟合</span></a></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+<!-- common -->
+<script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/utils.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/header-shrink.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/back2top.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/dark-light-toggle.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/main.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/libs/anime.min.js"></script>
+
+<!-- local-search -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/local-search.js"></script>
+
+
+<!-- code-block -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/code-block.js"></script>
+
+
+<!-- lazyload -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/lazyload.js"></script>
+
+
+<div class="pjax">
+    
+        <!-- post-helper -->
+        <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/post-helper.js"></script>
+
+        <!-- toc -->
+        
+            <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/toc.js"></script>
+        
+
+        <!-- copyright-info -->
+        
+            <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/copyright-info.js"></script>
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- category-page -->
+    
+
+    <!-- links-page -->
+    
+</div>
+
+<!-- mermaid -->
+
+
+<!-- pjax -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/libs/pjax.min.js"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax'
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            KEEP.utils.pjaxProgressBarStart()
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            KEEP.utils.pjaxProgressBarEnd()
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'))
+            KEEP.initExecute()
+        });
+    });
+</script>
+
+
+
+
+
+
+</body></html>

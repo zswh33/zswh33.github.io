@@ -1,0 +1,934 @@
+<!DOCTYPE html><html lang="zh-Hans"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="一个包含有学习日记的博客">
+    <meta name="author" content="uwupu">
+    
+    <title>
+        
+            Redis 1 介绍 结构 bitmaps |
+        
+        uwupu 学习日志
+    </title>
+    
+
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+    
+    
+    
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"zswh33.github.io","root":"/","language":"zh-Hans","path":"search.json"}
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":true,"init_open":true,"layout":"right"},"style":{"primary_color":"#F099BC","logo":"/images/logo.svg","favicon":"/images/logo.svg","avatar":"/images/avatar.svg","first_screen":{"enable":false,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"scroll":{"progress_bar":false,"percent":false}},"local_search":{"enable":true,"preload":true},"code_block":{"tools":{"enable":true,"style":"mac"},"highlight_theme":"obsidian"},"pjax":{"enable":true},"lazyload":{"enable":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.21"},"waline":{"server_url":null,"reaction":false,"version":2},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false}},"post":{"author_label":{"enable":true,"auto":false,"custom_label_list":["啦啦啦啦啦"]},"word_count":{"wordcount":true,"min2read":true},"datetime_format":"YYYY-MM-DD HH:mm","copyright_info":true,"share":false,"reward":{"enable":false,"img_link":null,"text":null}},"website_count":{"busuanzi_count":{"enable":true,"site_uv":true,"site_pv":true,"page_pv":true}},"version":"3.8.6"}
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
+    KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
+    KEEP.language_copy_copyright = {"copy":"Copy copyright info","copied":"Copied","title":"Original article title","author":"Original article author","link":"Original article link"}
+  </script>
+<meta name="generator" content="Hexo 6.2.0"><link rel="alternate" href="/atom.xml" title="uwupu Blog" type="application/atom+xml">
+<script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/fontawesome.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/regular.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/solid.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/brands.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/fontawesome.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/regular.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/solid.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/brands.min.css"></noscript></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <i class="pjax-progress-icon fas fa-circle-notch fa-spin"></i>
+    
+</div>
+
+
+<main class="page-container border-box">
+
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.svg">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               uwupu 学习日志
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class="" href="/">
+                                首頁
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/archives">
+                                歸檔
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/tags">
+                                標籤
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/categories">
+                                分類
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/links">
+                                友鏈
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/about">
+                                關於
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/">首頁</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/archives">歸檔</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/tags">標籤</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/categories">分類</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/links">友鏈</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/about">關於</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+
+                
+
+                    <div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+
+        <div class="article-content-container border-box">
+
+            
+
+            <div class="article-content-bottom border-box">
+                
+                    <div class="article-title">
+                        Redis 1 介绍 结构 bitmaps
+                    </div>
+                
+
+                
+                    <div class="article-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/avatar.svg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author">
+                                <span class="name">uwupu</span>
+                                
+                                    <span class="author-label">啦啦啦啦啦</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="article-meta-info-container border-box post">
+    <div class="article-meta-info border-box">
+        
+
+
+        
+            <span class="meta-info-item article-create-date">
+                <i class="icon fa-solid fa-calendar-check"></i>&nbsp;
+                <span class="pc">2022-09-19 16:08</span>
+                <span class="mobile">2022-09-19 16:08</span>
+            </span>
+
+            <span class="meta-info-item article-update-date">
+                <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                <span class="pc" data-updated="Fri Nov 10 2023 23:15:22 GMT+0800">2023-11-10 23:15</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item article-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="article-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="article-tag meta-info-item border-box">
+                <i class="icon fas fa-tags"></i>&nbsp;
+                <ul class="article-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Redis/">Redis</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+            <span class="meta-info-item article-wordcount">
+                <i class="icon fas fa-file-word"></i>&nbsp;<span>3.2k 字數</span>
+            </span>
+        
+        
+            <span class="meta-info-item article-min2read">
+                <i class="icon fas fa-clock"></i>&nbsp;<span>14 分鐘</span>
+            </span>
+        
+        
+            <span class="meta-info-item article-pv">
+                <i class="icon fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="article-content keep-markdown-body">
+                    
+
+                    <h1 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h1><p><a class="link" target="_blank" rel="noopener" href="https://pdai.tech/md/db/nosql-redis/db-redis-overview.html">https://pdai.tech/md/db/nosql-redis/db-redis-overview.html<i class="fas fa-external-link-alt"></i></a></p>
+<p><a class="link" target="_blank" rel="noopener" href="https://redis.io/docs/data-types/">https://redis.io/docs/data-types/<i class="fas fa-external-link-alt"></i></a></p>
+<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>Redis是一种支持<strong>key-value等多种数据结构</strong>的存储系统。可用于<strong>缓存，事件发布或订阅、高速队列</strong>等场景，支持<strong>网络，提供字符串、哈希、列表、队列、集合结构</strong>直接存取，基于<strong>内存</strong>，可<strong>持久化</strong>。</p>
+<h2 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h2><p><img lazyload="" alt="image" data-src="/Redis-1/Redis%E7%BB%93%E6%9E%84.svg"></p>
+<h2 id="基础数据类型"><a href="#基础数据类型" class="headerlink" title="基础数据类型"></a>基础数据类型</h2><blockquote>
+<p>Redis数据类型：String、List、Set、Hash、Sorted set、Stream。</p>
+</blockquote>
+<p><img lazyload="" alt="image" data-src="/Redis-1/Redis%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B.drawio.svg"></p>
+<table>
+<thead>
+<tr>
+<th>结构类型</th>
+<th>结构存储的值</th>
+<th>结构的读写能力</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>String</td>
+<td>可以是字符串、整数或浮点数</td>
+<td>对字符串或字符串的一部分进行操作；对整数或浮点数进行自增或自建操作</td>
+</tr>
+<tr>
+<td>List</td>
+<td>一个链表，链表上每个节点都包含一个字符串</td>
+<td>对链表的两端进行push和pop操作；读取单个或多个元素；根据值查找或删除元素；</td>
+</tr>
+<tr>
+<td>Set</td>
+<td>包含字符串的无序集合</td>
+<td>字符串的集合，包含基础的方法：添加、删除、查询、isExist；支持交集，并集，差集等；</td>
+</tr>
+<tr>
+<td>Hash</td>
+<td>包含键值对的无序散列表</td>
+<td>添加、获取、删除</td>
+</tr>
+<tr>
+<td>Zset</td>
+<td>与Hash一样，存储键值对</td>
+<td>字符串成员与浮点数分数之间的有序映射；元素的排列依据分数大小排序决定；包含添加、删除、获取；查询支持按照score范围或成员来获取元素。</td>
+</tr>
+</tbody></table>
+<h3 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h3><p>对于Redis来说，所有key都是字符串；</p>
+<h3 id="String"><a href="#String" class="headerlink" title="String"></a>String</h3><p>String存储字节序列，可以是文本、序列化对象和二进制数组；</p>
+<p>通常用于缓存；</p>
+<p>可以进行按位操作。</p>
+<h4 id="使用-x2F-场景"><a href="#使用-x2F-场景" class="headerlink" title="使用/场景"></a>使用/场景</h4><h5 id="一些场景"><a href="#一些场景" class="headerlink" title="一些场景"></a>一些场景</h5><p><strong>缓存</strong>：把常用信息，字符串、图片或饰品等信息放到redis，Redis作为缓存层，MySQL作为持久化层，均衡MySQL的读写压力；</p>
+<p><strong>计数器</strong>：Redis是单线程模型，一个命令执行完才会去执行下一个；</p>
+<p><strong>Session</strong>：使用SpringSession+Redis实现Session共享。</p>
+<h5 id="设置值、获取值"><a href="#设置值、获取值" class="headerlink" title="设置值、获取值"></a>设置值、获取值</h5><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; set user:1 uwupu</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; get user:1</span><br><span class="line">"uwupu"</span><br><span class="line">127.0.0.1:6379&gt;</span><br></pre></td></tr></tbody></table></figure>
+
+<p><code>set user:1 uwupu</code> ：设置user:1的值为uwupu；</p>
+<p><code>get user:1</code>：获取user:1的值。</p>
+<h5 id="存储一个序列化JSON字符串，并设定100秒后过期"><a href="#存储一个序列化JSON字符串，并设定100秒后过期" class="headerlink" title="存储一个序列化JSON字符串，并设定100秒后过期"></a>存储一个序列化JSON字符串，并设定100秒后过期</h5><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; set ticket:1 "{'username':'zhangsan','name':'zs123'}" EX 100</span><br><span class="line">OK</span><br></pre></td></tr></tbody></table></figure>
+
+<p>设置一个ticket:1并在100秒后过期；</p>
+<h5 id="一个计数器"><a href="#一个计数器" class="headerlink" title="一个计数器"></a>一个计数器</h5><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; incr views:page:2</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; incrby views:page:2 10</span><br><span class="line">(integer) 11</span><br><span class="line">127.0.0.1:6379&gt; incrby views:page:2 5</span><br><span class="line">(integer) 16</span><br><span class="line">127.0.0.1:6379&gt;</span><br></pre></td></tr></tbody></table></figure>
+
+<p><code>incr views:page:2</code>：设置一个计数器；</p>
+<p><code>incrby views:page:2 10</code>：使得计数器增加。</p>
+<h4 id="限制"><a href="#限制" class="headerlink" title="限制"></a>限制</h4><p>默认情况下，单个<code>Redis</code>字符串最大为512MB。</p>
+<h4 id="基本命令"><a href="#基本命令" class="headerlink" title="基本命令"></a>基本命令</h4><h5 id="获取和设置字符串"><a href="#获取和设置字符串" class="headerlink" title="获取和设置字符串"></a>获取和设置字符串</h5><ul>
+<li><p><strong>SET</strong>：存储一个字符串值。</p>
+<p>set apple 3</p>
+</li>
+<li><p><strong>SETNX</strong>：当键不存在时，存储字符串值，可以用于实现锁。</p>
+<p>SETNX apple 3</p>
+</li>
+<li><p><strong>GET</strong>：获取/检索字符串值。</p>
+<p>GET apple</p>
+<p>&gt; 3</p>
+</li>
+<li><p><strong>MGET</strong>：在单个操作中获取多个字符串值</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; set a 1</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; set b 2</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; set c 3</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; mget a b c</span><br><span class="line">1) "1"</span><br><span class="line">2) "2"</span><br><span class="line">3) "3"</span><br><span class="line">127.0.0.1:6379&gt;</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+<h5 id="管理计数器"><a href="#管理计数器" class="headerlink" title="管理计数器"></a>管理计数器</h5><p>INCR：创建一个计数器；</p>
+<p>INCRBY：使得计数器增加指定值。</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; incr apple</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; incr apple</span><br><span class="line">(integer) 2</span><br><span class="line">127.0.0.1:6379&gt; incrby apple 3</span><br><span class="line">(integer) 5</span><br><span class="line">127.0.0.1:6379&gt; incrby apple 7</span><br><span class="line">(integer) 12</span><br></pre></td></tr></tbody></table></figure>
+
+<h5 id="其他命令"><a href="#其他命令" class="headerlink" title="其他命令"></a>其他命令</h5><blockquote>
+<p><code>APPEND key value</code>：追加字符串到key的后面，如果key不存在则创建key并将值赋值；返回添加后value的长度；</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; set a 123</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; append a qwe</span><br><span class="line">(integer) 6</span><br><span class="line">127.0.0.1:6379&gt; get a</span><br><span class="line">"123qwe"</span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p><code>DECR key</code>：若key为整数，则将减一的值赋值给key。仅支持64位有符号整数。返回结果值；</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; set a 123</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; decr a</span><br><span class="line">(integer) 122</span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p><code>DECRBY key value</code>：若key为整数，将key减少指定大小；</p>
+</blockquote>
+<blockquote>
+<p><code>GETDEL key</code>：获得值然后删除该变量；</p>
+</blockquote>
+<blockquote>
+<p><code>GETEX key [EX 秒 | PX 毫秒]</code>：获得Key值并为key设定过期时间；返回key，若key不存在返回nil。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; getex a EX 300</span><br><span class="line">"122"</span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p><code>GETRANGE key start end</code>：截取字符串并返回。start和end可以为负，若为负表示从字符串末尾截取；</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; set asd "This is a Obsidian"</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; GETRANGE asd 0 6</span><br><span class="line">"This is"</span><br><span class="line">127.0.0.1:6379&gt; GETRANGE asd 4 10</span><br><span class="line">" is a O"</span><br><span class="line">127.0.0.1:6379&gt; GETRANGE asd -5 -1</span><br><span class="line">"idian"</span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p><code>GETSET key value</code>：返回当前值，然后设置新的值；</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; set a 123</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; getset a 234</span><br><span class="line">"123"</span><br><span class="line">127.0.0.1:6379&gt; get a</span><br><span class="line">"234"</span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p><code>INCR key</code>：若值为整数，则赋值加一后的结果。返回值为结果值；</p>
+</blockquote>
+<blockquote>
+<p><code>INCRBY key increment</code>：为值增加指定的整数；  </p>
+</blockquote>
+<blockquote>
+<p><code>INCRBYFLOAT key increment</code>：若值可以为浮点数，则设置值为原来的值加上increment；这个可以增加浮点数。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; set a 123</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; incrbyfloat a 1.23</span><br><span class="line">"124.23"</span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p><code>LCS key1 key2 [LEN] [IDX] [MINMATCHLEN len][WITHMATCHLEN]</code>：实现最长公共子序列算法。</p>
+</blockquote>
+<ul>
+<li><p>匹配的字符串不需要连续，如：”asdqwe”和”asqzxe”的结果是”asqe”。</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; set a asdqwe</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; set b asqzxe</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; lcs a b</span><br><span class="line">"asqe"</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>一般用于比较两个序列之间的相似程度。</p>
+</li>
+<li><p>算法O(N*M)复杂度较高，尽量运行在较小的字符串上；</p>
+</li>
+<li><p>加上LEN会返回匹配的长度；</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; mset a asdqwe b asqzxe</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; lcs a b LEN</span><br><span class="line">(integer) 4</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>加上IDX将返回匹配的位置</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; lcs a b IDX</span><br><span class="line">1) "matches"</span><br><span class="line">2) 1) 1) 1) (integer) 5</span><br><span class="line">         2) (integer) 5</span><br><span class="line">      2) 1) (integer) 5</span><br><span class="line">         2) (integer) 5</span><br><span class="line">   2) 1) 1) (integer) 3</span><br><span class="line">         2) (integer) 3</span><br><span class="line">      2) 1) (integer) 2</span><br><span class="line">         2) (integer) 2</span><br><span class="line">   3) 1) 1) (integer) 0</span><br><span class="line">         2) (integer) 1</span><br><span class="line">      2) 1) (integer) 0</span><br><span class="line">         2) (integer) 1</span><br><span class="line">3) "len"</span><br><span class="line">4) (integer) 4</span><br></pre></td></tr></tbody></table></figure>
+
+<p>其中，在**2)<strong>中有</strong>1),2),3)**三组序列，每组序列表示一组匹配列表；</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1) 1) (integer) 5</span><br><span class="line">   2) (integer) 5</span><br><span class="line">2) 1) (integer) 5</span><br><span class="line">   2) (integer) 5</span><br></pre></td></tr></tbody></table></figure>
+
+<p>这个是在 2) -&gt; 1)下的内容，其中1）下的两个值为在key1中匹配的起点终点，2）下的两个值时在key2中匹配的起点和重点，其他依次类推。</p>
+</li>
+</ul>
+<blockquote>
+<p><code>MGET key [key ...]</code>：一次获得多个值。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; mset a 10 b 20</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; mget a b</span><br><span class="line">1) "10"</span><br><span class="line">2) "20"</span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p>MSET key value[ key value …]：一次设置多个key和值</p>
+</blockquote>
+<blockquote>
+<p>MSETNX key value[ key value …]：一次声明且设置多个之前不存在的key和值；若key存在，则失败，返回0；若成功，则返回1。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; msetnx x 1 y 2</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; msetnx x 1 z 3</span><br><span class="line">(integer) 0</span><br><span class="line">127.0.0.1:6379&gt; mget x y z</span><br><span class="line">1) "1"</span><br><span class="line">2) "2"</span><br><span class="line">3) (nil)</span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p>PSETEX key milliseconds value：设置key和value，并设置过期时间，单位为毫秒。与setex不同的是，时间以毫秒为单位，setex时间以秒为单位。即将被弃用</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; psetex a 1000 b</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; get a</span><br><span class="line">"b"</span><br><span class="line">127.0.0.1:6379&gt; get a</span><br><span class="line">(nil)</span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p>SET key value [NX | XX] [GET] [EX 秒 | PX 毫秒 | EXAT unit-time-sexonds | PXAT unit-time-milliseconds | KEEPTTL]</p>
+<p>设置key和value。若key不为</p>
+</blockquote>
+<p>EX：设置指定的过期时间，单位秒；</p>
+<p>PX：设置指定的过期时间，单位毫秒；</p>
+<p>EXAT：Unix时间，单位秒；</p>
+<p>PXAT：Unit时间，单位毫秒；</p>
+<p>NX：当Key不存在时设置；</p>
+<p>XX：当key存在时设置；</p>
+<p>KEEPTTL：获取Key的过期时间；</p>
+<p>GET：返回key原来的值，若key不存在返回nil。</p>
+<p>返回值：</p>
+<ul>
+<li>OK：成功返回ok；</li>
+<li>nil：若get的值为nil，则返回nil；若因为NX或XX导致SET未执行操作，返回nil；</li>
+<li>字符串：若get的值不为nil，返回原来字符串的值。</li>
+</ul>
+<blockquote>
+<p>SETEX、SETNX：设置过期时间，即将被弃用。</p>
+</blockquote>
+<blockquote>
+<p>SETRANGE key offset value：从key值的offset位置开始，设置值为value。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; set key "HelloWorld"</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; set a "HelloWorld"</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; setrange a 5 Redis</span><br><span class="line">(integer) 10</span><br><span class="line">127.0.0.1:6379&gt; get a</span><br><span class="line">"HelloRedis"</span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p>STRLEN key：获取字符串长度。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; set a "HelloWorld"</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; strlen a</span><br><span class="line">(integer) 10</span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p>SUBSTR key start end：截取字符串。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; set a "HelloWorld"</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; substr a 2 5</span><br><span class="line">"lloW"</span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="bitmaps-通过二进制修改-x2F-获取String的值"><a href="#bitmaps-通过二进制修改-x2F-获取String的值" class="headerlink" title="bitmaps 通过二进制修改/获取String的值"></a>bitmaps 通过二进制修改/获取String的值</h4><p>将String编码为二进制格式，bitmaps可以获取或设定二进制数列的每个位置的值。</p>
+<p><strong>SETBIT key offset 0/1</strong>：设定key的二进制位第offset位的值；</p>
+<p><strong>GETBIT key offset</strong>：获取key的二进制位第offset位的值；</p>
+<p>offset在二进制数列里，从前往后数。0为起始位置。</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; set num 0</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; getbit num 0</span><br><span class="line">(integer) 0</span><br><span class="line">127.0.0.1:6379&gt; getbit num 1</span><br><span class="line">(integer) 0</span><br><span class="line">127.0.0.1:6379&gt; getbit num 2</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; getbit num 3</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; getbit num 4</span><br><span class="line">(integer) 0</span><br><span class="line">127.0.0.1:6379&gt; getbit num 5</span><br><span class="line">(integer) 0</span><br><span class="line">127.0.0.1:6379&gt; getbit num 6</span><br><span class="line">(integer) 0</span><br><span class="line">127.0.0.1:6379&gt; getbit num 7</span><br><span class="line">(integer) 0</span><br><span class="line">127.0.0.1:6379&gt; setbit num 5 1</span><br><span class="line">(integer) 0</span><br><span class="line">127.0.0.1:6379&gt; get num</span><br><span class="line">"4"</span><br></pre></td></tr></tbody></table></figure>
+
+<p>先**设置num的值为’0’**，</p>
+<p>然后<strong>获取0-7位置上的二进制数字</strong>，分别为：<strong>00110000</strong>，对应’0’的ansi码；</p>
+<p>设置<strong>第5位的二进制数位为1</strong>后，获取num的值，值变成了<strong>4</strong>。</p>
+<h5 id="其他命令-1"><a href="#其他命令-1" class="headerlink" title="其他命令"></a>其他命令</h5><h6 id="bitcount"><a href="#bitcount" class="headerlink" title="bitcount"></a>bitcount</h6><p>返回字节位数；</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; set apple sweet,nice</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; bitcount apple</span><br><span class="line">(integer) 43</span><br></pre></td></tr></tbody></table></figure>
+
+<h6 id="bitfield"><a href="#bitfield" class="headerlink" title="bitfield"></a>bitfield</h6><p>将字符串作为位数组，允许对位域的值进行获取、修改和自增自减。</p>
+<p><strong>子命令列表</strong></p>
+<ul>
+<li>GET type offset 获取位域的值，以十进制返回；</li>
+<li>SET type offset value 设置位域的值，并返回原来的值；</li>
+<li>INCRBY type offset increment，自增\自减指定位域的值并返回新值。</li>
+</ul>
+<p><strong>type offset 解释</strong></p>
+<p>type：即位域的类型；</p>
+<p>i表示有符号整数，u表示无符号整数。</p>
+<p>例：</p>
+<p>i8：8位有符号整数；</p>
+<p>u8：8位无符号整数；</p>
+<p>i16：16位有符号整数。</p>
+<p>offset：即位移偏移量。</p>
+<p><strong>使用</strong></p>
+<blockquote>
+<p>GET </p>
+</blockquote>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; set apple sweetAndNice</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; bitfield apple GET i8 0</span><br><span class="line">1) (integer) 115</span><br><span class="line">127.0.0.1:6379&gt; bitfield apple GET i8 8</span><br><span class="line">1) (integer) 119</span><br><span class="line">127.0.0.1:6379&gt; bitfield apple GET i8 16</span><br><span class="line">1) (integer) 101</span><br><span class="line">127.0.0.1:6379&gt;</span><br></pre></td></tr></tbody></table></figure>
+
+<p>设定apple的值为sweetAndNice后；</p>
+<p>以有符号整数的形式获取位于0,8,16位域的值，分别为115,119,101，分别对应s、w、e。</p>
+<blockquote>
+<p>SET</p>
+</blockquote>
+<p>设置位域的值，并返回原来的值；</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; bitfield apple set i8 0 117</span><br><span class="line">1) (integer) 115</span><br><span class="line">127.0.0.1:6379&gt; get apple</span><br><span class="line">"uweetAndNice"</span><br></pre></td></tr></tbody></table></figure>
+
+<p>以i8形式设置位置0的位域的值为117。</p>
+<blockquote>
+<p>INCRBY</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; bitfield apple incrby i8 0 3</span><br><span class="line">1) (integer) 120</span><br><span class="line">127.0.0.1:6379&gt; get apple</span><br><span class="line">"xweetAndNice"</span><br></pre></td></tr></tbody></table></figure>
+
+<p>以i8形式为位置0的位域的值增加3。</p>
+<blockquote>
+<p>OVERFLOW</p>
+</blockquote>
+<p>改变当INCRBY子命令发生溢出情况时的行为。</p>
+<p>可以有的值：WRAP SAT FAIL</p>
+<p>WRAP：默认值。若为无符号数，则按照最大值进行取模运算；若为有符号数，对于结果的取值，上溢取溢出值与最小值相加的值，下溢取最大值与溢出值相减的值，与C语言类似；</p>
+<p>SAT：若上溢，则使值控制在最大值；若下溢，则使值控制在最小值。如：若最大值为127，则120 加 10结果为127；</p>
+<p>FAIL：若发生溢出，取消本次操作，返回null向调用者发送错误信号。 </p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; bitfield a OVERFLOW WRAP INCRBY i8 0 1234</span><br><span class="line">1) (integer) 3</span><br><span class="line">127.0.0.1:6379&gt; bitfield a OVERFLOW SAT INCRBY i8 0 1234</span><br><span class="line">1) (integer) 127</span><br><span class="line">127.0.0.1:6379&gt; bitfield a OVERFLOW FAIL INCRBY i8 0 1234</span><br><span class="line">1) (nil)</span><br><span class="line">127.0.0.1:6379&gt; get a</span><br><span class="line">"\x7f23"</span><br></pre></td></tr></tbody></table></figure>
+
+<h6 id="bitfield-ro"><a href="#bitfield-ro" class="headerlink" title="bitfield_ro"></a>bitfield_ro</h6><p>类似于bitfield，但是只接受get子命令；</p>
+<p>因为bitfield有改变数值的选项，所以在技术上被标记为redis的写入命令；</p>
+<p>（存疑）Redis可以有主节点和副本节点，副本节点是主节点的副本；</p>
+<p>若bitfield命令向副本节点发送操作，副本节点会将操作转发到主节点进行操作，而不是在副本中操作；</p>
+<p>bitfield_ro命令也会向副本节点发送操作，但bitfield_ro的操作不会被转发到主节点，在副本节点中获取数据后直接返回。（可能会存在旧数据）</p>
+<h6 id="bitop"><a href="#bitop" class="headerlink" title="bitop"></a>bitop</h6><p>BITOP支持四种与运算：AND、OR、XOR和NOT。</p>
+<p>dest 目标  src 来源</p>
+<ul>
+<li>BITOP AND destkey srckey1 srckey2 srckey3 …  srckeyN</li>
+<li>BITOP OR destkey srckey1 srckey2 srckey3 …  srckeyN</li>
+<li>BITOP XOR destkey srckey1 srckey2 srckey3 …  srckeyN</li>
+<li>BITOP NOT destkey srckey</li>
+</ul>
+<p>NOT只需要一个参数。</p>
+<p>运算结果存放在dest中，依据srckey进行计算。</p>
+<h6 id="bitpos"><a href="#bitpos" class="headerlink" title="bitpos"></a>bitpos</h6><figure class="highlight tex"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">BITPOS key bit [start [end [BYTE | BIT]]]</span><br></pre></td></tr></tbody></table></figure>
+
+<p>将字符串数据作为一个位数组，获取指定范围第一个1或0的<strong>位置</strong>。</p>
+<p>bit值为1/0，表示指定1或者0；</p>
+<p>使用start和end指定范围；</p>
+
+                </div>
+
+                
+                        
+<div class="article-copyright-info-container border-box">
+    <div class="copyright-info-content border-box">
+        <div class="copyright-info-top border-box">
+            <div class="post-title border-box text-ellipsis">
+                Redis 1 介绍 结构 bitmaps
+            </div>
+
+            <div class="post-link border-box text-ellipsis">
+                2022/09/19/Redis/Redis-1/
+            </div>
+        </div>
+
+        <div class="copyright-info-bottom border-box">
+            <div class="post-author bottom-item">
+                <div class="type">
+                    作者
+                </div>
+                <div class="content">uwupu</div>
+            </div>
+
+            <div class="post-time bottom-item">
+                <div class="type">
+                    發布于
+                </div>
+                <div class="content">2022-09-19 16:08</div>
+            </div>
+
+
+            <div class="post-license bottom-item">
+                <div class="type">
+                    許可
+                </div>
+                <div class="content tooltip" data-tooltip-content="CC BY-NC-SA 4.0">
+                    <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed">
+                        <i class="fa-brands fa-creative-commons"></i>
+                        <i class="fa-brands fa-creative-commons-by"></i>
+                        <i class="fa-brands fa-creative-commons-nc"></i>
+                        <i class="fa-brands fa-creative-commons-sa"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <i class="copyright-bg fa-solid fa-copyright"></i>
+    </div>
+    <div class="copy-copyright-info flex-center tooltip" data-tooltip-content="復製版權信息" data-tooltip-offset-y="-2px">
+        <i class="fa-solid fa-copy"></i>
+    </div>
+</div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Redis/">Redis</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="article-nav">
+                        
+                            <div class="article-prev">
+                                <a class="prev" rel="prev" href="/2022/09/20/Redis/Redis-2/" title="Redis 2 List Set">
+                                    <span class="left arrow-icon flex-center">
+                                      <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                            <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Redis 2 List Set</span>
+                                        <span class="post-nav-item">上一篇</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="article-next">
+                                <a class="next" rel="next" href="/2022/09/18/Java/SpringBoot%20Cache/" title="SpringBoot Cache">
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">SpringBoot Cache</span>
+                                        <span class="post-nav-item">下一篇</span>
+                                    </span>
+                                            <span class="right arrow-icon flex-center">
+                                      <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis"><span class="nav-number">1.</span> <span class="nav-text">Redis</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="nav-number">1.2.</span> <span class="nav-text">数据结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.3.</span> <span class="nav-text">基础数据类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%80%E8%BF%B0"><span class="nav-number">1.3.1.</span> <span class="nav-text">简述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#String"><span class="nav-number">1.3.2.</span> <span class="nav-text">String</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-x2F-%E5%9C%BA%E6%99%AF"><span class="nav-number">1.3.2.1.</span> <span class="nav-text">使用/场景</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B%E5%9C%BA%E6%99%AF"><span class="nav-number">1.3.2.1.1.</span> <span class="nav-text">一些场景</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E5%80%BC%E3%80%81%E8%8E%B7%E5%8F%96%E5%80%BC"><span class="nav-number">1.3.2.1.2.</span> <span class="nav-text">设置值、获取值</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%AD%98%E5%82%A8%E4%B8%80%E4%B8%AA%E5%BA%8F%E5%88%97%E5%8C%96JSON%E5%AD%97%E7%AC%A6%E4%B8%B2%EF%BC%8C%E5%B9%B6%E8%AE%BE%E5%AE%9A100%E7%A7%92%E5%90%8E%E8%BF%87%E6%9C%9F"><span class="nav-number">1.3.2.1.3.</span> <span class="nav-text">存储一个序列化JSON字符串，并设定100秒后过期</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B8%80%E4%B8%AA%E8%AE%A1%E6%95%B0%E5%99%A8"><span class="nav-number">1.3.2.1.4.</span> <span class="nav-text">一个计数器</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%99%90%E5%88%B6"><span class="nav-number">1.3.2.2.</span> <span class="nav-text">限制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4"><span class="nav-number">1.3.2.3.</span> <span class="nav-text">基本命令</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E5%92%8C%E8%AE%BE%E7%BD%AE%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">1.3.2.3.1.</span> <span class="nav-text">获取和设置字符串</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%AE%A1%E7%90%86%E8%AE%A1%E6%95%B0%E5%99%A8"><span class="nav-number">1.3.2.3.2.</span> <span class="nav-text">管理计数器</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E5%91%BD%E4%BB%A4"><span class="nav-number">1.3.2.3.3.</span> <span class="nav-text">其他命令</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#bitmaps-%E9%80%9A%E8%BF%87%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BF%AE%E6%94%B9-x2F-%E8%8E%B7%E5%8F%96String%E7%9A%84%E5%80%BC"><span class="nav-number">1.3.2.4.</span> <span class="nav-text">bitmaps 通过二进制修改/获取String的值</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E5%91%BD%E4%BB%A4-1"><span class="nav-number">1.3.2.4.1.</span> <span class="nav-text">其他命令</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#bitcount"><span class="nav-number">1.3.2.4.1.1.</span> <span class="nav-text">bitcount</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#bitfield"><span class="nav-number">1.3.2.4.1.2.</span> <span class="nav-text">bitfield</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#bitfield-ro"><span class="nav-number">1.3.2.4.1.3.</span> <span class="nav-text">bitfield_ro</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#bitop"><span class="nav-number">1.3.2.4.1.4.</span> <span class="nav-text">bitop</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#bitpos"><span class="nav-number">1.3.2.4.1.5.</span> <span class="nav-text">bitpos</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="border-box website-info-box default">
+        
+            <div class="copyright-info info-item default">
+                ©&nbsp;<span>2020</span>&nbsp;-&nbsp;2023
+                
+                    &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">uwupu</a>
+                
+            </div>
+
+            <div class="theme-info info-item default">
+                <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;框架&nbsp;&amp;&nbsp;主題&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a>
+            </div>
+
+            
+
+            
+        
+
+        <div class="count-item info-item default">
+            
+                <span class="count-box border-box word">
+                    <span class="item-type border-box">總字數</span>
+                    <span class="item-value border-box word">161.4k</span>
+                </span>
+            
+
+            
+                <span class="count-box border-box uv">
+                    <span class="item-type border-box">讀者</span>
+                    <span class="item-value border-box uv" id="busuanzi_value_site_uv"></span>
+                </span>
+            
+
+            
+                <span class="count-box border-box pv">
+                    <span class="item-type border-box">閱覽</span>
+                    <span class="item-value border-box pv" id="busuanzi_value_site_pv"></span>
+                </span>
+            
+        </div>
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="tools-list border-box">
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="搜尋..." spellcheck="false" type="search" class="search-input">
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis"><span class="nav-number">1.</span> <span class="nav-text">Redis</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="nav-number">1.2.</span> <span class="nav-text">数据结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.3.</span> <span class="nav-text">基础数据类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%80%E8%BF%B0"><span class="nav-number">1.3.1.</span> <span class="nav-text">简述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#String"><span class="nav-number">1.3.2.</span> <span class="nav-text">String</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-x2F-%E5%9C%BA%E6%99%AF"><span class="nav-number">1.3.2.1.</span> <span class="nav-text">使用/场景</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B%E5%9C%BA%E6%99%AF"><span class="nav-number">1.3.2.1.1.</span> <span class="nav-text">一些场景</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E5%80%BC%E3%80%81%E8%8E%B7%E5%8F%96%E5%80%BC"><span class="nav-number">1.3.2.1.2.</span> <span class="nav-text">设置值、获取值</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%AD%98%E5%82%A8%E4%B8%80%E4%B8%AA%E5%BA%8F%E5%88%97%E5%8C%96JSON%E5%AD%97%E7%AC%A6%E4%B8%B2%EF%BC%8C%E5%B9%B6%E8%AE%BE%E5%AE%9A100%E7%A7%92%E5%90%8E%E8%BF%87%E6%9C%9F"><span class="nav-number">1.3.2.1.3.</span> <span class="nav-text">存储一个序列化JSON字符串，并设定100秒后过期</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B8%80%E4%B8%AA%E8%AE%A1%E6%95%B0%E5%99%A8"><span class="nav-number">1.3.2.1.4.</span> <span class="nav-text">一个计数器</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%99%90%E5%88%B6"><span class="nav-number">1.3.2.2.</span> <span class="nav-text">限制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4"><span class="nav-number">1.3.2.3.</span> <span class="nav-text">基本命令</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E5%92%8C%E8%AE%BE%E7%BD%AE%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">1.3.2.3.1.</span> <span class="nav-text">获取和设置字符串</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%AE%A1%E7%90%86%E8%AE%A1%E6%95%B0%E5%99%A8"><span class="nav-number">1.3.2.3.2.</span> <span class="nav-text">管理计数器</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E5%91%BD%E4%BB%A4"><span class="nav-number">1.3.2.3.3.</span> <span class="nav-text">其他命令</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#bitmaps-%E9%80%9A%E8%BF%87%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%BF%AE%E6%94%B9-x2F-%E8%8E%B7%E5%8F%96String%E7%9A%84%E5%80%BC"><span class="nav-number">1.3.2.4.</span> <span class="nav-text">bitmaps 通过二进制修改/获取String的值</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E5%91%BD%E4%BB%A4-1"><span class="nav-number">1.3.2.4.1.</span> <span class="nav-text">其他命令</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#bitcount"><span class="nav-number">1.3.2.4.1.1.</span> <span class="nav-text">bitcount</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#bitfield"><span class="nav-number">1.3.2.4.1.2.</span> <span class="nav-text">bitfield</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#bitfield-ro"><span class="nav-number">1.3.2.4.1.3.</span> <span class="nav-text">bitfield_ro</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#bitop"><span class="nav-number">1.3.2.4.1.4.</span> <span class="nav-text">bitop</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#bitpos"><span class="nav-number">1.3.2.4.1.5.</span> <span class="nav-text">bitpos</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+<!-- common -->
+<script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/utils.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/header-shrink.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/back2top.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/dark-light-toggle.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/main.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/libs/anime.min.js"></script>
+
+<!-- local-search -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/local-search.js"></script>
+
+
+<!-- code-block -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/code-block.js"></script>
+
+
+<!-- lazyload -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/lazyload.js"></script>
+
+
+<div class="pjax">
+    
+        <!-- post-helper -->
+        <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/post-helper.js"></script>
+
+        <!-- toc -->
+        
+            <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/toc.js"></script>
+        
+
+        <!-- copyright-info -->
+        
+            <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/copyright-info.js"></script>
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- category-page -->
+    
+
+    <!-- links-page -->
+    
+</div>
+
+<!-- mermaid -->
+
+
+<!-- pjax -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/libs/pjax.min.js"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax'
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            KEEP.utils.pjaxProgressBarStart()
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            KEEP.utils.pjaxProgressBarEnd()
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'))
+            KEEP.initExecute()
+        });
+    });
+</script>
+
+
+
+
+
+
+</body></html>

@@ -1,0 +1,984 @@
+<!DOCTYPE html><html lang="zh-Hans"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="一个包含有学习日记的博客">
+    <meta name="author" content="uwupu">
+    
+    <title>
+        
+            Java 并发编程艺术 Note |
+        
+        uwupu 学习日志
+    </title>
+    
+
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+    
+    
+    
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"zswh33.github.io","root":"/","language":"zh-Hans","path":"search.json"}
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":true,"init_open":true,"layout":"right"},"style":{"primary_color":"#F099BC","logo":"/images/logo.svg","favicon":"/images/logo.svg","avatar":"/images/avatar.svg","first_screen":{"enable":false,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"scroll":{"progress_bar":false,"percent":false}},"local_search":{"enable":true,"preload":true},"code_block":{"tools":{"enable":true,"style":"mac"},"highlight_theme":"obsidian"},"pjax":{"enable":true},"lazyload":{"enable":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.21"},"waline":{"server_url":null,"reaction":false,"version":2},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false}},"post":{"author_label":{"enable":true,"auto":false,"custom_label_list":["啦啦啦啦啦"]},"word_count":{"wordcount":true,"min2read":true},"datetime_format":"YYYY-MM-DD HH:mm","copyright_info":true,"share":false,"reward":{"enable":false,"img_link":null,"text":null}},"website_count":{"busuanzi_count":{"enable":true,"site_uv":true,"site_pv":true,"page_pv":true}},"version":"3.8.6"}
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
+    KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
+    KEEP.language_copy_copyright = {"copy":"Copy copyright info","copied":"Copied","title":"Original article title","author":"Original article author","link":"Original article link"}
+  </script>
+<meta name="generator" content="Hexo 6.2.0"><link rel="alternate" href="/atom.xml" title="uwupu Blog" type="application/atom+xml">
+<script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/fontawesome.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/regular.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/solid.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/brands.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/fontawesome.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/regular.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/solid.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/brands.min.css"></noscript></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <i class="pjax-progress-icon fas fa-circle-notch fa-spin"></i>
+    
+</div>
+
+
+<main class="page-container border-box">
+
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.svg">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               uwupu 学习日志
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class="" href="/">
+                                首頁
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/archives">
+                                歸檔
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/tags">
+                                標籤
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/categories">
+                                分類
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/links">
+                                友鏈
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/about">
+                                關於
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/">首頁</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/archives">歸檔</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/tags">標籤</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/categories">分類</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/links">友鏈</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/about">關於</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+
+                
+
+                    <div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+
+        <div class="article-content-container border-box">
+
+            
+
+            <div class="article-content-bottom border-box">
+                
+                    <div class="article-title">
+                        Java 并发编程艺术 Note
+                    </div>
+                
+
+                
+                    <div class="article-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/avatar.svg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author">
+                                <span class="name">uwupu</span>
+                                
+                                    <span class="author-label">啦啦啦啦啦</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="article-meta-info-container border-box post">
+    <div class="article-meta-info border-box">
+        
+
+
+        
+            <span class="meta-info-item article-create-date">
+                <i class="icon fa-solid fa-calendar-check"></i>&nbsp;
+                <span class="pc">2022-11-15 09:48</span>
+                <span class="mobile">2022-11-15 09:48</span>
+            </span>
+
+            <span class="meta-info-item article-update-date">
+                <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                <span class="pc" data-updated="Fri Nov 10 2023 23:12:32 GMT+0800">2023-11-10 23:12</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item article-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="article-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="article-tag meta-info-item border-box">
+                <i class="icon fas fa-tags"></i>&nbsp;
+                <ul class="article-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Java/">Java</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+            <span class="meta-info-item article-wordcount">
+                <i class="icon fas fa-file-word"></i>&nbsp;<span>3.1k 字數</span>
+            </span>
+        
+        
+            <span class="meta-info-item article-min2read">
+                <i class="icon fas fa-clock"></i>&nbsp;<span>10 分鐘</span>
+            </span>
+        
+        
+            <span class="meta-info-item article-pv">
+                <i class="icon fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="article-content keep-markdown-body">
+                    
+
+                    <p>《Java并发编程的艺术》阅读笔记</p>
+<h1 id="如何减少上下文切换"><a href="#如何减少上下文切换" class="headerlink" title="如何减少上下文切换"></a>如何减少上下文切换</h1><p>减少上下文切换</p>
+<ul>
+<li>无锁并发编程。<ul>
+<li>多线程竞争锁，会引发上下文切换 -&gt; 考虑避免使用锁；</li>
+<li>如，将数据的ID按照Hash算法取模分段，不同线程处理不同段的数据；</li>
+</ul>
+</li>
+<li>CAS算法<ul>
+<li>Java的Atomic包使用CAS算法来更新数据，不需要加锁；</li>
+</ul>
+</li>
+<li>使用最少线程<ul>
+<li>避免创建不必要的线程；</li>
+</ul>
+</li>
+<li>协程：在单线程实现多任务的调度，在单线程里维持多个任务间的切换；</li>
+</ul>
+<h1 id="避免死锁"><a href="#避免死锁" class="headerlink" title="避免死锁"></a>避免死锁</h1><ul>
+<li>避免一个线程同时获取多个锁；</li>
+<li>避免一个线程在锁内同时占用多个资源，尽量保证每个锁只占用一个资源；</li>
+<li>尝试使用定时锁，使用<code>lock.tryLock(timeout)</code>来替代使用内部锁机制；</li>
+<li>对于数据库锁，加锁和解锁必须在一个数据库连接里，否则可能出现解锁失败的情况；</li>
+</ul>
+<h1 id="服务器集群"><a href="#服务器集群" class="headerlink" title="服务器集群"></a>服务器集群</h1><p>可以使用ODPS或Hadoop搭建一个服务器集群。</p>
+<h1 id="volatile"><a href="#volatile" class="headerlink" title="volatile"></a>volatile</h1><p>定义：Java编程语言允许线程访问共享变量，为了确保共享变量能被准确和一致地更新，线程应却表通过排它锁单独获得这个变量；</p>
+<h2 id="CPU术语"><a href="#CPU术语" class="headerlink" title="CPU术语"></a>CPU术语</h2><p>《Java并发编程的艺术》Page.9</p>
+<table>
+<thead>
+<tr>
+<th>术语</th>
+<th>英文</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>内存屏障</td>
+<td>memory barriers</td>
+<td>是一组处理器指令，用于实现对内存操作的顺序限制。</td>
+</tr>
+<tr>
+<td>缓冲行</td>
+<td>cache line</td>
+<td>CPU高速缓存中可以分配的最小存储单位。处理器填写缓存行会加载整个缓存行，现存CPU需要执行几百次CPU指令。</td>
+</tr>
+<tr>
+<td>原子操作</td>
+<td>atomic operations</td>
+<td>不可中断的一个或一系列操作。</td>
+</tr>
+<tr>
+<td>缓存行填充</td>
+<td>cache line fill</td>
+<td>当处理器识别到从内存中读取操作数是可缓存的，处理器读取整个高速缓存行到适当的缓存（L1，L2，L3或所有）。</td>
+</tr>
+<tr>
+<td>缓存命中</td>
+<td>cache hit</td>
+<td>如果进行高速缓存行填充操作的内存位置仍然是下次处理器访问的地址时，处理器从缓存中读取操作数，而不是从内存读取。</td>
+</tr>
+<tr>
+<td>写命中</td>
+<td>write hit</td>
+<td>当处理器将操作数写回到一个内存缓存的区域时，它首先会检查这个缓存的内存地址是否在缓存行中，如果存在一个有效的缓存行，则处理器将这个操作数写回到缓存，而不是写回到内存，这个操作称为写命中。</td>
+</tr>
+<tr>
+<td>写缺失</td>
+<td>write misses the cache</td>
+<td>一个有效的缓存行被写入到不存在的内存区域。</td>
+</tr>
+</tbody></table>
+<h2 id="如何实现可见性"><a href="#如何实现可见性" class="headerlink" title="如何实现可见性"></a>如何实现可见性</h2><ul>
+<li>如果对volatile变量进行写操作，JVM就会向处理器发送一条Lock前缀的指令，将这个变量所在缓存行的数据协会到系统内存；</li>
+<li>为了保证各个处理器的缓存是一致的，实现了<strong>缓存一致性协议</strong><ul>
+<li>每个处理器通过<strong>嗅探</strong>总线上传播的数据来检查自己的缓存值<strong>是否过期</strong>，</li>
+<li>当处理器发现自己缓存行对应的内存地址被修改，就会将当前处理器的缓存行设置为无效状态，</li>
+<li>当处理器对这个数据进行修改操作，会重新从系统内存中把数据读到处理器缓存里。</li>
+</ul>
+</li>
+</ul>
+<h2 id="实现原则"><a href="#实现原则" class="headerlink" title="实现原则"></a>实现原则</h2><ol>
+<li><p>Lock前缀指令会引起处理器缓存协会到内存。</p>
+</li>
+<li><p>一个处理器的缓存回写到内存会导致其他处理器的缓存无效</p>
+<ul>
+<li>IA-32处理器和Intel 64处理器使用MESI（修改，独占，共享，无效）控制协议去维护内部缓存和其他处理器缓存的一致性；</li>
+<li>IA-32和Intel 64处理器能<strong>嗅探</strong>其他处理器访问系统内存和他们的内部缓存。处理器<strong>使用嗅探技术保证它的内部缓存、系统内存和其他处理器的缓存的数据在总线上保持一致</strong>；</li>
+<li>在Pentium和P6 family处理器中，如果有<strong>处理器</strong>嗅探到别的处理器打算写内存地址，而这个地址处于共享状态，那么这个处理器会使它的缓存行无效，在下次访问相同内存地址时，强制执行<strong>缓存行填充</strong>。</li>
+</ul>
+</li>
+</ol>
+<h2 id="案例：追加字节数提高volatile"><a href="#案例：追加字节数提高volatile" class="headerlink" title="案例：追加字节数提高volatile"></a>案例：追加字节数提高volatile</h2><p>《Java并发编程的艺术》Page.10</p>
+<p>著名Java并发编程大师Dong lea在<strong>JDK 7</strong> 里新增了一个<strong>队列集合类LinkedTransferQueue</strong>，在使用volatile变量时，使用追加字节的方式来优化队列出队，入队的性能：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">transient</span> <span class="keyword">final</span> PaddedAtomicReference&lt;QNode&gt; head;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">transient</span> <span class="keyword">final</span> PaddedAtomicReference&lt;QNode&gt; tail;</span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">class</span> <span class="title class_">PaddedAtomicReference</span> &lt;T&gt; <span class="keyword">extends</span> <span class="title class_">AtomicReference</span> &lt;T&gt;{</span><br><span class="line">    Object p0,p1,p2,p3,p4,p5,p6,p7,p8,p9,pa,pb,pc,pd,pe;</span><br><span class="line">    PaddedAtomicReference(T r){supre(r);}</span><br><span class="line">}</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AtomicReference</span> &lt;V&gt; <span class="keyword">implements</span> <span class="title class_">java</span>.io.Serializable{</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> V value;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li>这里的目的是：<strong>将对象追加到64字节</strong>；<ul>
+<li>一个对象引用<strong>4字节</strong>，有15个变量即<strong>60个字节</strong>,再加上父类<strong>value变量</strong>，一共<strong>64个字节</strong>；</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>为什么要添加到64字节？</p>
+</blockquote>
+<p>对于英特尔酷睿i7，酷睿、Atom和NetBurst，以及Core Solo和Pentium M处理器上的L1、L2、L3缓存的高速缓存行是64个字节宽，不支持部分填充缓存行；</p>
+<p>这意味着，若队列头结点和尾节点不足64字节的话，处理器会将他们读到同一个高速缓存行中；</p>
+<p><strong>当一个处理器试图修改头结点，会将整个缓存行锁定</strong>；在缓存一致性机制下，其他处理器会不能访问高速缓存的尾节点；</p>
+<p>而<strong>队列的入队和出队操作需要不停修改头结点尾节点</strong>，在多处理器情况下会严重影响到队列的入队和出队效率；</p>
+<p>追加到64字节，填满高速缓冲区的缓存行，避免头结点和尾节点加载到同一个缓存行，使头、尾节点不互相锁定。</p>
+<blockquote>
+<p>是不是所有的volatile变量都要追加到64字节呢？</p>
+</blockquote>
+<p>不是。</p>
+<ul>
+<li>缓存行非64位宽的处理器不能；<ul>
+<li>如P6系列和奔腾处理器，他们的L1和L2高速缓存行是<strong>32个字节宽</strong>；</li>
+</ul>
+</li>
+<li>共享变量不会被频繁地写。<ul>
+<li>追加字节的方式需要处理器读取更多字节到高速缓冲区，本身带来一定性能损耗，如果变量本身不被频繁写，锁的几率是非常小的，就没必要通过追加字节的方式来避免互相锁定。</li>
+</ul>
+</li>
+</ul>
+<p>其他：该写法Java7下不生效，Java7会淘汰或重新排列无用字段；</p>
+<h1 id="Synchronized原理"><a href="#Synchronized原理" class="headerlink" title="Synchronized原理"></a>Synchronized原理</h1><p>synchronized实现同步的基础：Java中每个对象都可以作为锁；</p>
+<ul>
+<li>对于普通同步方法，锁的是<strong>当前实例对象</strong>；</li>
+<li>对于静态同步方法，锁是<strong>当前类的Class对象</strong>；</li>
+<li>对于同步代码块，锁是<strong>Synchronized括号里配置的对象</strong>。</li>
+</ul>
+<blockquote>
+<p>在JVM中原理</p>
+</blockquote>
+<p>当一个线程视图访问同步代码块时，首先必须得到锁，退出或抛出异常时必须释放锁；</p>
+<p>在JVM中，代码块的同步是<strong>使用monitorenter和monitorexit指令</strong>实现的：</p>
+<ul>
+<li>monitorenter插入到同步代码块的开始位置，monitorexit插入到同步代码块的结束和异常位置；</li>
+<li>JVM保证：<strong>每个monitorenter必须有对应的monitorexit与之配对；</strong></li>
+<li>任何一个对象都有一个monitor与之关联，当一个monitor被持有后，它将处于锁定状态；</li>
+<li>线程执行到monitorenter指令时，将会尝试获取对象所对应的monitor所有权，即尝试获取monitor的锁。</li>
+</ul>
+<h2 id="Java对象头"><a href="#Java对象头" class="headerlink" title="Java对象头"></a>Java对象头</h2><p>synchronized用的锁在Java的对象头里；</p>
+<ul>
+<li>若对象是数组类型，则虚拟机用3个字宽存储对象头；</li>
+<li>若对象是非数组类型，则用2个字宽存储对象头；</li>
+<li>在32位虚拟机中，1字宽等于4字节，即32bit；</li>
+</ul>
+<p><strong>Java对象头的长度</strong></p>
+<table>
+<thead>
+<tr>
+<th>长度</th>
+<th>内容</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>32/64bit</td>
+<td>Mark Word</td>
+<td>对象的hashCode或锁信息等</td>
+</tr>
+<tr>
+<td>32/64bit</td>
+<td>Class Metadata Address</td>
+<td>对象类型数据的指针</td>
+</tr>
+<tr>
+<td>32/32bit</td>
+<td>Array Length</td>
+<td>数组的长度（若对象是数组）</td>
+</tr>
+</tbody></table>
+<p>Java对象头的Mark Word默认存储对象的：<strong>HashCode，分代年龄</strong>和<strong>锁标记位</strong>。</p>
+<p><strong>32位JVM  Mark Word   Java对象头存储结构</strong></p>
+<table>
+<thead>
+<tr>
+<th>锁状态</th>
+<th>25bit</th>
+<th>4bit</th>
+<th>1bit 是否偏向锁</th>
+<th>2bit 锁标志位</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>无锁状态</td>
+<td>对象的hashCode</td>
+<td>对象分代年龄</td>
+<td>0</td>
+<td>01</td>
+</tr>
+</tbody></table>
+<p><strong>Mark Word 运行期间变化</strong></p>
+<table>
+    <tbody><tr>
+        <th rowspan="2">锁状态</th>
+        <th colspan="2">25bit</th>
+        <th rowspan="2">4bit</th>
+        <th>1bit</th>
+        <th>2bit</th>
+    </tr>
+    <tr>
+        <th>23bit</th>
+        <th>2bit</th>
+        <th>是否是偏向锁</th>
+        <th>锁标志位</th>
+    </tr>
+    <tr>
+        <td>轻量级锁</td>
+        <td colspan="4">指向栈中锁记录的指针</td>
+        <td>00</td>
+    </tr>
+    <tr>
+        <td>重量级锁</td>
+        <td colspan="4">指向互斥量（重量级锁）的指针</td>
+        <td>10</td>
+    </tr>
+    <tr>
+        <td>GC标记</td>
+        <td colspan="4">空</td>
+        <td>11</td>
+    </tr>
+    <tr>
+        <td>偏向锁</td>
+        <td>线程ID</td>
+        <td>Epoch</td>
+        <td>对象分代年龄</td>
+        <td>1</td>
+        <td>01</td>
+    </tr>
+</tbody></table>
+
+<p>在64位虚拟机下，Mark Word是64bit大小的；</p>
+<p><strong>64位虚拟机下，Mark Word 存储结构</strong></p>
+<table>
+    <tbody><tr>
+        <th rowspan="2">锁状态</th>
+        <th>25bit</th>
+        <th>31bit</th>
+        <th>1bit</th>
+        <th>4bit</th>
+        <th>1bit</th>
+        <th>2bit</th>
+    </tr>
+    <tr>
+        <th></th>
+        <th></th>
+        <th>cms_free</th>
+        <th>分代年龄</th>
+        <th>偏向锁</th>
+        <th>锁标志位</th>
+    </tr>
+    <tr>
+        <td>无锁</td>
+        <td>unused</td>
+        <td>hashCode</td>
+        <td></td>
+        <td></td>
+        <td>0</td>
+        <td>01</td>
+    </tr>
+    <tr>
+        <td>偏向锁</td>
+        <td colspan="2">ThreadId(54bit) Epoch(2bit)</td>
+        <td></td>
+        <td></td>
+        <td>1</td>
+        <td>01</td>
+    </tr>
+</tbody></table>
+
+<h2 id="锁的升级和对比"><a href="#锁的升级和对比" class="headerlink" title="锁的升级和对比"></a>锁的升级和对比</h2><p>Java SE1.6为了减少锁和释放锁带来的性能消耗，引入了<strong>偏向锁</strong>和<strong>轻量级锁</strong>；</p>
+<p>在Java SE 1.6中，锁一共有4种状态，级别从低到高依次是：<strong>无锁状态、偏向锁状态、轻量级锁状态和重量级锁状态</strong>。</p>
+<p>锁可以升级但不能降级，即偏向锁升级成轻量级锁后不能降低到偏向锁，<strong>目的</strong>是为了<strong>提高获得和释放锁的效率</strong>。</p>
+<h2 id="偏向锁"><a href="#偏向锁" class="headerlink" title="偏向锁"></a>偏向锁</h2><p>HotSpot作者研究发现，大多数情况下，锁不仅不存在多线程竞争，而且总是由同一个线程多次获得。为了让线程获得锁的代价更低而引入了偏向锁；</p>
+<p>当一个线程访问同步块并获得锁时，会在<strong>对象头和栈帧中的锁记录</strong>里存储<strong>偏向的线程ID</strong>，以后该线程在进入和退出同步块时不需要进行CAS操作来加锁和解锁，只需简单地测试一下对象头的Mark Word里是否存储指向当前线程的偏向锁。若测试成功，表示线程已经获得了锁。若测试失败，则需要再测试一下Mark Word中偏向锁的标志是否为1（表示当前是偏向锁）；若没有设置，则使用CAS竞争锁；若设置了，则尝试使用CAS将对象头的偏向锁指向当前线程。</p>
+<blockquote>
+<p>偏向锁执行流程</p>
+</blockquote>
+<ol>
+<li>一个线程访问同步块</li>
+<li>测试对象头的Mark Word是否存储指向当前线程的偏向锁<ul>
+<li>存在<ul>
+<li><strong>线程获得锁</strong></li>
+</ul>
+</li>
+<li>不存在<ul>
+<li>测试Mark Word中偏向锁的标志是否为1<ul>
+<li>是：<strong>尝试使用CAS将对象头的偏向锁指向当前线程</strong></li>
+<li>不是：<strong>使用CAS竞争锁</strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p>偏向锁的撤销</p>
+</blockquote>
+<p>偏向锁使用了<strong>一种等到竞争出现才释放锁的机制</strong>，所以当其他线程尝试竞争偏向锁时，持有偏向锁的线程才会释放锁；</p>
+<p>偏向锁的撤销，需要等待一个<strong>全局安全点</strong>（这个时间点没有正在执行的字节码）；</p>
+<p>当出现竞争，首先暂停拥有偏向锁的线程，然后检查持有偏向锁的线程是否活着，若线程不活跃，则将对象头设置为无锁状态；若线程存活，拥有偏向锁的栈会被执行，遍历偏向对象的锁记录，栈中的锁记录和对象头的Mark Word要么重新偏向于其他线程，要么恢复到无锁或标记对象不适合作为偏向锁，最后唤醒暂停的线程；</p>
+<p><strong>撤销流程</strong></p>
+<ol>
+<li>出现竞争</li>
+<li>暂停拥有偏向锁的线程</li>
+<li>检查持有偏向锁的线程是否存活<ul>
+<li>未存活<ul>
+<li>对象头设置为无锁状态；</li>
+</ul>
+</li>
+<li>存活<ul>
+<li>拥有偏向锁的栈会被执行</li>
+<li>遍历对象的锁记录</li>
+<li>栈中的锁记录和对象头的Mark Word<ul>
+<li>要么重新偏向于其他线程，</li>
+<li>要么恢复好无锁或标记对象不适合作为偏向锁</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>唤醒暂停的线程</li>
+</ol>
+
+                </div>
+
+                
+                        
+<div class="article-copyright-info-container border-box">
+    <div class="copyright-info-content border-box">
+        <div class="copyright-info-top border-box">
+            <div class="post-title border-box text-ellipsis">
+                Java 并发编程艺术 Note
+            </div>
+
+            <div class="post-link border-box text-ellipsis">
+                2022/11/15/Java/Java-并发编程艺术-Note/
+            </div>
+        </div>
+
+        <div class="copyright-info-bottom border-box">
+            <div class="post-author bottom-item">
+                <div class="type">
+                    作者
+                </div>
+                <div class="content">uwupu</div>
+            </div>
+
+            <div class="post-time bottom-item">
+                <div class="type">
+                    發布于
+                </div>
+                <div class="content">2022-11-15 09:48</div>
+            </div>
+
+
+            <div class="post-license bottom-item">
+                <div class="type">
+                    許可
+                </div>
+                <div class="content tooltip" data-tooltip-content="CC BY-NC-SA 4.0">
+                    <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed">
+                        <i class="fa-brands fa-creative-commons"></i>
+                        <i class="fa-brands fa-creative-commons-by"></i>
+                        <i class="fa-brands fa-creative-commons-nc"></i>
+                        <i class="fa-brands fa-creative-commons-sa"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <i class="copyright-bg fa-solid fa-copyright"></i>
+    </div>
+    <div class="copy-copyright-info flex-center tooltip" data-tooltip-content="復製版權信息" data-tooltip-offset-y="-2px">
+        <i class="fa-solid fa-copy"></i>
+    </div>
+</div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Java/">Java</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="article-nav">
+                        
+                            <div class="article-prev">
+                                <a class="prev" rel="prev" href="/2022/11/15/Java/Java-%E5%B9%B6%E5%8F%91-Tools-Note/" title="Java 并发 性能分析工具">
+                                    <span class="left arrow-icon flex-center">
+                                      <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                            <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Java 并发 性能分析工具</span>
+                                        <span class="post-nav-item">上一篇</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="article-next">
+                                <a class="next" rel="next" href="/2022/11/09/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%B9%B3%E8%A1%A1%E4%BA%8C%E5%8F%89%E6%A0%91%E4%BB%A5%E5%8F%8A%E5%85%B6%E6%8B%93%E5%B1%95-Note/" title="平衡二叉树以及其拓展 Note">
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">平衡二叉树以及其拓展 Note</span>
+                                        <span class="post-nav-item">下一篇</span>
+                                    </span>
+                                            <span class="right arrow-icon flex-center">
+                                      <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%87%8F%E5%B0%91%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2"><span class="nav-number">1.</span> <span class="nav-text">如何减少上下文切换</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%81%BF%E5%85%8D%E6%AD%BB%E9%94%81"><span class="nav-number">2.</span> <span class="nav-text">避免死锁</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%9B%86%E7%BE%A4"><span class="nav-number">3.</span> <span class="nav-text">服务器集群</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#volatile"><span class="nav-number">4.</span> <span class="nav-text">volatile</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#CPU%E6%9C%AF%E8%AF%AD"><span class="nav-number">4.1.</span> <span class="nav-text">CPU术语</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E5%8F%AF%E8%A7%81%E6%80%A7"><span class="nav-number">4.2.</span> <span class="nav-text">如何实现可见性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E5%8E%9F%E5%88%99"><span class="nav-number">4.3.</span> <span class="nav-text">实现原则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B%EF%BC%9A%E8%BF%BD%E5%8A%A0%E5%AD%97%E8%8A%82%E6%95%B0%E6%8F%90%E9%AB%98volatile"><span class="nav-number">4.4.</span> <span class="nav-text">案例：追加字节数提高volatile</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Synchronized%E5%8E%9F%E7%90%86"><span class="nav-number">5.</span> <span class="nav-text">Synchronized原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Java%E5%AF%B9%E8%B1%A1%E5%A4%B4"><span class="nav-number">5.1.</span> <span class="nav-text">Java对象头</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%94%81%E7%9A%84%E5%8D%87%E7%BA%A7%E5%92%8C%E5%AF%B9%E6%AF%94"><span class="nav-number">5.2.</span> <span class="nav-text">锁的升级和对比</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%81%8F%E5%90%91%E9%94%81"><span class="nav-number">5.3.</span> <span class="nav-text">偏向锁</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="border-box website-info-box default">
+        
+            <div class="copyright-info info-item default">
+                ©&nbsp;<span>2020</span>&nbsp;-&nbsp;2023
+                
+                    &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">uwupu</a>
+                
+            </div>
+
+            <div class="theme-info info-item default">
+                <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;框架&nbsp;&amp;&nbsp;主題&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a>
+            </div>
+
+            
+
+            
+        
+
+        <div class="count-item info-item default">
+            
+                <span class="count-box border-box word">
+                    <span class="item-type border-box">總字數</span>
+                    <span class="item-value border-box word">161.4k</span>
+                </span>
+            
+
+            
+                <span class="count-box border-box uv">
+                    <span class="item-type border-box">讀者</span>
+                    <span class="item-value border-box uv" id="busuanzi_value_site_uv"></span>
+                </span>
+            
+
+            
+                <span class="count-box border-box pv">
+                    <span class="item-type border-box">閱覽</span>
+                    <span class="item-value border-box pv" id="busuanzi_value_site_pv"></span>
+                </span>
+            
+        </div>
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="tools-list border-box">
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="搜尋..." spellcheck="false" type="search" class="search-input">
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%87%8F%E5%B0%91%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2"><span class="nav-number">1.</span> <span class="nav-text">如何减少上下文切换</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%81%BF%E5%85%8D%E6%AD%BB%E9%94%81"><span class="nav-number">2.</span> <span class="nav-text">避免死锁</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%9B%86%E7%BE%A4"><span class="nav-number">3.</span> <span class="nav-text">服务器集群</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#volatile"><span class="nav-number">4.</span> <span class="nav-text">volatile</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#CPU%E6%9C%AF%E8%AF%AD"><span class="nav-number">4.1.</span> <span class="nav-text">CPU术语</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E5%8F%AF%E8%A7%81%E6%80%A7"><span class="nav-number">4.2.</span> <span class="nav-text">如何实现可见性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E5%8E%9F%E5%88%99"><span class="nav-number">4.3.</span> <span class="nav-text">实现原则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B%EF%BC%9A%E8%BF%BD%E5%8A%A0%E5%AD%97%E8%8A%82%E6%95%B0%E6%8F%90%E9%AB%98volatile"><span class="nav-number">4.4.</span> <span class="nav-text">案例：追加字节数提高volatile</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Synchronized%E5%8E%9F%E7%90%86"><span class="nav-number">5.</span> <span class="nav-text">Synchronized原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Java%E5%AF%B9%E8%B1%A1%E5%A4%B4"><span class="nav-number">5.1.</span> <span class="nav-text">Java对象头</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%94%81%E7%9A%84%E5%8D%87%E7%BA%A7%E5%92%8C%E5%AF%B9%E6%AF%94"><span class="nav-number">5.2.</span> <span class="nav-text">锁的升级和对比</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%81%8F%E5%90%91%E9%94%81"><span class="nav-number">5.3.</span> <span class="nav-text">偏向锁</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+<!-- common -->
+<script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/utils.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/header-shrink.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/back2top.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/dark-light-toggle.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/main.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/libs/anime.min.js"></script>
+
+<!-- local-search -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/local-search.js"></script>
+
+
+<!-- code-block -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/code-block.js"></script>
+
+
+<!-- lazyload -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/lazyload.js"></script>
+
+
+<div class="pjax">
+    
+        <!-- post-helper -->
+        <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/post-helper.js"></script>
+
+        <!-- toc -->
+        
+            <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/toc.js"></script>
+        
+
+        <!-- copyright-info -->
+        
+            <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/copyright-info.js"></script>
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- category-page -->
+    
+
+    <!-- links-page -->
+    
+</div>
+
+<!-- mermaid -->
+
+
+<!-- pjax -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/libs/pjax.min.js"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax'
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            KEEP.utils.pjaxProgressBarStart()
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            KEEP.utils.pjaxProgressBarEnd()
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'))
+            KEEP.initExecute()
+        });
+    });
+</script>
+
+
+
+
+
+
+</body></html>

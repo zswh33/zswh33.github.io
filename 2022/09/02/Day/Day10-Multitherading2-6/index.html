@@ -1,0 +1,836 @@
+<!DOCTYPE html><html lang="zh-Hans"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="一个包含有学习日记的博客">
+    <meta name="author" content="uwupu">
+    
+    <title>
+        
+            Day10 多线程进阶 6 四大函数式接口 Stream流式计算 ForkJoin分支合并 CompletableFuture异步回调 |
+        
+        uwupu 学习日志
+    </title>
+    
+
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+    
+    
+    
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"zswh33.github.io","root":"/","language":"zh-Hans","path":"search.json"}
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":true,"init_open":true,"layout":"right"},"style":{"primary_color":"#F099BC","logo":"/images/logo.svg","favicon":"/images/logo.svg","avatar":"/images/avatar.svg","first_screen":{"enable":false,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"scroll":{"progress_bar":false,"percent":false}},"local_search":{"enable":true,"preload":true},"code_block":{"tools":{"enable":true,"style":"mac"},"highlight_theme":"obsidian"},"pjax":{"enable":true},"lazyload":{"enable":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.21"},"waline":{"server_url":null,"reaction":false,"version":2},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false}},"post":{"author_label":{"enable":true,"auto":false,"custom_label_list":["啦啦啦啦啦"]},"word_count":{"wordcount":true,"min2read":true},"datetime_format":"YYYY-MM-DD HH:mm","copyright_info":true,"share":false,"reward":{"enable":false,"img_link":null,"text":null}},"website_count":{"busuanzi_count":{"enable":true,"site_uv":true,"site_pv":true,"page_pv":true}},"version":"3.8.6"}
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
+    KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
+    KEEP.language_copy_copyright = {"copy":"Copy copyright info","copied":"Copied","title":"Original article title","author":"Original article author","link":"Original article link"}
+  </script>
+<meta name="generator" content="Hexo 6.2.0"><link rel="alternate" href="/atom.xml" title="uwupu Blog" type="application/atom+xml">
+<script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/fontawesome.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/regular.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/solid.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/brands.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/fontawesome.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/regular.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/solid.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/brands.min.css"></noscript></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <i class="pjax-progress-icon fas fa-circle-notch fa-spin"></i>
+    
+</div>
+
+
+<main class="page-container border-box">
+
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.svg">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               uwupu 学习日志
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class="" href="/">
+                                首頁
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/archives">
+                                歸檔
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/tags">
+                                標籤
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/categories">
+                                分類
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/links">
+                                友鏈
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/about">
+                                關於
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/">首頁</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/archives">歸檔</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/tags">標籤</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/categories">分類</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/links">友鏈</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/about">關於</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+
+                
+
+                    <div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+
+        <div class="article-content-container border-box">
+
+            
+
+            <div class="article-content-bottom border-box">
+                
+                    <div class="article-title">
+                        Day10 多线程进阶 6 四大函数式接口 Stream流式计算 ForkJoin分支合并 CompletableFuture异步回调
+                    </div>
+                
+
+                
+                    <div class="article-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/avatar.svg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author">
+                                <span class="name">uwupu</span>
+                                
+                                    <span class="author-label">啦啦啦啦啦</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="article-meta-info-container border-box post">
+    <div class="article-meta-info border-box">
+        
+
+
+        
+            <span class="meta-info-item article-create-date">
+                <i class="icon fa-solid fa-calendar-check"></i>&nbsp;
+                <span class="pc">2022-09-02 16:41</span>
+                <span class="mobile">2022-09-02 16:41</span>
+            </span>
+
+            <span class="meta-info-item article-update-date">
+                <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                <span class="pc" data-updated="Fri Nov 10 2023 23:09:24 GMT+0800">2023-11-10 23:09</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item article-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="article-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/Day/">Day</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="article-tag meta-info-item border-box">
+                <i class="icon fas fa-tags"></i>&nbsp;
+                <ul class="article-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Java/">Java</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+            <span class="meta-info-item article-wordcount">
+                <i class="icon fas fa-file-word"></i>&nbsp;<span>2.7k 字數</span>
+            </span>
+        
+        
+            <span class="meta-info-item article-min2read">
+                <i class="icon fas fa-clock"></i>&nbsp;<span>12 分鐘</span>
+            </span>
+        
+        
+            <span class="meta-info-item article-pv">
+                <i class="icon fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="article-content keep-markdown-body">
+                    
+
+                    <h1 id="四大函数式接口"><a href="#四大函数式接口" class="headerlink" title="四大函数式接口"></a>四大函数式接口</h1><blockquote>
+<p>函数式接口</p>
+</blockquote>
+<p>只有一个方法的接口。</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//例 Callable接口</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Callable</span>&lt;V&gt; {</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Computes a result, or throws an exception if unable to do so.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> computed result</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> Exception if unable to compute a result</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    V <span class="title function_">call</span><span class="params">()</span> <span class="keyword">throws</span> Exception;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="Function函数式接口"><a href="#Function函数式接口" class="headerlink" title="Function函数式接口"></a>Function函数式接口</h2><p>Function接口可以将一个函数变成一个变量。</p>
+<p>Function可以用来写工具类，泛型参数里，第一个为传入类型，第二个为返回类型。</p>
+<blockquote>
+<p>源码</p>
+</blockquote>
+<p><img lazyload="" alt="image" data-src="/Day10-Multitherading2-6/image-20220902171032827.png"></p>
+<blockquote>
+<p>使用</p>
+</blockquote>
+<p>基本用法（不常用的用法）：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Demo21_Function</span> {</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> {</span><br><span class="line">        <span class="comment">//Function可以用来写工具类，泛型参数里，第一个为传入类型，第二个为返回类型。</span></span><br><span class="line">        <span class="comment">//这里写一个工具类用于演示：返回输入整数+1。</span></span><br><span class="line">        Function&lt;Integer,Integer&gt; function_plus1 = <span class="keyword">new</span> <span class="title class_">Function</span>&lt;Integer,Integer&gt;() {</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> Integer <span class="title function_">apply</span><span class="params">(Integer o)</span> {</span><br><span class="line">                <span class="keyword">return</span> o+<span class="number">1</span>;</span><br><span class="line">            }</span><br><span class="line">        };</span><br><span class="line">        System.out.println(function_plus1.apply(<span class="number">123</span>));</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>常用用法：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Demo21_Function</span> {</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> {</span><br><span class="line">        <span class="comment">//Function可以用来写工具类，泛型参数里，第一个为传入类型，第二个为返回类型。</span></span><br><span class="line">        <span class="comment">//这里写一个工具类用于演示：返回输入整数+1。</span></span><br><span class="line">        Function&lt;Integer,Integer&gt; function_plus1 = (in)-&gt;{<span class="keyword">return</span> (<span class="type">int</span>)in+<span class="number">1</span>;};</span><br><span class="line">        System.out.println(function_plus1.apply(<span class="number">123</span>));</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>创建一个Function的引用，然后将一个lambda表达式的函数传值给引用；</p>
+<p>调用使用方法<code>apply(参数)</code>,返回值为lambda表达式的返回值。</p>
+<h2 id="Predicate断定型接口"><a href="#Predicate断定型接口" class="headerlink" title="Predicate断定型接口"></a>Predicate断定型接口</h2><p>不同于Function，Predicate定义的函数只能返回<code>boolean</code>值，输入参数不限。</p>
+<blockquote>
+<p>代码</p>
+</blockquote>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Demo22_Predicate</span> {</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> {</span><br><span class="line">        <span class="comment">//Predicate也是一个函数式接口，不同的是：Predicate创建的函数只能返回boolean类型。</span></span><br><span class="line">        <span class="comment">//泛型参数为输入参数类型。</span></span><br><span class="line">        <span class="comment">//当前代码：判断字符串是否为空。</span></span><br><span class="line">        Predicate&lt;String&gt; predicate_isEmpty = (string)-&gt;{<span class="keyword">return</span> string.isEmpty();};</span><br><span class="line">        System.out.println(predicate_isEmpty.test(<span class="string">"asdqwe"</span>));</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">false</span><br><span class="line"></span><br><span class="line">Process finished with exit code 0</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="Consumer消费型接口"><a href="#Consumer消费型接口" class="headerlink" title="Consumer消费型接口"></a>Consumer消费型接口</h2><p>功能上与函数式接口基本一致。</p>
+<p>特点：只有输入，没有返回值。</p>
+<blockquote>
+<p>代码</p>
+</blockquote>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Demo23_Consumer</span> {</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> {</span><br><span class="line">        <span class="comment">//Consumer消费型接口，只有输入没有返回值。</span></span><br><span class="line">        <span class="comment">//这里写一个：输出字符串。</span></span><br><span class="line">        Consumer&lt;String&gt; consumer = (str)-&gt;{System.out.println(str);};</span><br><span class="line">        consumer.accept(<span class="string">"张三李四"</span>);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>使用方法<code>accept(参数)</code>使用该接口的实现对象。</p>
+<h2 id="Supplier供给型接口"><a href="#Supplier供给型接口" class="headerlink" title="Supplier供给型接口"></a>Supplier供给型接口</h2><p><em>“功能上与函数式接口基本一致。”</em></p>
+<p>特点：没有输入，只有返回值。</p>
+<blockquote>
+<p>源码</p>
+</blockquote>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Supplier</span>&lt;T&gt; {</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Gets a result.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> a result</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    T <span class="title function_">get</span><span class="params">()</span>;<span class="comment">//没有参数，只有返回值</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p>代码/使用</p>
+</blockquote>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Supplier供给型接口：没有参数，只有返回值。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Demo24_Supplies</span> {</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> {</span><br><span class="line">        <span class="comment">//这里写一个：只会返回1024的函数。</span></span><br><span class="line">        Supplier&lt;Integer&gt; supplier = <span class="keyword">new</span> <span class="title class_">Supplier</span>&lt;Integer&gt;() {</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> Integer <span class="title function_">get</span><span class="params">()</span> {</span><br><span class="line">                System.out.println(<span class="string">"get!"</span>);</span><br><span class="line">                <span class="keyword">return</span> <span class="number">1024</span>;</span><br><span class="line">            }</span><br><span class="line">        };</span><br><span class="line">        System.out.println(supplier.get());</span><br><span class="line"></span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>使用<code>get()</code>方法执行函数。</p>
+<blockquote>
+<p>代码 简化</p>
+</blockquote>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Demo24_Supplies</span> {</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> {</span><br><span class="line">        <span class="comment">//这里写一个：只会返回1024的函数。</span></span><br><span class="line">        Supplier&lt;Integer&gt; supplier = ()-&gt;{<span class="keyword">return</span> <span class="number">1024</span>;};</span><br><span class="line">        System.out.println(supplier.get());</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="Stream流式计算"><a href="#Stream流式计算" class="headerlink" title="Stream流式计算"></a>Stream流式计算</h1><p><em>java.util.stream</em></p>
+<p>大数据时代，无非就是：<strong>存储 + 计算</strong></p>
+<p>比如：MySQL、Java集合等本质是用来存储东西的。</p>
+<p><strong>Stream流式计算</strong>就是用来<strong>计算</strong>。</p>
+<blockquote>
+<p>一个题目</p>
+<p>用一行代码实现：</p>
+<p>现在有5个用户，要求筛选出：</p>
+<ol>
+<li>ID必须是偶数</li>
+<li>年龄必须大于23岁</li>
+<li>用户名转为大写字母</li>
+<li>用户名字母倒着排序</li>
+<li>只输出一个用户</li>
+</ol>
+</blockquote>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Demo26_Stream</span>流式计算引入_一道题 {</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 用一行代码实现：</span></span><br><span class="line"><span class="comment">     * 现在有5个用户，要求筛选出：</span></span><br><span class="line"><span class="comment">     * 1. ID必须是偶数</span></span><br><span class="line"><span class="comment">     * 2. 年龄必须大于23岁</span></span><br><span class="line"><span class="comment">     * 3. 用户名转为大写字母</span></span><br><span class="line"><span class="comment">     * 4. 用户名字母倒着排序</span></span><br><span class="line"><span class="comment">     * 5. 只输出一个用户</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> {</span><br><span class="line">        <span class="type">User</span> <span class="variable">u1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">User</span>(<span class="number">1</span>,<span class="string">"a"</span>,<span class="number">21</span>);</span><br><span class="line">        <span class="type">User</span> <span class="variable">u2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">User</span>(<span class="number">2</span>,<span class="string">"b"</span>,<span class="number">22</span>);</span><br><span class="line">        <span class="type">User</span> <span class="variable">u3</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">User</span>(<span class="number">3</span>,<span class="string">"c"</span>,<span class="number">23</span>);</span><br><span class="line">        <span class="type">User</span> <span class="variable">u4</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">User</span>(<span class="number">4</span>,<span class="string">"d"</span>,<span class="number">24</span>);</span><br><span class="line">        <span class="type">User</span> <span class="variable">u5</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">User</span>(<span class="number">6</span>,<span class="string">"e"</span>,<span class="number">25</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//集合用于存储</span></span><br><span class="line">        List&lt;User&gt; userList = Arrays.asList(u1,u2,u3,u4,u5);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//流用于计算</span></span><br><span class="line">        userList.stream()</span><br><span class="line">                .filter(u-&gt;{<span class="keyword">return</span> u.getId()%<span class="number">2</span>==<span class="number">0</span>;})<span class="comment">//ID为偶数</span></span><br><span class="line">                .filter(u-&gt;{<span class="keyword">return</span> u.getAge()&gt;<span class="number">23</span>;})<span class="comment">//年龄大于23</span></span><br><span class="line">                .map(u-&gt;{<span class="keyword">return</span> u.getName().toUpperCase();})<span class="comment">//名字大写</span></span><br><span class="line">                .sorted((uu1,uu2)-&gt;{<span class="keyword">return</span> uu2.compareTo(uu1);})<span class="comment">//逆序</span></span><br><span class="line">                .limit(<span class="number">1</span>)<span class="comment">//输出1个</span></span><br><span class="line">                .forEach(System.out::println);</span><br><span class="line">        <span class="comment">//Lambda表达式、链式编程、函数式接口、Stream流式计算</span></span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">}</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">User</span>{</span><br><span class="line">    <span class="type">int</span> id;</span><br><span class="line">    String name;</span><br><span class="line">    <span class="type">int</span> age;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">User</span><span class="params">(<span class="type">int</span> id, String name, <span class="type">int</span> age)</span> {</span><br><span class="line">        <span class="built_in">this</span>.id = id;</span><br><span class="line">        <span class="built_in">this</span>.name = name;</span><br><span class="line">        <span class="built_in">this</span>.age = age;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">getId</span><span class="params">()</span> {</span><br><span class="line">        <span class="keyword">return</span> id;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setId</span><span class="params">(<span class="type">int</span> id)</span> {</span><br><span class="line">        <span class="built_in">this</span>.id = id;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">getName</span><span class="params">()</span> {</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setName</span><span class="params">(String name)</span> {</span><br><span class="line">        <span class="built_in">this</span>.name = name;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">getAge</span><span class="params">()</span> {</span><br><span class="line">        <span class="keyword">return</span> age;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setAge</span><span class="params">(<span class="type">int</span> age)</span> {</span><br><span class="line">        <span class="built_in">this</span>.age = age;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">toString</span><span class="params">()</span> {</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"User{"</span> +</span><br><span class="line">                <span class="string">"id="</span> + id +</span><br><span class="line">                <span class="string">", name='"</span> + name + <span class="string">'\''</span> +</span><br><span class="line">                <span class="string">", age="</span> + age +</span><br><span class="line">                <span class="string">'}'</span>;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p><em>好像没有说明Stream流式计算是什么？！</em></p>
+<p>dig hole…</p>
+<h1 id="ForkJoin-分支合并"><a href="#ForkJoin-分支合并" class="headerlink" title="ForkJoin 分支合并"></a>ForkJoin 分支合并</h1><p><em>起源于JDK1.7</em></p>
+<blockquote>
+<p>介绍</p>
+</blockquote>
+<p>是一个<strong>分而治之</strong>的任务框架。</p>
+<p>使用场景：一个任务需要多线程执行，分割成很多块计算的时候，使用ForkJoin方法。</p>
+<p>ForkJoin的作用：对于大数据量计算，用于提高效率。</p>
+<blockquote>
+<p>特点</p>
+</blockquote>
+<p><strong>动态规范</strong>：和分而治之不同的是，任务分割的每个小任务之间互相联系。</p>
+<p><strong>工作密取（<del>工作窃取</del>）：</strong>分割了每个任务之后，若某个线程提前完成了任务，就会去其他线程偷取任务来完成，加快执行效率。同时，第一个分配的线程从队列的头部拿取任务，当完成任务的线程后去其他队列拿任务时候是从尾部拿任务。</p>
+<blockquote>
+<p>使用</p>
+</blockquote>
+<p>Hole…</p>
+<h1 id="异步回调"><a href="#异步回调" class="headerlink" title="异步回调"></a>异步回调</h1><p><em>类似ajax，将Java的线程创建过程包装，使创建线程更加方便。缺点是远离了底层，减少了手动优化的机会。</em></p>
+<h2 id="CompletableFuture类"><a href="#CompletableFuture类" class="headerlink" title="CompletableFuture类"></a>CompletableFuture类</h2><h3 id="API"><a href="#API" class="headerlink" title="API"></a>API</h3><table>
+<thead>
+<tr>
+<th>API</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>static  runAsync(Runnable runnable)</td>
+<td>创建一个无返回值的异步回调。</td>
+</tr>
+<tr>
+<td>static  supplyAsync(Supplier<u> supplier)</u></td>
+<td>创建一个有返回值的异步回调</td>
+</tr>
+<tr>
+<td>whenComplete(BiConsumer&lt;? super T, ? super Throwable&gt; action)</td>
+<td>为CompletableFuture对象的异步回调添加<strong>运行结束</strong>时要执行的操作。T为运行成功返回的结果，运行失败为null。Throwable为运行失败的错误信息，成功为null（运行失败指抛出异常或其他错误）。action为BiConsumer对象，用于使用参数和添加回调方法。返回值为CompletableFuture对象，可以使用链式编程。</td>
+</tr>
+<tr>
+<td>exceptionally(Function&lt;Throwable, ? extends T&gt; fn)</td>
+<td>为CompletableFuture对象的异步回调添加<strong>出现异常</strong>时要执行的操作。T为抛出的异常。fn为要执行的操作。</td>
+</tr>
+<tr>
+<td>get()</td>
+<td>使用runAsync()或supplyAsync()方法后，会返回一个CompletableFuture对象，可以使用get()方法获取异步回调的返回值。若线程未运行结束，则会阻塞当前线程等待运行结束。runAsync()的返回值为Void(无返回值)，supplyAsync()返回值由输入指定。</td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+</tr>
+</tbody></table>
+<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><blockquote>
+<p>runAsync()和supplyAsyn()</p>
+</blockquote>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 异步调用：CompletableFuture</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Demo28_Future</span> {</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> ExecutionException, InterruptedException {</span><br><span class="line">        <span class="comment">// 发起一个请求</span></span><br><span class="line">        <span class="comment">// runAsync() 没有返回值的异步回调</span></span><br><span class="line">        CompletableFuture&lt;Void&gt; completableFuture = CompletableFuture.runAsync(()-&gt;{</span><br><span class="line">            <span class="keyword">try</span> {</span><br><span class="line">                TimeUnit.SECONDS.sleep(<span class="number">2</span>);</span><br><span class="line">            } <span class="keyword">catch</span> (InterruptedException e) {</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            }</span><br><span class="line">            System.out.println(Thread.currentThread().getName()+<span class="string">" ok"</span>);</span><br><span class="line">        });</span><br><span class="line">        System.out.println(<span class="string">"等待runAsync异步请求的结果...."</span>);</span><br><span class="line">        completableFuture.get();<span class="comment">//获取</span></span><br><span class="line">        <span class="comment">//supplyAsync 有返回值的异步回调</span></span><br><span class="line">        CompletableFuture&lt;String&gt; completableFuture2 = CompletableFuture.supplyAsync(()-&gt;{</span><br><span class="line">            System.out.println(Thread.currentThread().getName()+<span class="string">" supplyAsync异步回调"</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="string">"今天吃Obsidian"</span>;</span><br><span class="line">        });</span><br><span class="line">        System.out.println(<span class="string">"等待supplyAsync异步请求的结果....."</span>);</span><br><span class="line">        System.out.println(<span class="string">"supplyAsync异步请求的结果："</span>+completableFuture2.get());</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p>supplyAsync()下的whenComplete()和exceptionally()</p>
+</blockquote>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 异步调用：CompletableFuture</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Demo28_Future2</span> {</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> ExecutionException, InterruptedException {</span><br><span class="line">        <span class="comment">//supplyAsync 有返回值的异步回调,包括成功、失败的回调。</span></span><br><span class="line">        CompletableFuture&lt;String&gt; completableFuture2 = CompletableFuture.supplyAsync(()-&gt;{</span><br><span class="line">            System.out.println(Thread.currentThread().getName()+<span class="string">" supplyAsync异步回调"</span>);</span><br><span class="line">            <span class="type">int</span> <span class="variable">t</span> <span class="operator">=</span> <span class="number">10</span>/<span class="number">0</span>;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">"今天吃Obsidian"</span>;</span><br><span class="line">        });</span><br><span class="line">        completableFuture2.whenComplete((t,u)-&gt;{</span><br><span class="line">            System.out.println(</span><br><span class="line">                    <span class="string">"事件完成："</span> +</span><br><span class="line">                            t+   <span class="comment">//成功时，为正确的返回值，失败时为null</span></span><br><span class="line">                            <span class="string">" "</span>+u <span class="comment">//失败时，为错误信息，成功时为null</span></span><br><span class="line">            );</span><br><span class="line">        }).exceptionally((e)-&gt;{</span><br><span class="line">            System.out.println(e);<span class="comment">//异常时，打印异常信息</span></span><br><span class="line">            <span class="keyword">return</span> <span class="string">"今天不吃Obsidian."</span>;</span><br><span class="line">        });</span><br><span class="line">        System.out.println(<span class="string">"等待supplyAsync异步请求的结果....."</span>);</span><br><span class="line">        System.out.println(<span class="string">"supplyAsync异步请求的结果："</span>+completableFuture2.get());</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><h2 id="forEach-使用"><a href="#forEach-使用" class="headerlink" title="forEach()使用"></a><code>forEach()</code>使用</h2><p>代码：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; list = Arrays.asList(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>);</span><br><span class="line">list.forEach((d)-&gt;{</span><br><span class="line">    System.out.print(d);</span><br><span class="line">});</span><br></pre></td></tr></tbody></table></figure>
+
+<p>输出：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">123456</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="lambda代码简化"><a href="#lambda代码简化" class="headerlink" title="lambda代码简化"></a>lambda代码简化</h2><p>原本：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Consumer&lt;String&gt; consumer = <span class="keyword">new</span> <span class="title class_">Consumer</span>&lt;String&gt;() {</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">accept</span><span class="params">(String s)</span> {</span><br><span class="line">        System.out.println(s);</span><br><span class="line">    }</span><br><span class="line">};</span><br></pre></td></tr></tbody></table></figure>
+
+<p>简化1：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Consumer&lt;String&gt; consumer = (str)-&gt;{System.out.println(str);};</span><br></pre></td></tr></tbody></table></figure>
+
+<p>简化2：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Consumer&lt;String&gt; consumer = System.out::println;</span><br></pre></td></tr></tbody></table></figure>
+
+
+
+<p>当lambda代码块中<strong>只有一个方法</strong>，且<strong>方法的参数和lambda表达式的参数一致</strong>，才可以使用。</p>
+<h2 id="枚举enum"><a href="#枚举enum" class="headerlink" title="枚举enum"></a>枚举enum</h2><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Demo25_</span>枚举 {</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> {</span><br><span class="line">        <span class="type">Animal</span> <span class="variable">animal</span> <span class="operator">=</span> Animal.cat;</span><br><span class="line">        System.out.println(animal);</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"><span class="keyword">enum</span> <span class="title class_">Animal</span>{</span><br><span class="line">    pig,cat,dog</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="三种方法的求和计算"><a href="#三种方法的求和计算" class="headerlink" title="三种方法的求和计算"></a>三种方法的求和计算</h1><blockquote>
+<p>代码</p>
+</blockquote>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 任务：求和计算</span></span><br><span class="line"><span class="comment"> * 方法：</span></span><br><span class="line"><span class="comment"> * 1. 1000000000.for</span></span><br><span class="line"><span class="comment"> * 2. ForkJoin</span></span><br><span class="line"><span class="comment"> * 3. Stream并行流</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Demo27_</span>求和计算三种方法 {</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception {</span><br><span class="line">        <span class="comment">//基本方法</span></span><br><span class="line">        System.out.println(<span class="string">"sum="</span>+ProgramTime.get(()-&gt;{</span><br><span class="line">            <span class="type">long</span> <span class="variable">sum</span> <span class="operator">=</span> <span class="number">0L</span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">long</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt;= <span class="number">9_0000_0000</span>; i++) {</span><br><span class="line">                sum += i;</span><br><span class="line">            }</span><br><span class="line">            <span class="keyword">return</span> sum;</span><br><span class="line">        }));</span><br><span class="line">        System.out.println(<span class="string">"==================="</span>);</span><br><span class="line">        TimeUnit.SECONDS.sleep(<span class="number">1</span>);</span><br><span class="line">        <span class="comment">//ForkJoin方法</span></span><br><span class="line">        System.out.println(<span class="string">"sum="</span>+ProgramTime.get(()-&gt;{</span><br><span class="line">            <span class="type">ForkJoinPool</span> <span class="variable">forkJoinPool</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ForkJoinPool</span>();</span><br><span class="line">            ForkJoinTask&lt;Long&gt; task = <span class="keyword">new</span> <span class="title class_">ForkJoinDemo</span>(<span class="number">0l</span>,<span class="number">9_0000_0000l</span>);</span><br><span class="line">            ForkJoinTask&lt;Long&gt; sumbit = forkJoinPool.submit(task);</span><br><span class="line">            <span class="keyword">return</span> sumbit.get();</span><br><span class="line">        }));</span><br><span class="line">        System.out.println(<span class="string">"==================="</span>);</span><br><span class="line">        TimeUnit.SECONDS.sleep(<span class="number">1</span>);</span><br><span class="line">        <span class="comment">//Stream并行流方法</span></span><br><span class="line">        System.out.println(<span class="string">"sum="</span>+ProgramTime.get(()-&gt;{</span><br><span class="line">            <span class="keyword">return</span> LongStream.rangeClosed(<span class="number">0l</span>,<span class="number">9_0000_0000l</span>)</span><br><span class="line">                    .parallel()</span><br><span class="line">                    .reduce(<span class="number">0</span>,Long::sum);</span><br><span class="line">        }));</span><br><span class="line">        System.out.println(<span class="string">"==================="</span>);</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ProgramTime</span>&lt;T&gt;{</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">long</span> <span class="title function_">get</span><span class="params">(Callable&lt;Long&gt; fun)</span> <span class="keyword">throws</span> Exception {</span><br><span class="line">        <span class="type">long</span> rs;</span><br><span class="line">        <span class="type">long</span> <span class="variable">start</span> <span class="operator">=</span> System.currentTimeMillis();</span><br><span class="line">        rs = fun.call();</span><br><span class="line">        <span class="type">long</span> <span class="variable">end</span> <span class="operator">=</span> System.currentTimeMillis();</span><br><span class="line">        System.out.println(<span class="string">"执行了时间："</span>+(end-start));</span><br><span class="line">        <span class="keyword">return</span> rs;</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ForkJoinDemo</span> <span class="keyword">extends</span> <span class="title class_">RecursiveTask</span>&lt;Long&gt; {</span><br><span class="line">    <span class="keyword">private</span> Long start;</span><br><span class="line">    <span class="keyword">private</span> Long end;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="type">Long</span> <span class="variable">temp</span> <span class="operator">=</span> <span class="number">10000L</span>;<span class="comment">//临界值</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">ForkJoinDemo</span><span class="params">(Long start, Long end)</span> {</span><br><span class="line">        <span class="built_in">this</span>.start = start;</span><br><span class="line">        <span class="built_in">this</span>.end = end;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> Long <span class="title function_">compute</span><span class="params">()</span> {</span><br><span class="line">        <span class="keyword">if</span> (end - start &lt; temp) {<span class="comment">//若计算范围小于10000，就用普通方式计算</span></span><br><span class="line">            <span class="type">long</span> <span class="variable">sum</span> <span class="operator">=</span> <span class="number">0L</span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">long</span> <span class="variable">i</span> <span class="operator">=</span> start; i &lt;= end; i++) {</span><br><span class="line">                sum += i;</span><br><span class="line">            }</span><br><span class="line"><span class="comment">//            System.out.println(sum);</span></span><br><span class="line">            <span class="keyword">return</span> sum;</span><br><span class="line">        } <span class="keyword">else</span> {</span><br><span class="line">            <span class="comment">//ForkJoin 分支合并计算</span></span><br><span class="line">            <span class="type">long</span> <span class="variable">mid</span> <span class="operator">=</span> (start + end) / <span class="number">2</span>;<span class="comment">//中间值</span></span><br><span class="line">            <span class="type">ForkJoinDemo</span> <span class="variable">task1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ForkJoinDemo</span>(start, mid);</span><br><span class="line">            task1.fork();<span class="comment">//拆分任务，把任务放入线程队列</span></span><br><span class="line"><span class="comment">//            System.out.println("qwe");</span></span><br><span class="line">            <span class="type">ForkJoinDemo</span> <span class="variable">task2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ForkJoinDemo</span>((mid + <span class="number">1</span>), end);</span><br><span class="line">            task2.fork();<span class="comment">//后半部分</span></span><br><span class="line"><span class="comment">//            System.out.println("asd");</span></span><br><span class="line">            <span class="keyword">return</span> task1.join() + task2.join();</span><br><span class="line"></span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p>输出</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">执行了时间：434</span><br><span class="line">sum=405000000450000000</span><br><span class="line">===================</span><br><span class="line">执行了时间：253</span><br><span class="line">sum=405000000450000000</span><br><span class="line">===================</span><br><span class="line">执行了时间：128</span><br><span class="line">sum=405000000450000000</span><br><span class="line">===================</span><br><span class="line"></span><br><span class="line">Process finished with exit code 0</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+
+                </div>
+
+                
+                        
+<div class="article-copyright-info-container border-box">
+    <div class="copyright-info-content border-box">
+        <div class="copyright-info-top border-box">
+            <div class="post-title border-box text-ellipsis">
+                Day10 多线程进阶 6 四大函数式接口 Stream流式计算 ForkJoin分支合并 CompletableFuture异步回调
+            </div>
+
+            <div class="post-link border-box text-ellipsis">
+                2022/09/02/Day/Day10-Multitherading2-6/
+            </div>
+        </div>
+
+        <div class="copyright-info-bottom border-box">
+            <div class="post-author bottom-item">
+                <div class="type">
+                    作者
+                </div>
+                <div class="content">uwupu</div>
+            </div>
+
+            <div class="post-time bottom-item">
+                <div class="type">
+                    發布于
+                </div>
+                <div class="content">2022-09-02 16:41</div>
+            </div>
+
+
+            <div class="post-license bottom-item">
+                <div class="type">
+                    許可
+                </div>
+                <div class="content tooltip" data-tooltip-content="CC BY-NC-SA 4.0">
+                    <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed">
+                        <i class="fa-brands fa-creative-commons"></i>
+                        <i class="fa-brands fa-creative-commons-by"></i>
+                        <i class="fa-brands fa-creative-commons-nc"></i>
+                        <i class="fa-brands fa-creative-commons-sa"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <i class="copyright-bg fa-solid fa-copyright"></i>
+    </div>
+    <div class="copy-copyright-info flex-center tooltip" data-tooltip-content="復製版權信息" data-tooltip-offset-y="-2px">
+        <i class="fa-solid fa-copy"></i>
+    </div>
+</div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Java/">Java</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="article-nav">
+                        
+                            <div class="article-prev">
+                                <a class="prev" rel="prev" href="/2022/09/03/Day/Day11-Multithreading2-7/" title="Day11 多线程进阶 7 JMM Volatile">
+                                    <span class="left arrow-icon flex-center">
+                                      <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                            <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Day11 多线程进阶 7 JMM Volatile</span>
+                                        <span class="post-nav-item">上一篇</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="article-next">
+                                <a class="next" rel="next" href="/2022/09/01/Day/Day9-Multithreading2-5/" title="Day9 多线程进阶 5 读写锁 阻塞队列 同步队列 线程池">
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Day9 多线程进阶 5 读写锁 阻塞队列 同步队列 线程池</span>
+                                        <span class="post-nav-item">下一篇</span>
+                                    </span>
+                                            <span class="right arrow-icon flex-center">
+                                      <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%9B%E5%A4%A7%E5%87%BD%E6%95%B0%E5%BC%8F%E6%8E%A5%E5%8F%A3"><span class="nav-number">1.</span> <span class="nav-text">四大函数式接口</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Function%E5%87%BD%E6%95%B0%E5%BC%8F%E6%8E%A5%E5%8F%A3"><span class="nav-number">1.1.</span> <span class="nav-text">Function函数式接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Predicate%E6%96%AD%E5%AE%9A%E5%9E%8B%E6%8E%A5%E5%8F%A3"><span class="nav-number">1.2.</span> <span class="nav-text">Predicate断定型接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Consumer%E6%B6%88%E8%B4%B9%E5%9E%8B%E6%8E%A5%E5%8F%A3"><span class="nav-number">1.3.</span> <span class="nav-text">Consumer消费型接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Supplier%E4%BE%9B%E7%BB%99%E5%9E%8B%E6%8E%A5%E5%8F%A3"><span class="nav-number">1.4.</span> <span class="nav-text">Supplier供给型接口</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Stream%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97"><span class="nav-number">2.</span> <span class="nav-text">Stream流式计算</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ForkJoin-%E5%88%86%E6%94%AF%E5%90%88%E5%B9%B6"><span class="nav-number">3.</span> <span class="nav-text">ForkJoin 分支合并</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%82%E6%AD%A5%E5%9B%9E%E8%B0%83"><span class="nav-number">4.</span> <span class="nav-text">异步回调</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#CompletableFuture%E7%B1%BB"><span class="nav-number">4.1.</span> <span class="nav-text">CompletableFuture类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#API"><span class="nav-number">4.1.1.</span> <span class="nav-text">API</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81"><span class="nav-number">4.1.2.</span> <span class="nav-text">代码</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">5.</span> <span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#forEach-%E4%BD%BF%E7%94%A8"><span class="nav-number">5.1.</span> <span class="nav-text">forEach()使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lambda%E4%BB%A3%E7%A0%81%E7%AE%80%E5%8C%96"><span class="nav-number">5.2.</span> <span class="nav-text">lambda代码简化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9E%9A%E4%B8%BEenum"><span class="nav-number">5.3.</span> <span class="nav-text">枚举enum</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89%E7%A7%8D%E6%96%B9%E6%B3%95%E7%9A%84%E6%B1%82%E5%92%8C%E8%AE%A1%E7%AE%97"><span class="nav-number">6.</span> <span class="nav-text">三种方法的求和计算</span></a></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="border-box website-info-box default">
+        
+            <div class="copyright-info info-item default">
+                ©&nbsp;<span>2020</span>&nbsp;-&nbsp;2023
+                
+                    &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">uwupu</a>
+                
+            </div>
+
+            <div class="theme-info info-item default">
+                <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;框架&nbsp;&amp;&nbsp;主題&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a>
+            </div>
+
+            
+
+            
+        
+
+        <div class="count-item info-item default">
+            
+                <span class="count-box border-box word">
+                    <span class="item-type border-box">總字數</span>
+                    <span class="item-value border-box word">161.4k</span>
+                </span>
+            
+
+            
+                <span class="count-box border-box uv">
+                    <span class="item-type border-box">讀者</span>
+                    <span class="item-value border-box uv" id="busuanzi_value_site_uv"></span>
+                </span>
+            
+
+            
+                <span class="count-box border-box pv">
+                    <span class="item-type border-box">閱覽</span>
+                    <span class="item-value border-box pv" id="busuanzi_value_site_pv"></span>
+                </span>
+            
+        </div>
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="tools-list border-box">
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="搜尋..." spellcheck="false" type="search" class="search-input">
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%9B%E5%A4%A7%E5%87%BD%E6%95%B0%E5%BC%8F%E6%8E%A5%E5%8F%A3"><span class="nav-number">1.</span> <span class="nav-text">四大函数式接口</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Function%E5%87%BD%E6%95%B0%E5%BC%8F%E6%8E%A5%E5%8F%A3"><span class="nav-number">1.1.</span> <span class="nav-text">Function函数式接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Predicate%E6%96%AD%E5%AE%9A%E5%9E%8B%E6%8E%A5%E5%8F%A3"><span class="nav-number">1.2.</span> <span class="nav-text">Predicate断定型接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Consumer%E6%B6%88%E8%B4%B9%E5%9E%8B%E6%8E%A5%E5%8F%A3"><span class="nav-number">1.3.</span> <span class="nav-text">Consumer消费型接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Supplier%E4%BE%9B%E7%BB%99%E5%9E%8B%E6%8E%A5%E5%8F%A3"><span class="nav-number">1.4.</span> <span class="nav-text">Supplier供给型接口</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Stream%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97"><span class="nav-number">2.</span> <span class="nav-text">Stream流式计算</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ForkJoin-%E5%88%86%E6%94%AF%E5%90%88%E5%B9%B6"><span class="nav-number">3.</span> <span class="nav-text">ForkJoin 分支合并</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%82%E6%AD%A5%E5%9B%9E%E8%B0%83"><span class="nav-number">4.</span> <span class="nav-text">异步回调</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#CompletableFuture%E7%B1%BB"><span class="nav-number">4.1.</span> <span class="nav-text">CompletableFuture类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#API"><span class="nav-number">4.1.1.</span> <span class="nav-text">API</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81"><span class="nav-number">4.1.2.</span> <span class="nav-text">代码</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">5.</span> <span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#forEach-%E4%BD%BF%E7%94%A8"><span class="nav-number">5.1.</span> <span class="nav-text">forEach()使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lambda%E4%BB%A3%E7%A0%81%E7%AE%80%E5%8C%96"><span class="nav-number">5.2.</span> <span class="nav-text">lambda代码简化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9E%9A%E4%B8%BEenum"><span class="nav-number">5.3.</span> <span class="nav-text">枚举enum</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89%E7%A7%8D%E6%96%B9%E6%B3%95%E7%9A%84%E6%B1%82%E5%92%8C%E8%AE%A1%E7%AE%97"><span class="nav-number">6.</span> <span class="nav-text">三种方法的求和计算</span></a></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+<!-- common -->
+<script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/utils.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/header-shrink.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/back2top.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/dark-light-toggle.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/main.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/libs/anime.min.js"></script>
+
+<!-- local-search -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/local-search.js"></script>
+
+
+<!-- code-block -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/code-block.js"></script>
+
+
+<!-- lazyload -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/lazyload.js"></script>
+
+
+<div class="pjax">
+    
+        <!-- post-helper -->
+        <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/post-helper.js"></script>
+
+        <!-- toc -->
+        
+            <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/toc.js"></script>
+        
+
+        <!-- copyright-info -->
+        
+            <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/copyright-info.js"></script>
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- category-page -->
+    
+
+    <!-- links-page -->
+    
+</div>
+
+<!-- mermaid -->
+
+
+<!-- pjax -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/libs/pjax.min.js"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax'
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            KEEP.utils.pjaxProgressBarStart()
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            KEEP.utils.pjaxProgressBarEnd()
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'))
+            KEEP.initExecute()
+        });
+    });
+</script>
+
+
+
+
+
+
+</body></html>

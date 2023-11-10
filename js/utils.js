@@ -1,46 +1,667 @@
-function debounce(func, wait, immediate) {
-  var timeout
-  return function () {
-    var context = this
-    var args = arguments
-    var later = function () {
-      timeout = null
-      if (!immediate) func.apply(context, args)
+/* global KEEP */
+
+KEEP.initUtils = () => {
+  KEEP.utils = {
+    rootHtmlDom: document.querySelector('html'),
+    pageTopDom: document.querySelector('.page-main-content-top'),
+    scrollProgressBarDom: document.querySelector('.scroll-progress-bar'),
+    pjaxProgressBarDom: document.querySelector('.pjax-progress-bar'),
+    pjaxProgressIcon: document.querySelector('.pjax-progress-icon'),
+    back2TopBtn: document.querySelector('.tool-scroll-to-top'),
+    headerWrapperDom: document.querySelector('.header-wrapper'),
+
+    innerHeight: window.innerHeight,
+    pjaxProgressBarTimer: null,
+    prevScrollValue: 0,
+    fontSizeLevel: 0,
+    isHasScrollProgressBar: false,
+    isHasScrollPercent: false,
+    isHeaderTransparent: false,
+    hasToc: false,
+
+    // initialization data
+    initData() {
+      const { scroll, first_screen } = KEEP.theme_config?.style || {}
+      this.isHasScrollProgressBar = scroll?.progress_bar === true
+      this.isHasScrollPercent = scroll?.percent === true
+      this.isHeaderTransparent =
+        first_screen?.enable === true && !window.location.pathname.includes('/page/')
+      if (!this.isHeaderTransparent) {
+        this.headerWrapperDom.classList.remove('transparent-1', 'transparent-2')
+      }
+    },
+
+    // scroll Style Handle
+    styleHandleWhenScroll() {
+      const scrollTop = document.body.scrollTop || document.documentElement.scrollTop
+      const scrollHeight = document.body.scrollHeight || document.documentElement.scrollHeight
+      const clientHeight = window.innerHeight || document.documentElement.clientHeight
+
+      const percent = Math.round((scrollTop / (scrollHeight - clientHeight)) * 100) || 0
+
+      // back to top
+      if (scrollTop > 10) {
+        this.back2TopBtn.classList.add('show')
+      } else {
+        this.back2TopBtn.classList.remove('show')
+      }
+
+      // scroll progress bar
+      if (this.isHasScrollProgressBar && this.scrollProgressBarDom) {
+        const progressPercent = ((scrollTop / (scrollHeight - clientHeight)) * 100).toFixed(3)
+        this.scrollProgressBarDom.style.visibility = percent === 0 ? 'hidden' : 'visible'
+        this.scrollProgressBarDom.style.width = `${progressPercent}%`
+      }
+
+      // scroll percent
+      if (this.isHasScrollPercent && this.back2TopBtn) {
+        this.back2TopBtn.classList.add('show-percent')
+        const percentDom = this.back2TopBtn.querySelector('.percent')
+        if (percent === 0 || percent === undefined) {
+          this.back2TopBtn.classList.remove('show')
+        } else {
+          this.back2TopBtn.classList.add('show')
+          percentDom.innerHTML = percent.toFixed(0)
+          if (percent > 99) {
+            this.back2TopBtn.classList.add('show-arrow')
+          } else {
+            this.back2TopBtn.classList.remove('show-arrow')
+          }
+        }
+      }
+
+      // hide header handle
+      if (scrollTop > this.prevScrollValue && scrollTop > this.innerHeight) {
+        this.pageTopDom.classList.add('hide')
+        if (this.isHeaderTransparent) {
+          this.headerWrapperDom.classList.remove('transparent-1', 'transparent-2')
+        }
+      } else {
+        this.pageTopDom.classList.remove('hide')
+        if (this.isHeaderTransparent) {
+          if (scrollTop <= this.headerWrapperDom.getBoundingClientRect().height) {
+            this.headerWrapperDom.classList.remove('transparent-2')
+            this.headerWrapperDom.classList.add('transparent-1')
+          } else if (scrollTop < this.innerHeight) {
+            this.headerWrapperDom.classList.add('transparent-2')
+          }
+        }
+      }
+
+      this.prevScrollValue = scrollTop
+    },
+
+    // register window scroll event
+    registerWindowScroll() {
+      window.addEventListener('scroll', () => {
+        // style handle when scroll
+        this.styleHandleWhenScroll()
+
+        // TOC scroll handle
+        if (KEEP.theme_config?.toc?.enable === true && KEEP.utils?.tocHelper) {
+          KEEP.utils.tocHelper.activeNav()
+        }
+
+        // header shrink
+        KEEP.utils.headerShrink.headerShrink()
+
+        // side tools bar show handle
+        KEEP.utils.headerShrink.sideToolsBarShowHandle()
+      })
+    },
+
+    // toggle show tools list
+    toggleShowToolsList() {
+      const sideToolsListDom = document.querySelector('.side-tools-list')
+      const toggleShowToolsDom = document.querySelector('.tool-toggle-show')
+      toggleShowToolsDom.addEventListener('click', (e) => {
+        sideToolsListDom.classList.toggle('show')
+        e.stopPropagation()
+      })
+      sideToolsListDom.querySelectorAll('.tools-item').forEach((item) => {
+        item.addEventListener('click', (e) => {
+          e.stopPropagation()
+        })
+      })
+      document.addEventListener('click', () => {
+        sideToolsListDom.classList.contains('show') && sideToolsListDom.classList.remove('show')
+      })
+    },
+
+    // global font adjust
+    globalFontAdjust() {
+      const fontSize = document.defaultView.getComputedStyle(document.body).fontSize
+      const fs = parseFloat(fontSize)
+
+      const initFontSize = () => {
+        const styleStatus = KEEP.getStyleStatus()
+        if (styleStatus) {
+          this.fontSizeLevel = styleStatus.fontSizeLevel
+          setFontSize(this.fontSizeLevel)
+        }
+      }
+
+      const setFontSize = (fontSizeLevel) => {
+        this.rootHtmlDom.style.setProperty(
+          'font-size',
+          `${fs * (1 + fontSizeLevel * 0.05)}px`,
+          'important'
+        )
+        KEEP.styleStatus.fontSizeLevel = fontSizeLevel
+        KEEP.setStyleStatus()
+      }
+
+      initFontSize()
+
+      document.querySelector('.tool-font-adjust-plus').addEventListener('click', () => {
+        if (this.fontSizeLevel === 5) return
+        this.fontSizeLevel++
+        setFontSize(this.fontSizeLevel)
+      })
+
+      document.querySelector('.tool-font-adjust-minus').addEventListener('click', () => {
+        if (this.fontSizeLevel <= 0) return
+        this.fontSizeLevel--
+        setFontSize(this.fontSizeLevel)
+      })
+    },
+
+    // init has TOC
+    initHasToc() {
+      const tocNavDoms = document.querySelectorAll('.post-toc-wrap .post-toc li')
+      if (tocNavDoms.length > 0) {
+        this.hasToc = true
+        document.body.classList.add('has-toc')
+      } else {
+        this.hasToc = false
+        document.body.classList.remove('has-toc')
+      }
+    },
+
+    // zoom in image
+    zoomInImage() {
+      let SIDE_GAP = 40
+      let isZoomIn = false
+      let curWinScrollY = 0
+      let selectedImgDom = null
+      const imgDomList = document.querySelectorAll('.keep-markdown-body img')
+      const zoomInImgMask = document.querySelector('.zoom-in-image-mask')
+      const zoomInImg = zoomInImgMask?.querySelector('.zoom-in-image')
+
+      const zoomOut = () => {
+        if (isZoomIn) {
+          isZoomIn = false
+          curWinScrollY = 0
+          zoomInImg && (zoomInImg.style.transform = `scale(1)`)
+          zoomInImgMask && zoomInImgMask.classList.remove('show')
+          setTimeout(() => {
+            selectedImgDom && selectedImgDom.classList.remove('hide')
+          }, 300)
+        }
+      }
+
+      const zoomOutHandle = () => {
+        zoomInImgMask &&
+          zoomInImgMask.addEventListener('click', () => {
+            zoomOut()
+          })
+
+        document.addEventListener('scroll', () => {
+          if (isZoomIn && Math.abs(curWinScrollY - window.scrollY) >= 50) {
+            zoomOut()
+          }
+        })
+      }
+
+      const setSideGap = () => {
+        const w = document.body.offsetWidth
+        if (w <= 500) {
+          SIDE_GAP = 10
+        } else if (w <= 800) {
+          SIDE_GAP = 20
+        } else {
+          SIDE_GAP = 40
+        }
+      }
+
+      if (imgDomList.length) {
+        zoomOutHandle()
+        imgDomList.forEach((img) => {
+          img.addEventListener('click', () => {
+            curWinScrollY = window.scrollY
+            isZoomIn = !isZoomIn
+            setSideGap()
+            zoomInImg.setAttribute('src', img.getAttribute('src'))
+            selectedImgDom = img
+            if (isZoomIn) {
+              const imgRect = selectedImgDom.getBoundingClientRect()
+              const imgW = imgRect.width
+              const imgH = imgRect.height
+              const imgL = imgRect.left
+              const imgT = imgRect.top
+              const winW = document.body.offsetWidth - SIDE_GAP * 2
+              const winH = document.body.offsetHeight - SIDE_GAP * 2
+              const scaleX = winW / imgW
+              const scaleY = winH / imgH
+              const scale = (scaleX < scaleY ? scaleX : scaleY) || 1
+              const translateX = winW / 2 - (imgRect.x + imgW / 2) + SIDE_GAP
+              const translateY = winH / 2 - (imgRect.y + imgH / 2) + SIDE_GAP
+
+              selectedImgDom.classList.add('hide')
+              zoomInImgMask.classList.add('show')
+              zoomInImg.style.top = imgT + 'px'
+              zoomInImg.style.left = imgL + 'px'
+              zoomInImg.style.width = imgW + 'px'
+              zoomInImg.style.height = imgH + 'px'
+              zoomInImg.style.transform = `translateX(${translateX}px) translateY(${translateY}px) scale(${scale}) `
+            }
+          })
+        })
+      }
+    },
+
+    // set how long ago language
+    setHowLongAgoLanguage(p1, p2) {
+      return p2.replace(/%s/g, p1)
+    },
+
+    // get how long ago
+    getHowLongAgo(timestamp) {
+      const lang = KEEP.language_ago
+      const __Y = Math.floor(timestamp / (60 * 60 * 24 * 30) / 12)
+      const __M = Math.floor(timestamp / (60 * 60 * 24 * 30))
+      const __W = Math.floor(timestamp / (60 * 60 * 24) / 7)
+      const __d = Math.floor(timestamp / (60 * 60 * 24))
+      const __h = Math.floor((timestamp / (60 * 60)) % 24)
+      const __m = Math.floor((timestamp / 60) % 60)
+      const __s = Math.floor(timestamp % 60)
+
+      if (__Y > 0) {
+        return this.setHowLongAgoLanguage(__Y, lang.year)
+      } else if (__M > 0) {
+        return this.setHowLongAgoLanguage(__M, lang.month)
+      } else if (__W > 0) {
+        return this.setHowLongAgoLanguage(__W, lang.week)
+      } else if (__d > 0) {
+        return this.setHowLongAgoLanguage(__d, lang.day)
+      } else if (__h > 0) {
+        return this.setHowLongAgoLanguage(__h, lang.hour)
+      } else if (__m > 0) {
+        return this.setHowLongAgoLanguage(__m, lang.minute)
+      } else if (__s > 0) {
+        return this.setHowLongAgoLanguage(__s, lang.second)
+      }
+    },
+
+    // set how long age in home article block
+    setHowLongAgoInHome() {
+      const post = document.querySelectorAll('.article-meta-info .home-article-history')
+      post &&
+        post.forEach((v) => {
+          const nowTimestamp = Date.now()
+          const updatedTimestamp = new Date(v.dataset.updated).getTime()
+          v.innerHTML = this.getHowLongAgo(Math.floor((nowTimestamp - updatedTimestamp) / 1000))
+        })
+    },
+
+    // loading progress bar start
+    pjaxProgressBarStart() {
+      this.pjaxProgressBarTimer && clearInterval(this.pjaxProgressBarTimer)
+      if (this.isHasScrollProgressBar) {
+        this.scrollProgressBarDom.classList.add('hide')
+      }
+
+      this.pjaxProgressBarDom.style.width = '0'
+      this.pjaxProgressIcon.classList.add('show')
+
+      let width = 1
+      const maxWidth = 99
+
+      this.pjaxProgressBarDom.classList.add('show')
+      this.pjaxProgressBarDom.style.width = width + '%'
+
+      this.pjaxProgressBarTimer = setInterval(() => {
+        width += 5
+        if (width > maxWidth) width = maxWidth
+        this.pjaxProgressBarDom.style.width = width + '%'
+      }, 100)
+    },
+
+    // loading progress bar end
+    pjaxProgressBarEnd() {
+      this.pjaxProgressBarTimer && clearInterval(this.pjaxProgressBarTimer)
+      this.pjaxProgressBarDom.style.width = '100%'
+
+      const temp_1 = setTimeout(() => {
+        this.pjaxProgressBarDom.classList.remove('show')
+        this.pjaxProgressIcon.classList.remove('show')
+
+        if (this.isHasScrollProgressBar) {
+          this.scrollProgressBarDom.classList.remove('hide')
+        }
+
+        const temp_2 = setTimeout(() => {
+          this.pjaxProgressBarDom.style.width = '0'
+          clearTimeout(temp_1), clearTimeout(temp_2)
+        }, 200)
+      }, 200)
+    },
+
+    // insert tooltip content dom
+    insertTooltipContent() {
+      const isLazyLoadImg = KEEP.theme_config?.lazyload?.enable === true
+
+      const init = () => {
+        // tooltip
+        document.querySelectorAll('.tooltip').forEach((element) => {
+          const { tooltipContent, tooltipOffsetX, tooltipOffsetY } = element.dataset
+
+          let styleCss = ''
+
+          if (tooltipOffsetX) {
+            styleCss += `left: ${tooltipOffsetX};`
+          }
+
+          if (tooltipOffsetY) {
+            styleCss += `top: ${tooltipOffsetY};`
+          }
+
+          if (styleCss) {
+            styleCss = `style="${styleCss}"`
+          }
+
+          if (tooltipContent) {
+            element.insertAdjacentHTML(
+              'afterbegin',
+              `<span class="tooltip-content" ${styleCss}>${tooltipContent}</span>`
+            )
+          }
+        })
+
+        // tooltip-img
+        const imgsSet = {}
+
+        const hideTooltipImg = (dom, nameIdx, trigger = 'click') => {
+          if (trigger === 'hover') {
+            trigger = 'mouseout'
+          }
+
+          document.addEventListener(trigger, () => {
+            if (imgsSet[nameIdx].isShowImg) {
+              dom.classList.remove('show-img')
+              imgsSet[nameIdx].isShowImg = false
+            }
+          })
+        }
+
+        const loadImg = (img, imgLoaded) => {
+          const temp = new Image()
+          const { src } = img.dataset
+          temp.src = src
+          temp.onload = () => {
+            img.src = src
+            img.removeAttribute('lazyload')
+            imgLoaded = true
+          }
+        }
+
+        // tooltip-img
+        document.querySelectorAll('.tooltip-img').forEach((dom, idx) => {
+          const {
+            tooltipImgName,
+            tooltipImgUrl,
+            tooltipImgTip,
+            tooltipImgTrigger = 'click',
+            tooltipImgStyle
+          } = dom.dataset
+
+          let styleCss = ''
+
+          if (tooltipImgStyle) {
+            styleCss = `style="${tooltipImgStyle}"`
+          }
+
+          let tipDom = ''
+          if (tooltipImgTip) {
+            tipDom = `<div class="tip">${tooltipImgTip}</div>`
+          }
+
+          if (tooltipImgUrl) {
+            const imgDomClass = `tooltip-img-${idx}-${tooltipImgName ? tooltipImgName : Date.now()}`
+            const nameIdx = `${tooltipImgName}-${idx}`
+
+            const imgDom = `<img class="${imgDomClass}"
+                              ${isLazyLoadImg ? 'lazyload' : ''}
+                              ${isLazyLoadImg ? 'data-' : ''}src="${tooltipImgUrl}"
+                              alt="${imgDomClass}"
+                            >`
+
+            const imgTooltipBox = `<div ${styleCss} class="tooltip-img-box ${
+              tipDom ? 'has-tip' : ''
+            }">${imgDom}${tipDom}</div>`
+
+            imgsSet[nameIdx] = {
+              imgLoaded: false,
+              isShowImg: false
+            }
+
+            dom.insertAdjacentHTML('afterbegin', imgTooltipBox)
+
+            let eventTrigger = 'click'
+
+            if (tooltipImgTrigger === 'hover') {
+              eventTrigger = 'mouseover'
+            }
+
+            dom.addEventListener(eventTrigger, (e) => {
+              if (isLazyLoadImg && !imgsSet[nameIdx].imgLoaded) {
+                loadImg(
+                  document.querySelector(`.tooltip-img-box img.${imgDomClass}`),
+                  imgsSet[nameIdx].imgLoaded
+                )
+              }
+              imgsSet[nameIdx].isShowImg = !imgsSet[nameIdx].isShowImg
+              dom.classList.toggle('show-img')
+              e.stopPropagation()
+            })
+
+            hideTooltipImg(dom, nameIdx, tooltipImgTrigger)
+          }
+        })
+      }
+      setTimeout(() => {
+        init()
+      }, 1000)
+    },
+
+    // busuanzi initialize handle
+    siteCountInitialize() {
+      if (KEEP.theme_config?.website_count?.busuanzi_count?.enable === true) {
+        const tmpId = 'busuanzi-js'
+        let script = document.body.querySelector(`#${tmpId}`)
+
+        if (!script) {
+          script = document.createElement('script')
+          script.setAttribute('data-pjax', '')
+          script.setAttribute('id', tmpId)
+          script.async = true
+          script.src = '//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js'
+          document.body.appendChild(script)
+        }
+
+        const getText = (selector) => {
+          return document.querySelector(selector)?.innerText
+        }
+
+        script.onload = () => {
+          setTimeout(() => {
+            if (
+              getText('#busuanzi_value_site_uv') ||
+              getText('#busuanzi_value_site_pv') ||
+              getText('#busuanzi_value_page_pv')
+            ) {
+              const tmpDom1 = document.querySelector('.footer .count-item .uv')
+              const tmpDom2 = document.querySelector('.footer .count-item .pv')
+              const tmpDom3 = document.querySelector('.article-meta-info .article-pv')
+              tmpDom1 && (tmpDom1.style.display = 'flex')
+              tmpDom2 && (tmpDom2.style.display = 'flex')
+              tmpDom3 && (tmpDom3.style.display = 'inline-block')
+            }
+          }, 1000)
+        }
+      }
+    },
+
+    // page number jump handle
+    pageNumberJump() {
+      const inputDom = document.querySelector('.paginator .page-number-input')
+      inputDom &&
+        inputDom.addEventListener('change', (e) => {
+          const min = 1
+          const max = Number(e.target.max)
+          let current = Number(e.target.value)
+
+          if (current <= 0) {
+            inputDom.value = min
+            current = min
+          }
+
+          if (current > max) {
+            inputDom.value = max
+            current = max
+          }
+
+          const tempHref = window.location.href.replace(/\/$/, '').split('/page/')[0]
+
+          if (current === 1) {
+            window.location.href = tempHref
+          } else {
+            window.location.href = tempHref + '/page/' + current
+          }
+        })
+    },
+
+    // custom tabs tag active handle
+    tabsActiveHandle() {
+      const activeHandle = (navList, paneList, tab) => {
+        navList.forEach((nav) => {
+          if (tab.dataset.href === nav.dataset.href) {
+            nav.classList.add('active')
+          } else {
+            nav.classList.remove('active')
+          }
+        })
+
+        paneList.forEach((pane) => {
+          if (tab.dataset.href === pane.id) {
+            pane.classList.add('active')
+          } else {
+            pane.classList.remove('active')
+          }
+        })
+      }
+
+      const tabsList = document.querySelectorAll('.keep-tabs')
+      tabsList.length &&
+        tabsList.forEach((tabs) => {
+          const tabNavList = tabs.querySelectorAll('.tabs-nav .tab')
+          const tabPaneList = tabs.querySelectorAll('.tabs-content .tab-pane')
+          tabNavList.forEach((tabNav) => {
+            tabNav.addEventListener('click', () => {
+              activeHandle(tabNavList, tabPaneList, tabNav)
+            })
+          })
+        })
+    },
+
+    // first screen typewriter
+    initTypewriter() {
+      const fsc = KEEP.theme_config?.style?.first_screen || {}
+      const isHitokoto = fsc?.hitokoto === true
+
+      if (fsc?.enable !== true) {
+        return
+      }
+
+      if (fsc?.enable === true && !isHitokoto && !fsc?.description) {
+        return
+      }
+
+      const descBox = document.querySelector('.first-screen-content .description')
+      if (descBox) {
+        descBox.style.opacity = '0'
+
+        setTimeout(
+          () => {
+            descBox.style.opacity = '1'
+            const descItemList = descBox.querySelectorAll('.desc-item')
+            descItemList.forEach((descItem) => {
+              const desc = descItem.querySelector('.desc')
+              const cursor = descItem.querySelector('.cursor')
+              const text = desc.innerHTML
+              desc.innerHTML = ''
+              let charIndex = 0
+
+              if (text) {
+                const typewriter = () => {
+                  if (charIndex < text.length) {
+                    desc.textContent += text.charAt(charIndex)
+                    charIndex++
+                    setTimeout(typewriter, 100)
+                  } else {
+                    cursor.style.display = 'none'
+                  }
+                }
+
+                typewriter()
+              }
+            })
+          },
+          isHitokoto ? 400 : 300
+        )
+      }
+    },
+
+    // remove white space between children
+    removeWhitespace(container) {
+      if (!container) {
+        return
+      }
+
+      const childNodes = container.childNodes
+      const whitespaceNodes = []
+
+      for (let i = 0; i < childNodes.length; i++) {
+        const node = childNodes[i]
+
+        if (node.nodeType === 3 && /^\s*$/.test(node.nodeValue)) {
+          whitespaceNodes.push(node)
+        }
+      }
+
+      for (const whitespaceNode of whitespaceNodes) {
+        container.removeChild(whitespaceNode)
+      }
+    },
+    trimPostMetaInfoBar() {
+      this.removeWhitespace(
+        document.querySelector('.article-meta-info-container .article-category-ul')
+      )
+      this.removeWhitespace(document.querySelector('.article-meta-info-container .article-tag-ul'))
     }
-    var callNow = immediate && !timeout
-    clearTimeout(timeout)
-    timeout = setTimeout(later, wait)
-    if (callNow) func.apply(context, args)
   }
-};
 
-function throttle(func, wait, mustRun) {
-  var timeout
-  var startTime = new Date()
-
-  return function () {
-    var context = this
-    var args = arguments
-    var curTime = new Date()
-
-    clearTimeout(timeout)
-    if (curTime - startTime >= mustRun) {
-      func.apply(context, args)
-      startTime = curTime
-    } else {
-      timeout = setTimeout(func, wait)
-    }
-  }
-};
-
-function isMobile() {
-  var check = false;
-  (function (a) { if (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i.test(a) || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0, 4))) check = true })(navigator.userAgent || navigator.vendor || window.opera)
-  return check
-};
-
-window.debounce = debounce
-
-window.throttle = throttle
-
-window.isMobile = isMobile
+  KEEP.utils.initData()
+  KEEP.utils.registerWindowScroll()
+  KEEP.utils.toggleShowToolsList()
+  KEEP.utils.globalFontAdjust()
+  KEEP.utils.initHasToc()
+  KEEP.utils.zoomInImage()
+  KEEP.utils.setHowLongAgoInHome()
+  KEEP.utils.insertTooltipContent()
+  KEEP.utils.siteCountInitialize()
+  KEEP.utils.pageNumberJump()
+  KEEP.utils.tabsActiveHandle()
+  KEEP.utils.initTypewriter()
+  KEEP.utils.trimPostMetaInfoBar()
+}

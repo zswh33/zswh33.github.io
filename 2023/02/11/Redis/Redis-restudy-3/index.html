@@ -1,0 +1,757 @@
+<!DOCTYPE html><html lang="zh-Hans"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="一个包含有学习日记的博客">
+    <meta name="author" content="uwupu">
+    
+    <title>
+        
+            Redis restudy 3 List Set Hash |
+        
+        uwupu 学习日志
+    </title>
+    
+
+
+    
+        <link rel="shortcut icon" href="/images/logo.svg">
+    
+    
+    
+    
+    
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"zswh33.github.io","root":"/","language":"zh-Hans","path":"search.json"}
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":true,"init_open":true,"layout":"right"},"style":{"primary_color":"#F099BC","logo":"/images/logo.svg","favicon":"/images/logo.svg","avatar":"/images/avatar.svg","first_screen":{"enable":false,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving.","hitokoto":false},"scroll":{"progress_bar":false,"percent":false}},"local_search":{"enable":true,"preload":true},"code_block":{"tools":{"enable":true,"style":"mac"},"highlight_theme":"obsidian"},"pjax":{"enable":true},"lazyload":{"enable":true},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.21"},"waline":{"server_url":null,"reaction":false,"version":2},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false}},"post":{"author_label":{"enable":true,"auto":false,"custom_label_list":["啦啦啦啦啦"]},"word_count":{"wordcount":true,"min2read":true},"datetime_format":"YYYY-MM-DD HH:mm","copyright_info":true,"share":false,"reward":{"enable":false,"img_link":null,"text":null}},"website_count":{"busuanzi_count":{"enable":true,"site_uv":true,"site_pv":true,"page_pv":true}},"version":"3.8.6"}
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
+    KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
+    KEEP.language_copy_copyright = {"copy":"Copy copyright info","copied":"Copied","title":"Original article title","author":"Original article author","link":"Original article link"}
+  </script>
+<meta name="generator" content="Hexo 6.2.0"><link rel="alternate" href="/atom.xml" title="uwupu Blog" type="application/atom+xml">
+<script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/fontawesome.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/regular.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/solid.min.css');loadCss('//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/brands.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/fontawesome.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/regular.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/solid.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/font/css/brands.min.css"></noscript></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <i class="pjax-progress-icon fas fa-circle-notch fa-spin"></i>
+    
+</div>
+
+
+<main class="page-container border-box">
+
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/logo.svg">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               uwupu 学习日志
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class="" href="/">
+                                首頁
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/archives">
+                                歸檔
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/tags">
+                                標籤
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/categories">
+                                分類
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/links">
+                                友鏈
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class="" href="/about">
+                                關於
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/">首頁</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/archives">歸檔</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/tags">標籤</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/categories">分類</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/links">友鏈</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class="" href="/about">關於</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+
+                
+
+                    <div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+
+        <div class="article-content-container border-box">
+
+            
+
+            <div class="article-content-bottom border-box">
+                
+                    <div class="article-title">
+                        Redis restudy 3 List Set Hash
+                    </div>
+                
+
+                
+                    <div class="article-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/avatar.svg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author">
+                                <span class="name">uwupu</span>
+                                
+                                    <span class="author-label">啦啦啦啦啦</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="article-meta-info-container border-box post">
+    <div class="article-meta-info border-box">
+        
+
+
+        
+            <span class="meta-info-item article-create-date">
+                <i class="icon fa-solid fa-calendar-check"></i>&nbsp;
+                <span class="pc">2023-02-11 18:39</span>
+                <span class="mobile">2023-02-11 18:39</span>
+            </span>
+
+            <span class="meta-info-item article-update-date">
+                <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                <span class="pc" data-updated="Fri Nov 10 2023 23:15:11 GMT+0800">2023-11-10 23:15</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item article-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="article-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="article-tag meta-info-item border-box">
+                <i class="icon fas fa-tags"></i>&nbsp;
+                <ul class="article-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Redis/">Redis</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+            <span class="meta-info-item article-wordcount">
+                <i class="icon fas fa-file-word"></i>&nbsp;<span>2.2k 字數</span>
+            </span>
+        
+        
+            <span class="meta-info-item article-min2read">
+                <i class="icon fas fa-clock"></i>&nbsp;<span>11 分鐘</span>
+            </span>
+        
+        
+            <span class="meta-info-item article-pv">
+                <i class="icon fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="article-content keep-markdown-body">
+                    
+
+                    <h1 id="List"><a href="#List" class="headerlink" title="List"></a>List</h1><p>列表。</p>
+<h2 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h2><p>栈，队列，阻塞队列。</p>
+<p>消息队列。</p>
+<h2 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h2><h3 id="lpush-rpush-lrange"><a href="#lpush-rpush-lrange" class="headerlink" title="lpush, rpush, lrange"></a>lpush, rpush, lrange</h3><p><code>lpush key value [value ...]</code>：向key列表的头部插入值；</p>
+<p><code>rpush key value [value ...]</code>：向key列表的尾部插入值</p>
+<p><code>lrange key a b</code>：查询key列表a-b的值，</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; lpush l1 one <span class="comment">#在列表头部插入值</span></span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; lpush l1 two</span><br><span class="line">(<span class="built_in">integer</span>) 2</span><br><span class="line">127.0.0.1:6379&gt; lpush l1 three four</span><br><span class="line">(<span class="built_in">integer</span>) 4</span><br><span class="line">127.0.0.1:6379&gt; lrange l1 0 -1  <span class="comment">#查询列表中所有值</span></span><br><span class="line">1) <span class="string">"four"</span></span><br><span class="line">2) <span class="string">"three"</span></span><br><span class="line">3) <span class="string">"two"</span></span><br><span class="line">4) <span class="string">"one"</span></span><br><span class="line">127.0.0.1:6379&gt; lrange l1 0 1  <span class="comment"># 查询列表中0-1的值</span></span><br><span class="line">1) <span class="string">"four"</span></span><br><span class="line">2) <span class="string">"three"</span></span><br><span class="line">127.0.0.1:6379&gt; rpush l1 five  <span class="comment"># 列表尾部插入值</span></span><br><span class="line">(<span class="built_in">integer</span>) 5</span><br><span class="line">127.0.0.1:6379&gt; lrange l1 0 -1</span><br><span class="line">1) <span class="string">"four"</span></span><br><span class="line">2) <span class="string">"three"</span></span><br><span class="line">3) <span class="string">"two"</span></span><br><span class="line">4) <span class="string">"one"</span></span><br><span class="line">5) <span class="string">"five"</span></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="lpop-rpop"><a href="#lpop-rpop" class="headerlink" title="lpop, rpop"></a>lpop, rpop</h3><p><code>lpop key</code>：移除列表头部的元素</p>
+<p><code>rpop key</code>：移除列表尾部的元素</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; lrange l1 0 -1</span><br><span class="line">1) <span class="string">"four"</span></span><br><span class="line">2) <span class="string">"three"</span></span><br><span class="line">3) <span class="string">"two"</span></span><br><span class="line">4) <span class="string">"one"</span></span><br><span class="line">5) <span class="string">"five"</span></span><br><span class="line">127.0.0.1:6379&gt; lpop l1</span><br><span class="line"><span class="string">"four"</span></span><br><span class="line">127.0.0.1:6379&gt; rpop l1</span><br><span class="line"><span class="string">"five"</span></span><br><span class="line">127.0.0.1:6379&gt; lrange l1 0 -1</span><br><span class="line">1) <span class="string">"three"</span></span><br><span class="line">2) <span class="string">"two"</span></span><br><span class="line">3) <span class="string">"one"</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="lindex-llen"><a href="#lindex-llen" class="headerlink" title="lindex, llen"></a>lindex, llen</h3><p><code>lindex key index</code>：获取key中index位置的值。</p>
+<p><code>llen key</code>：获取列表的长度。</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; lrange l1 0 -1</span><br><span class="line">1) <span class="string">"three"</span></span><br><span class="line">2) <span class="string">"two"</span></span><br><span class="line">3) <span class="string">"one"</span></span><br><span class="line">127.0.0.1:6379&gt; lindex l1 2  <span class="comment"># 获取index为2的值</span></span><br><span class="line"><span class="string">"one"</span></span><br><span class="line">127.0.0.1:6379&gt; llen l1 <span class="comment"># 获取列表长度</span></span><br><span class="line">(<span class="built_in">integer</span>) 3</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="lrem"><a href="#lrem" class="headerlink" title="lrem"></a>lrem</h3><p><code>lrem key count value </code>：移除指定数量的value值。精确匹配。</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; lpush l1 one two three one one  <span class="comment"># 向列表l1插入值</span></span><br><span class="line">(<span class="built_in">integer</span>) 5</span><br><span class="line">127.0.0.1:6379&gt; lrange l1 0 -1  <span class="comment"># 获取值</span></span><br><span class="line">1) <span class="string">"one"</span></span><br><span class="line">2) <span class="string">"one"</span></span><br><span class="line">3) <span class="string">"three"</span></span><br><span class="line">4) <span class="string">"two"</span></span><br><span class="line">5) <span class="string">"one"</span></span><br><span class="line">127.0.0.1:6379&gt; lrem l1 1 three  <span class="comment">#移除1个three</span></span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; lrem l1 2 one  <span class="comment"># 移除2个one</span></span><br><span class="line">(<span class="built_in">integer</span>) 2</span><br><span class="line">127.0.0.1:6379&gt; lrange l1 0 -1</span><br><span class="line">1) <span class="string">"two"</span></span><br><span class="line">2) <span class="string">"one"</span></span><br></pre></td></tr></tbody></table></figure>
+
+
+
+<p><code>ltrim key start stop</code>：裁剪列表，保留start-stop中的元素；</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; lpush l1 one two three four five</span><br><span class="line">(<span class="built_in">integer</span>) 5</span><br><span class="line">127.0.0.1:6379&gt; lrange l1 0 -1</span><br><span class="line">1) <span class="string">"five"</span></span><br><span class="line">2) <span class="string">"four"</span></span><br><span class="line">3) <span class="string">"three"</span></span><br><span class="line">4) <span class="string">"two"</span></span><br><span class="line">5) <span class="string">"one"</span></span><br><span class="line">127.0.0.1:6379&gt; ltrim l1 1 3  <span class="comment"># 裁剪列表，留下index为1-3的元素</span></span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; lrange l1 0 -1</span><br><span class="line">1) <span class="string">"four"</span></span><br><span class="line">2) <span class="string">"three"</span></span><br><span class="line">3) <span class="string">"two"</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="rpoplpush"><a href="#rpoplpush" class="headerlink" title="rpoplpush"></a>rpoplpush</h3><p><code>rpoplpush source destination</code>：从列表source的尾部取出元素，插入到列表destination列表的尾部；</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; lrange l1 0 -1</span><br><span class="line">1) <span class="string">"four"</span></span><br><span class="line">2) <span class="string">"three"</span></span><br><span class="line">3) <span class="string">"two"</span></span><br><span class="line">127.0.0.1:6379&gt; rpoplpush l1 l2</span><br><span class="line"><span class="string">"two"</span></span><br><span class="line">127.0.0.1:6379&gt; lrange l1 0 -1</span><br><span class="line">1) <span class="string">"four"</span></span><br><span class="line">2) <span class="string">"three"</span></span><br><span class="line">127.0.0.1:6379&gt; lrange l2 0 -1</span><br><span class="line">1) <span class="string">"two"</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="lset"><a href="#lset" class="headerlink" title="lset"></a>lset</h3><p><code>lset key index value</code> ：设置index位置的值为value</p>
+<ul>
+<li>只能设置key存在的列表，若key不存在则报错<ul>
+<li>(error) ERR no such key</li>
+</ul>
+</li>
+<li>不返回原值。</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; lpush l1 one two three</span><br><span class="line">(<span class="built_in">integer</span>) 3</span><br><span class="line">127.0.0.1:6379&gt; lrange l1 0 -1</span><br><span class="line">1) <span class="string">"three"</span></span><br><span class="line">2) <span class="string">"two"</span></span><br><span class="line">3) <span class="string">"one"</span></span><br><span class="line">127.0.0.1:6379&gt; lset l1 1 four <span class="comment"># 设置index为1的值为four</span></span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; lrange l1 0 -1</span><br><span class="line">1) <span class="string">"three"</span></span><br><span class="line">2) <span class="string">"four"</span></span><br><span class="line">3) <span class="string">"one"</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="linsert"><a href="#linsert" class="headerlink" title="linsert"></a>linsert</h3><p><code>linsert key BEFORE|AFTER pivot element</code></p>
+<ul>
+<li>向值为pivot的位置的前面或后面插入值element。</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; lrange l1 0 -1</span><br><span class="line">1) <span class="string">"three"</span></span><br><span class="line">2) <span class="string">"four"</span></span><br><span class="line">3) <span class="string">"one"</span></span><br><span class="line">127.0.0.1:6379&gt; linsert l1 before four other <span class="comment"># 向four的前面插入other</span></span><br><span class="line">(<span class="built_in">integer</span>) 4</span><br><span class="line">127.0.0.1:6379&gt; lrange l1 0 -1</span><br><span class="line">1) <span class="string">"three"</span></span><br><span class="line">2) <span class="string">"other"</span></span><br><span class="line">3) <span class="string">"four"</span></span><br><span class="line">4) <span class="string">"one"</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><ol>
+<li>本质为一个“链表”</li>
+<li>在两边插入或改动值，效率最高！</li>
+</ol>
+<h1 id="Set"><a href="#Set" class="headerlink" title="Set"></a>Set</h1><p>集合</p>
+<p>set中的值不能重复。</p>
+<h2 id="sadd-smembers-sismember-scard"><a href="#sadd-smembers-sismember-scard" class="headerlink" title="sadd, smembers, sismember, scard"></a>sadd, smembers, sismember, scard</h2><p><code>sadd key value [value ...]</code>：向集合添加元素</p>
+<p><code>smembers key</code>：查看元素成员列表</p>
+<p><code>sismember key value</code>：查询value是否为key集合的成员</p>
+<p><code>scard key</code>：获取集合中成员数量</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; sadd s1 hello  <span class="comment"># 向集合添加元素</span></span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; sadd s1 yn</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; sadd s1 llllyn</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; smembers s1  <span class="comment"># 查询集合成员</span></span><br><span class="line">1) <span class="string">"yn"</span></span><br><span class="line">2) <span class="string">"llllyn"</span></span><br><span class="line">3) <span class="string">"hello"</span></span><br><span class="line">127.0.0.1:6379&gt; sismember s1 hello <span class="comment"># 查看集合中是否存在某个值</span></span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; sismember s1 word</span><br><span class="line">(<span class="built_in">integer</span>) 0</span><br><span class="line">127.0.0.1:6379&gt; scard s1  <span class="comment">#获取s1集合中成员数量</span></span><br><span class="line">(<span class="built_in">integer</span>) 3</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="srem"><a href="#srem" class="headerlink" title="srem"></a>srem</h2><p><code>srem key value</code>：移除指定值</p>
+<p><code>srandmember key count</code>：随机取出集合中元素，count为数量，count默认为1</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; smembers s1  <span class="comment">#获取集合s1成员</span></span><br><span class="line">1) <span class="string">"yn"</span></span><br><span class="line">2) <span class="string">"llllyn"</span></span><br><span class="line">3) <span class="string">"hello"</span></span><br><span class="line">127.0.0.1:6379&gt; srem s1 yn  <span class="comment"># 移除s1中值为yn的成员</span></span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; smembers s1  <span class="comment">#获取集合s1中成员</span></span><br><span class="line">1) <span class="string">"llllyn"</span></span><br><span class="line">2) <span class="string">"hello"</span></span><br><span class="line">127.0.0.1:6379&gt; SRANDMEMBER s1 <span class="comment"># 在集合s1中随机取出元素</span></span><br><span class="line"><span class="string">"llllyn"</span></span><br><span class="line">127.0.0.1:6379&gt; SRANDMEMBER s1</span><br><span class="line"><span class="string">"llllyn"</span></span><br><span class="line">127.0.0.1:6379&gt; SRANDMEMBER s1</span><br><span class="line"><span class="string">"hello"</span></span><br><span class="line">127.0.0.1:6379&gt; SRANDMEMBER s1 2</span><br><span class="line">1) <span class="string">"llllyn"</span></span><br><span class="line">2) <span class="string">"hello"</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="spop"><a href="#spop" class="headerlink" title="spop"></a>spop</h2><p><code>spop key [count]</code>：随机弹出元素，count为数量</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; smembers s1</span><br><span class="line">1) <span class="string">"llllyn"</span></span><br><span class="line">2) <span class="string">"one"</span></span><br><span class="line">3) <span class="string">"hello"</span></span><br><span class="line">4) <span class="string">"four"</span></span><br><span class="line">5) <span class="string">"three"</span></span><br><span class="line">6) <span class="string">"two"</span></span><br><span class="line">127.0.0.1:6379&gt; spop s1 <span class="comment"># 随机删除元素</span></span><br><span class="line"><span class="string">"hello"</span></span><br><span class="line">127.0.0.1:6379&gt; spop s1</span><br><span class="line"><span class="string">"three"</span></span><br><span class="line">127.0.0.1:6379&gt; spop s1 2</span><br><span class="line">1) <span class="string">"two"</span></span><br><span class="line">2) <span class="string">"four"</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="smove"><a href="#smove" class="headerlink" title="smove"></a>smove</h2><p><code>smove key1 key2 value</code>：将一个集合中指定的值移动到另一个集合中。</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; smembers s1  <span class="comment"># s1集合中</span></span><br><span class="line">1) <span class="string">"one"</span></span><br><span class="line">2) <span class="string">"two"</span></span><br><span class="line">127.0.0.1:6379&gt; smembers s2  <span class="comment"># s2集合中</span></span><br><span class="line">1) <span class="string">"three"</span></span><br><span class="line">127.0.0.1:6379&gt; smove s1 s2 two  <span class="comment">#将s1集合中two移动到s2集合中</span></span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; smembers s1  </span><br><span class="line">1) <span class="string">"one"</span></span><br><span class="line">127.0.0.1:6379&gt; smembers s2</span><br><span class="line">1) <span class="string">"two"</span></span><br><span class="line">2) <span class="string">"three"</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="sdiff-sinter-sunion"><a href="#sdiff-sinter-sunion" class="headerlink" title="sdiff, sinter, sunion"></a>sdiff, sinter, sunion</h2><p><code>sdiff set1 set2</code>：获得set1与set2的差集</p>
+<p><code>sinter s1 s2</code>：查询s1和s2的交集</p>
+<p><code>sunion s1 s2</code>：查询s1和s2的并集</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; sadd s1 a b c</span><br><span class="line">(<span class="built_in">integer</span>) 3</span><br><span class="line">127.0.0.1:6379&gt; sadd s2 c d e</span><br><span class="line">(<span class="built_in">integer</span>) 3</span><br><span class="line">127.0.0.1:6379&gt; sdiff s1 s2  <span class="comment"># 差集</span></span><br><span class="line">1) <span class="string">"b"</span></span><br><span class="line">2) <span class="string">"a"</span></span><br><span class="line">127.0.0.1:6379&gt; sinter s1 s2  <span class="comment"># 交集</span></span><br><span class="line">1) <span class="string">"c"</span></span><br><span class="line">127.0.0.1:6379&gt; sunion s1 s2  <span class="comment">#并集</span></span><br><span class="line">1) <span class="string">"b"</span></span><br><span class="line">2) <span class="string">"c"</span></span><br><span class="line">3) <span class="string">"e"</span></span><br><span class="line">4) <span class="string">"a"</span></span><br><span class="line">5) <span class="string">"d"</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="Hash（哈希）"><a href="#Hash（哈希）" class="headerlink" title="Hash（哈希）"></a>Hash（哈希）</h1><p><code>key-&lt;key-value&gt;</code>  <code>key-Map</code></p>
+<p>值为map集合；</p>
+<h2 id="hset-hget-hmget-hmset-hgetall"><a href="#hset-hget-hmget-hmset-hgetall" class="headerlink" title="hset, hget, hmget, hmset, hgetall"></a>hset, hget, hmget, hmset, hgetall</h2><p><code>hset key field value</code>：设置值</p>
+<p><code>hget key field</code>：获取值</p>
+<p><code>hmset key field value [field value ...]</code>：设置多个值</p>
+<p><code>hmget key field [field...]</code>：获取多个值</p>
+<p><code>hgetall key</code>：获取所有值</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; hset h1 f1 hello  <span class="comment">#设置h1哈希的f1值为hello</span></span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; hget h1 f1  <span class="comment">#获取h1哈希的f1值</span></span><br><span class="line"><span class="string">"hello"</span></span><br><span class="line">127.0.0.1:6379&gt; hmset h1 f2 world f3 one f4 two  <span class="comment">#设置多个值</span></span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; hmget h1 f1 f2 f3 f4  <span class="comment">#获取多个值</span></span><br><span class="line">1) <span class="string">"hello"</span></span><br><span class="line">2) <span class="string">"world"</span></span><br><span class="line">3) <span class="string">"one"</span></span><br><span class="line">4) <span class="string">"two"</span></span><br><span class="line">127.0.0.1:6379&gt; hgetall h1  <span class="comment">#获取所有值</span></span><br><span class="line">1) <span class="string">"f1"</span></span><br><span class="line">2) <span class="string">"hello"</span></span><br><span class="line">3) <span class="string">"f2"</span></span><br><span class="line">4) <span class="string">"world"</span></span><br><span class="line">5) <span class="string">"f3"</span></span><br><span class="line">6) <span class="string">"one"</span></span><br><span class="line">7) <span class="string">"f4"</span></span><br><span class="line">8) <span class="string">"two"</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="hdel-hlen"><a href="#hdel-hlen" class="headerlink" title="hdel, hlen"></a>hdel, hlen</h2><p><code>hdel key field [field ...]</code>：删除指定key的field，对应value同时会消失</p>
+<p><code>hlen key</code>：获取hash长度</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; hdel h1 f1 f2 f3  <span class="comment">#删除h1的f1，f2，f3</span></span><br><span class="line">(<span class="built_in">integer</span>) 3</span><br><span class="line">127.0.0.1:6379&gt; hgetall h1 <span class="comment">#获取h1的所有字段</span></span><br><span class="line">1) <span class="string">"f4"</span></span><br><span class="line">2) <span class="string">"two"</span></span><br><span class="line">127.0.0.1:6379&gt; hlen h1  <span class="comment">#获取h1的长度</span></span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; hset h1 f1 one f2 three  <span class="comment">#添加字段</span></span><br><span class="line">(<span class="built_in">integer</span>) 2</span><br><span class="line">127.0.0.1:6379&gt; hlen h1</span><br><span class="line">(<span class="built_in">integer</span>) 3</span><br></pre></td></tr></tbody></table></figure>
+
+<p><code>hexists key field</code>：判断key的field是否存在</p>
+<p><code>hkeys key</code>：获取所有field</p>
+<p><code>hvals key</code>：获取所有values</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; hgetall h1</span><br><span class="line">1) <span class="string">"f4"</span></span><br><span class="line">2) <span class="string">"two"</span></span><br><span class="line">3) <span class="string">"f1"</span></span><br><span class="line">4) <span class="string">"one"</span></span><br><span class="line">5) <span class="string">"f2"</span></span><br><span class="line">6) <span class="string">"three"</span></span><br><span class="line">127.0.0.1:6379&gt; hexists h1 f1  <span class="comment">#查看f1是否存在</span></span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; hexists h1 f5  <span class="comment">#查看f5是否存在</span></span><br><span class="line">(<span class="built_in">integer</span>) 0</span><br><span class="line">127.0.0.1:6379&gt; hkeys h1  <span class="comment">#获取h1的所有field</span></span><br><span class="line">1) <span class="string">"f4"</span></span><br><span class="line">2) <span class="string">"f1"</span></span><br><span class="line">3) <span class="string">"f2"</span></span><br><span class="line">127.0.0.1:6379&gt; hvals h1  <span class="comment">#获取h1的所有value</span></span><br><span class="line">1) <span class="string">"two"</span></span><br><span class="line">2) <span class="string">"one"</span></span><br><span class="line">3) <span class="string">"three"</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="hincrby-hsetnx"><a href="#hincrby-hsetnx" class="headerlink" title="hincrby, hsetnx"></a>hincrby, hsetnx</h2><p><code>hincrby key field increment</code>：执行自增，可以指定增量</p>
+<p><code>hsetnx key field value</code>：与set一致，不同的是仅用于“key值不存在”时，若存在则不进行</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; hset h2 f1 3  <span class="comment"># 设置值</span></span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; hincrby h2 f1 10  <span class="comment">#值自增，指定增量为10</span></span><br><span class="line">(<span class="built_in">integer</span>) 13</span><br><span class="line">127.0.0.1:6379&gt; hget h2 f1  <span class="comment">#获取值</span></span><br><span class="line"><span class="string">"13"</span></span><br><span class="line">127.0.0.1:6379&gt; hsetnx h2 f2 4  <span class="comment">#若f2不存在，则进行</span></span><br><span class="line">(<span class="built_in">integer</span>) 1  <span class="comment">#进行成功</span></span><br><span class="line">127.0.0.1:6379&gt; hsetnx h2 f2 10  <span class="comment">#上面有f2了</span></span><br><span class="line">(<span class="built_in">integer</span>) 0  <span class="comment">#失败</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="技巧"><a href="#技巧" class="headerlink" title="技巧"></a>技巧</h2><h3 id="对象存储"><a href="#对象存储" class="headerlink" title="对象存储"></a>对象存储</h3><p>设置user的id为1的用户，name为ZhangSan，age为16。</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; hset user:1 name ZhangSan</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; hset user:1 age 16</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; hgetall user:1</span><br><span class="line">1) <span class="string">"name"</span></span><br><span class="line">2) <span class="string">"ZhangSan"</span></span><br><span class="line">3) <span class="string">"age"</span></span><br><span class="line">4) <span class="string">"16"</span></span><br></pre></td></tr></tbody></table></figure>
+
+
+
+
+
+
+                </div>
+
+                
+                        
+<div class="article-copyright-info-container border-box">
+    <div class="copyright-info-content border-box">
+        <div class="copyright-info-top border-box">
+            <div class="post-title border-box text-ellipsis">
+                Redis restudy 3 List Set Hash
+            </div>
+
+            <div class="post-link border-box text-ellipsis">
+                2023/02/11/Redis/Redis-restudy-3/
+            </div>
+        </div>
+
+        <div class="copyright-info-bottom border-box">
+            <div class="post-author bottom-item">
+                <div class="type">
+                    作者
+                </div>
+                <div class="content">uwupu</div>
+            </div>
+
+            <div class="post-time bottom-item">
+                <div class="type">
+                    發布于
+                </div>
+                <div class="content">2023-02-11 18:39</div>
+            </div>
+
+
+            <div class="post-license bottom-item">
+                <div class="type">
+                    許可
+                </div>
+                <div class="content tooltip" data-tooltip-content="CC BY-NC-SA 4.0">
+                    <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed">
+                        <i class="fa-brands fa-creative-commons"></i>
+                        <i class="fa-brands fa-creative-commons-by"></i>
+                        <i class="fa-brands fa-creative-commons-nc"></i>
+                        <i class="fa-brands fa-creative-commons-sa"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <i class="copyright-bg fa-solid fa-copyright"></i>
+    </div>
+    <div class="copy-copyright-info flex-center tooltip" data-tooltip-content="復製版權信息" data-tooltip-offset-y="-2px">
+        <i class="fa-solid fa-copy"></i>
+    </div>
+</div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Redis/">Redis</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="article-nav">
+                        
+                            <div class="article-prev">
+                                <a class="prev" rel="prev" href="/2023/02/13/Redis/Redis-restudy-4/" title="Redis restudy 4 Zset Geospatial Hyperloglog Bitmaps">
+                                    <span class="left arrow-icon flex-center">
+                                      <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                            <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Redis restudy 4 Zset Geospatial Hyperloglog Bitmaps</span>
+                                        <span class="post-nav-item">上一篇</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="article-next">
+                                <a class="next" rel="next" href="/2023/02/11/Redis/Redis-restudy-2/" title="Redis restudy 2 基础 Redis-key String">
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Redis restudy 2 基础 Redis-key String</span>
+                                        <span class="post-nav-item">下一篇</span>
+                                    </span>
+                                            <span class="right arrow-icon flex-center">
+                                      <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#List"><span class="nav-number">1.</span> <span class="nav-text">List</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">1.1.</span> <span class="nav-text">应用场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%91%BD%E4%BB%A4"><span class="nav-number">1.2.</span> <span class="nav-text">命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#lpush-rpush-lrange"><span class="nav-number">1.2.1.</span> <span class="nav-text">lpush, rpush, lrange</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lpop-rpop"><span class="nav-number">1.2.2.</span> <span class="nav-text">lpop, rpop</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lindex-llen"><span class="nav-number">1.2.3.</span> <span class="nav-text">lindex, llen</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lrem"><span class="nav-number">1.2.4.</span> <span class="nav-text">lrem</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rpoplpush"><span class="nav-number">1.2.5.</span> <span class="nav-text">rpoplpush</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lset"><span class="nav-number">1.2.6.</span> <span class="nav-text">lset</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#linsert"><span class="nav-number">1.2.7.</span> <span class="nav-text">linsert</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">1.3.</span> <span class="nav-text">其他</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Set"><span class="nav-number">2.</span> <span class="nav-text">Set</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#sadd-smembers-sismember-scard"><span class="nav-number">2.1.</span> <span class="nav-text">sadd, smembers, sismember, scard</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#srem"><span class="nav-number">2.2.</span> <span class="nav-text">srem</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#spop"><span class="nav-number">2.3.</span> <span class="nav-text">spop</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#smove"><span class="nav-number">2.4.</span> <span class="nav-text">smove</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sdiff-sinter-sunion"><span class="nav-number">2.5.</span> <span class="nav-text">sdiff, sinter, sunion</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Hash%EF%BC%88%E5%93%88%E5%B8%8C%EF%BC%89"><span class="nav-number">3.</span> <span class="nav-text">Hash（哈希）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#hset-hget-hmget-hmset-hgetall"><span class="nav-number">3.1.</span> <span class="nav-text">hset, hget, hmget, hmset, hgetall</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hdel-hlen"><span class="nav-number">3.2.</span> <span class="nav-text">hdel, hlen</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hincrby-hsetnx"><span class="nav-number">3.3.</span> <span class="nav-text">hincrby, hsetnx</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%80%E5%B7%A7"><span class="nav-number">3.4.</span> <span class="nav-text">技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E5%AD%98%E5%82%A8"><span class="nav-number">3.4.1.</span> <span class="nav-text">对象存储</span></a></li></ol></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="border-box website-info-box default">
+        
+            <div class="copyright-info info-item default">
+                ©&nbsp;<span>2020</span>&nbsp;-&nbsp;2023
+                
+                    &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">uwupu</a>
+                
+            </div>
+
+            <div class="theme-info info-item default">
+                <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;框架&nbsp;&amp;&nbsp;主題&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a>
+            </div>
+
+            
+
+            
+        
+
+        <div class="count-item info-item default">
+            
+                <span class="count-box border-box word">
+                    <span class="item-type border-box">總字數</span>
+                    <span class="item-value border-box word">161.4k</span>
+                </span>
+            
+
+            
+                <span class="count-box border-box uv">
+                    <span class="item-type border-box">讀者</span>
+                    <span class="item-value border-box uv" id="busuanzi_value_site_uv"></span>
+                </span>
+            
+
+            
+                <span class="count-box border-box pv">
+                    <span class="item-type border-box">閱覽</span>
+                    <span class="item-value border-box pv" id="busuanzi_value_site_pv"></span>
+                </span>
+            
+        </div>
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="tools-list border-box">
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="搜尋..." spellcheck="false" type="search" class="search-input">
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#List"><span class="nav-number">1.</span> <span class="nav-text">List</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">1.1.</span> <span class="nav-text">应用场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%91%BD%E4%BB%A4"><span class="nav-number">1.2.</span> <span class="nav-text">命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#lpush-rpush-lrange"><span class="nav-number">1.2.1.</span> <span class="nav-text">lpush, rpush, lrange</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lpop-rpop"><span class="nav-number">1.2.2.</span> <span class="nav-text">lpop, rpop</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lindex-llen"><span class="nav-number">1.2.3.</span> <span class="nav-text">lindex, llen</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lrem"><span class="nav-number">1.2.4.</span> <span class="nav-text">lrem</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rpoplpush"><span class="nav-number">1.2.5.</span> <span class="nav-text">rpoplpush</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lset"><span class="nav-number">1.2.6.</span> <span class="nav-text">lset</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#linsert"><span class="nav-number">1.2.7.</span> <span class="nav-text">linsert</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">1.3.</span> <span class="nav-text">其他</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Set"><span class="nav-number">2.</span> <span class="nav-text">Set</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#sadd-smembers-sismember-scard"><span class="nav-number">2.1.</span> <span class="nav-text">sadd, smembers, sismember, scard</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#srem"><span class="nav-number">2.2.</span> <span class="nav-text">srem</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#spop"><span class="nav-number">2.3.</span> <span class="nav-text">spop</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#smove"><span class="nav-number">2.4.</span> <span class="nav-text">smove</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sdiff-sinter-sunion"><span class="nav-number">2.5.</span> <span class="nav-text">sdiff, sinter, sunion</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Hash%EF%BC%88%E5%93%88%E5%B8%8C%EF%BC%89"><span class="nav-number">3.</span> <span class="nav-text">Hash（哈希）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#hset-hget-hmget-hmset-hgetall"><span class="nav-number">3.1.</span> <span class="nav-text">hset, hget, hmget, hmset, hgetall</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hdel-hlen"><span class="nav-number">3.2.</span> <span class="nav-text">hdel, hlen</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hincrby-hsetnx"><span class="nav-number">3.3.</span> <span class="nav-text">hincrby, hsetnx</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%80%E5%B7%A7"><span class="nav-number">3.4.</span> <span class="nav-text">技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E5%AD%98%E5%82%A8"><span class="nav-number">3.4.1.</span> <span class="nav-text">对象存储</span></a></li></ol></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+<!-- common -->
+<script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/utils.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/header-shrink.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/back2top.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/dark-light-toggle.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/main.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/libs/anime.min.js"></script>
+
+<!-- local-search -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/local-search.js"></script>
+
+
+<!-- code-block -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/code-block.js"></script>
+
+
+<!-- lazyload -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/lazyload.js"></script>
+
+
+<div class="pjax">
+    
+        <!-- post-helper -->
+        <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/post-helper.js"></script>
+
+        <!-- toc -->
+        
+            <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/toc.js"></script>
+        
+
+        <!-- copyright-info -->
+        
+            <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/post/copyright-info.js"></script>
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- category-page -->
+    
+
+    <!-- links-page -->
+    
+</div>
+
+<!-- mermaid -->
+
+
+<!-- pjax -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.6/source/js/libs/pjax.min.js"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax'
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            KEEP.utils.pjaxProgressBarStart()
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            KEEP.utils.pjaxProgressBarEnd()
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'))
+            KEEP.initExecute()
+        });
+    });
+</script>
+
+
+
+
+
+
+</body></html>
