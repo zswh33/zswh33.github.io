@@ -3,11 +3,11 @@
   <title>uwupu Blog</title>
   
   <subtitle>学习日志</subtitle>
-  <link href="http://zswh33.github.io/atom.xml" rel="self"/>
+  <link href="https://zswh33.github.io/atom.xml" rel="self"/>
   
-  <link href="http://zswh33.github.io/"/>
+  <link href="https://zswh33.github.io/"/>
   <updated>2023-11-10T15:05:01.090Z</updated>
-  <id>http://zswh33.github.io/</id>
+  <id>https://zswh33.github.io/</id>
   
   <author>
     <name>YN</name>
@@ -18,8 +18,8 @@
   
   <entry>
     <title>人工智能 1</title>
-    <link href="http://zswh33.github.io/2023/07/27/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD-1/"/>
-    <id>http://zswh33.github.io/2023/07/27/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD-1/</id>
+    <link href="https://zswh33.github.io/2023/07/27/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD-1/"/>
+    <id>https://zswh33.github.io/2023/07/27/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD-1/</id>
     <published>2023-07-26T17:52:42.000Z</published>
     <updated>2023-11-10T15:05:01.090Z</updated>
     
@@ -37,17 +37,17 @@
     
     
     
-    <category term="学习" scheme="http://zswh33.github.io/categories/%E5%AD%A6%E4%B9%A0/"/>
+    <category term="学习" scheme="https://zswh33.github.io/categories/%E5%AD%A6%E4%B9%A0/"/>
     
     
-    <category term="人工智能" scheme="http://zswh33.github.io/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/"/>
+    <category term="人工智能" scheme="https://zswh33.github.io/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/"/>
     
   </entry>
   
   <entry>
     <title>为jar包签名，并验证签名。</title>
-    <link href="http://zswh33.github.io/2023/05/11/Other/%E4%B8%BAjar%E5%8C%85%E7%AD%BE%E5%90%8D%EF%BC%8C%E5%B9%B6%E9%AA%8C%E8%AF%81%E7%AD%BE%E5%90%8D%E3%80%82/"/>
-    <id>http://zswh33.github.io/2023/05/11/Other/%E4%B8%BAjar%E5%8C%85%E7%AD%BE%E5%90%8D%EF%BC%8C%E5%B9%B6%E9%AA%8C%E8%AF%81%E7%AD%BE%E5%90%8D%E3%80%82/</id>
+    <link href="https://zswh33.github.io/2023/05/11/Other/%E4%B8%BAjar%E5%8C%85%E7%AD%BE%E5%90%8D%EF%BC%8C%E5%B9%B6%E9%AA%8C%E8%AF%81%E7%AD%BE%E5%90%8D%E3%80%82/"/>
+    <id>https://zswh33.github.io/2023/05/11/Other/%E4%B8%BAjar%E5%8C%85%E7%AD%BE%E5%90%8D%EF%BC%8C%E5%B9%B6%E9%AA%8C%E8%AF%81%E7%AD%BE%E5%90%8D%E3%80%82/</id>
     <published>2023-05-11T15:26:37.000Z</published>
     <updated>2023-05-12T15:20:07.470Z</updated>
     
@@ -62,18 +62,18 @@
     
     
     
-    <category term="jar" scheme="http://zswh33.github.io/tags/jar/"/>
+    <category term="jar" scheme="https://zswh33.github.io/tags/jar/"/>
     
-    <category term="java" scheme="http://zswh33.github.io/tags/java/"/>
+    <category term="java" scheme="https://zswh33.github.io/tags/java/"/>
     
-    <category term="加密" scheme="http://zswh33.github.io/tags/%E5%8A%A0%E5%AF%86/"/>
+    <category term="加密" scheme="https://zswh33.github.io/tags/%E5%8A%A0%E5%AF%86/"/>
     
   </entry>
   
   <entry>
     <title>Job Study 3 String</title>
-    <link href="http://zswh33.github.io/2023/04/29/Job/Job-Study-3-String/"/>
-    <id>http://zswh33.github.io/2023/04/29/Job/Job-Study-3-String/</id>
+    <link href="https://zswh33.github.io/2023/04/29/Job/Job-Study-3-String/"/>
+    <id>https://zswh33.github.io/2023/04/29/Job/Job-Study-3-String/</id>
     <published>2023-04-29T08:37:36.000Z</published>
     <updated>2023-04-29T09:40:53.960Z</updated>
     
@@ -88,14 +88,14 @@
     
     
     
-    <category term="Java" scheme="http://zswh33.github.io/tags/Java/"/>
+    <category term="Java" scheme="https://zswh33.github.io/tags/Java/"/>
     
   </entry>
   
   <entry>
     <title>Job Study 2</title>
-    <link href="http://zswh33.github.io/2023/04/29/Job/Job-Study-2/"/>
-    <id>http://zswh33.github.io/2023/04/29/Job/Job-Study-2/</id>
+    <link href="https://zswh33.github.io/2023/04/29/Job/Job-Study-2/"/>
+    <id>https://zswh33.github.io/2023/04/29/Job/Job-Study-2/</id>
     <published>2023-04-29T07:05:55.000Z</published>
     <updated>2023-11-10T15:13:30.141Z</updated>
     
@@ -110,14 +110,14 @@
     
     
     
-    <category term="Java" scheme="http://zswh33.github.io/tags/Java/"/>
+    <category term="Java" scheme="https://zswh33.github.io/tags/Java/"/>
     
   </entry>
   
   <entry>
     <title>Job Study 1 Java</title>
-    <link href="http://zswh33.github.io/2023/04/28/Job/Job-Study-1/"/>
-    <id>http://zswh33.github.io/2023/04/28/Job/Job-Study-1/</id>
+    <link href="https://zswh33.github.io/2023/04/28/Job/Job-Study-1/"/>
+    <id>https://zswh33.github.io/2023/04/28/Job/Job-Study-1/</id>
     <published>2023-04-28T15:44:08.000Z</published>
     <updated>2023-11-10T15:13:25.626Z</updated>
     
@@ -132,14 +132,14 @@
     
     
     
-    <category term="Java" scheme="http://zswh33.github.io/tags/Java/"/>
+    <category term="Java" scheme="https://zswh33.github.io/tags/Java/"/>
     
   </entry>
   
   <entry>
     <title>Openssl 1</title>
-    <link href="http://zswh33.github.io/2023/03/27/Other/OpenSSL-1/"/>
-    <id>http://zswh33.github.io/2023/03/27/Other/OpenSSL-1/</id>
+    <link href="https://zswh33.github.io/2023/03/27/Other/OpenSSL-1/"/>
+    <id>https://zswh33.github.io/2023/03/27/Other/OpenSSL-1/</id>
     <published>2023-03-27T06:04:02.000Z</published>
     <updated>2023-11-10T15:14:22.888Z</updated>
     
@@ -156,14 +156,14 @@
     
     
     
-    <category term="openssl" scheme="http://zswh33.github.io/tags/openssl/"/>
+    <category term="openssl" scheme="https://zswh33.github.io/tags/openssl/"/>
     
   </entry>
   
   <entry>
     <title>RabbitMQ 7</title>
-    <link href="http://zswh33.github.io/2023/03/20/RabbitMQ/RabbitMQ-7/"/>
-    <id>http://zswh33.github.io/2023/03/20/RabbitMQ/RabbitMQ-7/</id>
+    <link href="https://zswh33.github.io/2023/03/20/RabbitMQ/RabbitMQ-7/"/>
+    <id>https://zswh33.github.io/2023/03/20/RabbitMQ/RabbitMQ-7/</id>
     <published>2023-03-20T15:53:18.000Z</published>
     <updated>2023-11-10T15:14:54.967Z</updated>
     
@@ -178,17 +178,17 @@
     
     
     
-    <category term="学习" scheme="http://zswh33.github.io/categories/%E5%AD%A6%E4%B9%A0/"/>
+    <category term="学习" scheme="https://zswh33.github.io/categories/%E5%AD%A6%E4%B9%A0/"/>
     
     
-    <category term="RabbitMQ" scheme="http://zswh33.github.io/tags/RabbitMQ/"/>
+    <category term="RabbitMQ" scheme="https://zswh33.github.io/tags/RabbitMQ/"/>
     
   </entry>
   
   <entry>
     <title>RabbitMQ 6 交换机确认回调 消息回退 备份交换机 幂等性</title>
-    <link href="http://zswh33.github.io/2023/03/20/RabbitMQ/RabbitMQ-6/"/>
-    <id>http://zswh33.github.io/2023/03/20/RabbitMQ/RabbitMQ-6/</id>
+    <link href="https://zswh33.github.io/2023/03/20/RabbitMQ/RabbitMQ-6/"/>
+    <id>https://zswh33.github.io/2023/03/20/RabbitMQ/RabbitMQ-6/</id>
     <published>2023-03-20T12:34:28.000Z</published>
     <updated>2023-11-10T15:14:53.031Z</updated>
     
@@ -202,17 +202,17 @@
     
     
     
-    <category term="学习" scheme="http://zswh33.github.io/categories/%E5%AD%A6%E4%B9%A0/"/>
+    <category term="学习" scheme="https://zswh33.github.io/categories/%E5%AD%A6%E4%B9%A0/"/>
     
     
-    <category term="RabbitMQ" scheme="http://zswh33.github.io/tags/RabbitMQ/"/>
+    <category term="RabbitMQ" scheme="https://zswh33.github.io/tags/RabbitMQ/"/>
     
   </entry>
   
   <entry>
     <title>RabbitMQ 基础知识 1</title>
-    <link href="http://zswh33.github.io/2023/03/18/RabbitMQ/RabbitMQ-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86-1/"/>
-    <id>http://zswh33.github.io/2023/03/18/RabbitMQ/RabbitMQ-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86-1/</id>
+    <link href="https://zswh33.github.io/2023/03/18/RabbitMQ/RabbitMQ-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86-1/"/>
+    <id>https://zswh33.github.io/2023/03/18/RabbitMQ/RabbitMQ-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86-1/</id>
     <published>2023-03-18T07:00:10.000Z</published>
     <updated>2023-11-10T15:14:34.998Z</updated>
     
@@ -226,17 +226,17 @@
     
     
     
-    <category term="学习" scheme="http://zswh33.github.io/categories/%E5%AD%A6%E4%B9%A0/"/>
+    <category term="学习" scheme="https://zswh33.github.io/categories/%E5%AD%A6%E4%B9%A0/"/>
     
     
-    <category term="RabbitMQ" scheme="http://zswh33.github.io/tags/RabbitMQ/"/>
+    <category term="RabbitMQ" scheme="https://zswh33.github.io/tags/RabbitMQ/"/>
     
   </entry>
   
   <entry>
     <title>RabbitMQ 4</title>
-    <link href="http://zswh33.github.io/2023/03/01/RabbitMQ/RabbitMQ-4/"/>
-    <id>http://zswh33.github.io/2023/03/01/RabbitMQ/RabbitMQ-4/</id>
+    <link href="https://zswh33.github.io/2023/03/01/RabbitMQ/RabbitMQ-4/"/>
+    <id>https://zswh33.github.io/2023/03/01/RabbitMQ/RabbitMQ-4/</id>
     <published>2023-03-01T15:33:03.000Z</published>
     <updated>2023-11-10T15:14:46.241Z</updated>
     
@@ -250,17 +250,17 @@
     
     
     
-    <category term="学习" scheme="http://zswh33.github.io/categories/%E5%AD%A6%E4%B9%A0/"/>
+    <category term="学习" scheme="https://zswh33.github.io/categories/%E5%AD%A6%E4%B9%A0/"/>
     
     
-    <category term="RabbitMQ" scheme="http://zswh33.github.io/tags/RabbitMQ/"/>
+    <category term="RabbitMQ" scheme="https://zswh33.github.io/tags/RabbitMQ/"/>
     
   </entry>
   
   <entry>
     <title>RabbitMQ 4.9 SpringBoot与RabbitMQ</title>
-    <link href="http://zswh33.github.io/2023/02/28/RabbitMQ/RabbitMQ-5/"/>
-    <id>http://zswh33.github.io/2023/02/28/RabbitMQ/RabbitMQ-5/</id>
+    <link href="https://zswh33.github.io/2023/02/28/RabbitMQ/RabbitMQ-5/"/>
+    <id>https://zswh33.github.io/2023/02/28/RabbitMQ/RabbitMQ-5/</id>
     <published>2023-02-28T14:18:09.000Z</published>
     <updated>2023-11-10T15:14:50.841Z</updated>
     
@@ -274,17 +274,17 @@
     
     
     
-    <category term="学习" scheme="http://zswh33.github.io/categories/%E5%AD%A6%E4%B9%A0/"/>
+    <category term="学习" scheme="https://zswh33.github.io/categories/%E5%AD%A6%E4%B9%A0/"/>
     
     
-    <category term="RabbitMQ" scheme="http://zswh33.github.io/tags/RabbitMQ/"/>
+    <category term="RabbitMQ" scheme="https://zswh33.github.io/tags/RabbitMQ/"/>
     
   </entry>
   
   <entry>
     <title>RabbitMQ 5 交换机 死信队列 延时队列</title>
-    <link href="http://zswh33.github.io/2023/02/28/RabbitMQ/RabbitMQ-5_v2/"/>
-    <id>http://zswh33.github.io/2023/02/28/RabbitMQ/RabbitMQ-5_v2/</id>
+    <link href="https://zswh33.github.io/2023/02/28/RabbitMQ/RabbitMQ-5_v2/"/>
+    <id>https://zswh33.github.io/2023/02/28/RabbitMQ/RabbitMQ-5_v2/</id>
     <published>2023-02-28T14:18:09.000Z</published>
     <updated>2023-11-10T15:14:48.355Z</updated>
     
@@ -298,17 +298,17 @@
     
     
     
-    <category term="学习" scheme="http://zswh33.github.io/categories/%E5%AD%A6%E4%B9%A0/"/>
+    <category term="学习" scheme="https://zswh33.github.io/categories/%E5%AD%A6%E4%B9%A0/"/>
     
     
-    <category term="RabbitMQ" scheme="http://zswh33.github.io/tags/RabbitMQ/"/>
+    <category term="RabbitMQ" scheme="https://zswh33.github.io/tags/RabbitMQ/"/>
     
   </entry>
   
   <entry>
     <title>RabbitMQ 3  消息模式 使用场景</title>
-    <link href="http://zswh33.github.io/2023/02/27/RabbitMQ/RabbitMQ-3/"/>
-    <id>http://zswh33.github.io/2023/02/27/RabbitMQ/RabbitMQ-3/</id>
+    <link href="https://zswh33.github.io/2023/02/27/RabbitMQ/RabbitMQ-3/"/>
+    <id>https://zswh33.github.io/2023/02/27/RabbitMQ/RabbitMQ-3/</id>
     <published>2023-02-27T13:40:30.000Z</published>
     <updated>2023-11-10T15:14:44.341Z</updated>
     
@@ -322,17 +322,17 @@
     
     
     
-    <category term="学习" scheme="http://zswh33.github.io/categories/%E5%AD%A6%E4%B9%A0/"/>
+    <category term="学习" scheme="https://zswh33.github.io/categories/%E5%AD%A6%E4%B9%A0/"/>
     
     
-    <category term="RabbitMQ" scheme="http://zswh33.github.io/tags/RabbitMQ/"/>
+    <category term="RabbitMQ" scheme="https://zswh33.github.io/tags/RabbitMQ/"/>
     
   </entry>
   
   <entry>
     <title>RabbitMQ 2 RabbitMQ安装，配置  Java中使用</title>
-    <link href="http://zswh33.github.io/2023/02/27/RabbitMQ/RabbitMQ-2/"/>
-    <id>http://zswh33.github.io/2023/02/27/RabbitMQ/RabbitMQ-2/</id>
+    <link href="https://zswh33.github.io/2023/02/27/RabbitMQ/RabbitMQ-2/"/>
+    <id>https://zswh33.github.io/2023/02/27/RabbitMQ/RabbitMQ-2/</id>
     <published>2023-02-27T01:38:09.000Z</published>
     <updated>2023-11-10T15:14:42.505Z</updated>
     
@@ -349,17 +349,41 @@
     
     
     
-    <category term="学习" scheme="http://zswh33.github.io/categories/%E5%AD%A6%E4%B9%A0/"/>
+    <category term="学习" scheme="https://zswh33.github.io/categories/%E5%AD%A6%E4%B9%A0/"/>
     
     
-    <category term="RabbitMQ" scheme="http://zswh33.github.io/tags/RabbitMQ/"/>
+    <category term="RabbitMQ" scheme="https://zswh33.github.io/tags/RabbitMQ/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>RabbitMQ 0 中间件 消息中间件常用协议 特点</title>
+    <link href="https://zswh33.github.io/2023/02/23/RabbitMQ/RabbitMQ-0/"/>
+    <id>https://zswh33.github.io/2023/02/23/RabbitMQ/RabbitMQ-0/</id>
+    <published>2023-02-23T07:08:52.000Z</published>
+    <updated>2023-11-10T15:14:38.095Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="中间件"><a href="#中间件" class="headerlink" title="中间件"></a>中间件</h1><h2 id="分布式消息中间件"><a href="#分布式消息中间件" class="headerlink" title="分布式消息中间件"></a>分布式消息中间件</h2><h3 id="当前"><a href="#当前" class="headerlink" title="当前"></a>当前</h3><ul><li><p>ActiveMQ</p></li><li><p>RabbitMQ</p><ul><li>在AMQP基础上完成</li><li>优点：<ul><li>基于erlang语言，高并发特性</li><li>吞吐量万级</li><li>MQ功能完善</li><li>支持多种编程语言</li><li>开源管理界面完善</li><li>社区活跃度高</li></ul></li><li>缺点<ul><li>商业版收费</li><li>学习成本高</li></ul></li></ul></li><li><p>Kafka</p><ul><li>优点：性能很强，单机写入TPS约百万条&#x2F;s。</li><li>缺点：<ul><li>在单机超过64队列&#x2F;分区，Load会发生明显的飙高现象。队列越多，load越高，发送响应时间变长；</li><li>一台宕机，就会产生消息乱序。</li><li>消费失败不支持重试</li></ul></li></ul></li><li><p>RocketMQ</p><ul><li>阿里、滴滴开发的国产分布式消息中间件</li><li>优点：<ul><li>单机吞吐量十万级，</li><li>消息可以做到0丢失，</li><li>支持分布式，扩展性好。</li><li>支持10亿级别消息堆积；</li><li>支持自定义</li></ul></li><li>缺点：<ul><li>支持的客户端不多。</li></ul></li></ul></li></ul><h3 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h3><ul><li>消息中间件监控数据</li><li>异步数据传输场景</li><li>削峰填谷场景</li><li>任务调度场景</li><li>海量数据同步场景</li><li>分布式事务场景</li><li>日记管理场景</li><li>大数据分析场景</li></ul><h3 id="要求"><a href="#要求" class="headerlink" title="要求"></a>要求</h3><ul><li>AMQP</li><li>MQTT</li><li>持久化设计</li><li>Kafka协议</li><li>消息分发设计</li><li>高可用</li><li>可靠性</li><li>容错</li></ul><h2 id="负载均衡中间件"><a href="#负载均衡中间件" class="headerlink" title="负载均衡中间件"></a>负载均衡中间件</h2><ul><li>Nginx</li><li>LVS负载均衡<ul><li>对Nginx进行集群</li></ul></li><li>KeepAlive<ul><li>保持心跳，保持高可用</li></ul></li><li>CDN<ul><li>加速</li></ul></li></ul><h2 id="缓存中间件"><a href="#缓存中间件" class="headerlink" title="缓存中间件"></a>缓存中间件</h2><ul><li>MemCache</li><li>Redis</li></ul><h2 id="数据库中间件"><a href="#数据库中间件" class="headerlink" title="数据库中间件"></a>数据库中间件</h2><p><em>Mysql不保证高可用性</em></p><p><em>数据库中间件：实现Mysql集群，高可用性</em></p><ul><li>Mycat</li><li>ShardingJdbc</li></ul><h2 id="使用案例"><a href="#使用案例" class="headerlink" title="使用案例"></a>使用案例</h2><ul><li>异步数据保存<ul><li>实现削峰</li></ul></li><li>订单数据的消息分发</li><li>分布式事务</li><li>消息的容错</li><li>分布式锁</li><li>分布式会话</li><li>分库分表</li></ul><h2 id="消息中间件核心组成"><a href="#消息中间件核心组成" class="headerlink" title="消息中间件核心组成"></a>消息中间件核心组成</h2><ul><li>消息的协议</li><li>消息的持久化机制</li><li>消息的分发策略</li><li>消息的高可用，高可靠</li><li>消息的容错机制</li></ul><h1 id="网络协议三要素"><a href="#网络协议三要素" class="headerlink" title="网络协议三要素"></a>网络协议三要素</h1><ul><li>语法：语法是用户数据与控制信息的结构与格式以及数据出现的顺序</li><li>语义：语义是解释控制信息的每个部分的意义。它规定了需要发出何种控制信息，以及完成的动作与做出什么样的响应</li><li>时序：时序是对事件发生顺序的详细说明。</li></ul><h1 id="面试：为什么消息中间件不直接使用http协议？"><a href="#面试：为什么消息中间件不直接使用http协议？" class="headerlink" title="面试：为什么消息中间件不直接使用http协议？"></a>面试：为什么消息中间件不直接使用http协议？</h1><ul><li>因为http请求报文头和响应报文头是比较复杂的，包含了cookie，数据的加密解密，状态码，响应码等附加功能，对于一个消息而言，不需要这些复杂的功能，，消息只需要负责数据传递，存储，分发就可以，且追求高性能，进行简洁，快速；</li><li>大部分http使用的是短连接，在实际交互过程中，一个请求到响应很有可能会中断，中断后就不会进行持久化，造成请求的丢失，这样不利于消息中间件的业务场景。消息中间件可能是一个长期获取消息的过程，出现问题和故障要对数据或消息进行持久化等，目的是为了保证消息和数据的高可靠和稳健的运行。</li></ul><h1 id="消息中间件常用协议"><a href="#消息中间件常用协议" class="headerlink" title="消息中间件常用协议"></a>消息中间件常用协议</h1><ul><li>OpenWire，<strong>AMQP，MQTT，Kafka</strong>，OpenMessage协议</li></ul><h2 id="AMQP"><a href="#AMQP" class="headerlink" title="AMQP"></a>AMQP</h2><p>全称：Advanced Message Queuing Protocol</p><p>高级消息队列协议。</p><p>特性</p><ul><li>分布式事务支持</li><li>消息持久化支持</li><li>高性能和高可靠的消息处理优势</li></ul><p>支持者</p><ul><li>RabbitMQ，ActiveMQ</li></ul><h2 id="MQTT"><a href="#MQTT" class="headerlink" title="MQTT"></a>MQTT</h2><p>Message Queuing Telemetry Transport</p><p>是IBM开放的一个即时通讯协议，物联网系统架构的重要组成部分</p><p>特点</p><ul><li>轻量</li><li>结构简单</li><li>速度快，不支持事务</li><li>没有持久化设计</li></ul><p>应用场景</p><ul><li>计算能力有限</li><li>低带宽</li><li>网络不稳定场景</li></ul><p>支持者</p><ul><li>RabbitMQ，AvtiveMQ<ul><li>默认关闭MQTT协议，需要手动打开</li></ul></li></ul><h2 id="OpenMessage"><a href="#OpenMessage" class="headerlink" title="OpenMessage"></a>OpenMessage</h2><p>Apache RocketMQ</p><p>由阿里、雅虎、滴滴、Stremalio等公司共同参与创立的分布式消息中间件、流处理领域的应用开发标准；</p><p>特点：</p><ul><li>结构简单</li><li>解析速度快</li><li>支持事务和持久化设计</li></ul><h2 id="Kafka协议"><a href="#Kafka协议" class="headerlink" title="Kafka协议"></a>Kafka协议</h2><p>Kafka</p><p>基于TCP&#x2F;IP的二进制协议，消息内部通过长度来分割，由一些基本数据类型组成</p><p>特点</p><ul><li>结构简单</li><li>解析速度快</li><li>无事务支持</li><li>有持久化设计</li></ul><h1 id="消息队列持久化"><a href="#消息队列持久化" class="headerlink" title="消息队列持久化"></a>消息队列持久化</h1><p><em>将数据存入磁盘，而不是存在内存中，使数据永久保存</em></p><h1 id="消息队列分发策略"><a href="#消息队列分发策略" class="headerlink" title="消息队列分发策略"></a>消息队列分发策略</h1><p>角色：生产者，存储消息，消费者；</p><h2 id="执行过程"><a href="#执行过程" class="headerlink" title="执行过程"></a>执行过程</h2><ul><li>生产者生成消息</li><li>MQ进行存储</li><li>消费者通过<strong>PUSH推或PULL拉</strong>的方式获取消息</li></ul><h2 id="多个消息中间件消息分发策略的机制和对比"><a href="#多个消息中间件消息分发策略的机制和对比" class="headerlink" title="多个消息中间件消息分发策略的机制和对比"></a>多个消息中间件消息分发策略的机制和对比</h2><table><thead><tr><th></th><th>ActiveMQ</th><th>RabbitMQ</th><th>Kafka</th><th>RocketMQ</th></tr></thead><tbody><tr><td>发布订阅</td><td>支持</td><td>支持</td><td>支持</td><td>支持</td></tr><tr><td>轮询分发</td><td>支持</td><td>支持</td><td>支持</td><td>&#x2F;</td></tr><tr><td>公平分发</td><td>&#x2F;</td><td>支持</td><td>支持</td><td>&#x2F;</td></tr><tr><td>重发</td><td>支持</td><td>支持</td><td>&#x2F;</td><td>支持</td></tr><tr><td>消息拉取</td><td>&#x2F;</td><td>支持</td><td>支持</td><td>支持</td></tr></tbody></table><ul><li><p>轮询分发：每个服务器分配到的消息数量一致</p></li><li><p>公平分发：每个服务器分配到的消息数量<strong>不一致</strong>，能者多劳 ；</p></li><li><p>消息拉取：很少使用，RPC</p></li></ul><h1 id="消息队列高可用和高可靠"><a href="#消息队列高可用和高可靠" class="headerlink" title="消息队列高可用和高可靠"></a>消息队列高可用和高可靠</h1><h2 id="高可用"><a href="#高可用" class="headerlink" title="高可用"></a>高可用</h2><p><em>即：集群。</em></p><p>是指产品在规定的条件和规定的时刻或时间内处于可执行规定功能状态的能力；</p><p>当业务量增加时，请求也过多，一台消息中间件服务器会触及硬件（CPU，内存，磁盘）的极限，一台消息服务器已经无法满足业务的需求，所以消息中间件必须支持集群部署，来达到高可用的目的。</p><p>集群模式1，Master-Slave主从共享数据的部署方式</p><p><img lazyload alt="image" data-src="/RabbitMQ-1/%E6%9C%AA%E5%91%BD%E5%90%8D%E7%BB%98%E5%9B%BE.drawio.svg"></p><p>集群模式2，Master-Slave主从同步部署模式</p><p>集群模式3，多主集群同步部署模式</p><p>集群模式4，多主集群转发部署模式</p><p>集群模式5，Master-Slave与Breok-Cluster组合方案</p><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ol><li>消息共享</li><li>消息同步</li><li>元数据共享</li></ol><h2 id="高可靠"><a href="#高可靠" class="headerlink" title="高可靠"></a>高可靠</h2><p><strong>指系统可以无故障持续运行</strong></p><p>比如一个系统崩溃，报错，异常等不影响线上业务的正常运行，出错率极低，就称之为：高可靠。</p><p>如何保证中间件消息的可靠性？</p><ol><li>消息的传输：通过协议来保证系统间数据解析的正确性</li><li>消息的存储可靠：通过持久化来保证消息的可靠性</li></ol>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;中间件&quot;&gt;&lt;a href=&quot;#中间件&quot; class=&quot;headerlink&quot; title=&quot;中间件&quot;&gt;&lt;/a&gt;中间件&lt;/h1&gt;&lt;h2 id=&quot;分布式消息中间件&quot;&gt;&lt;a href=&quot;#分布式消息中间件&quot; class=&quot;headerlink&quot; title=&quot;分布式消息</summary>
+      
+    
+    
+    
+    <category term="学习" scheme="https://zswh33.github.io/categories/%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+    <category term="RabbitMQ" scheme="https://zswh33.github.io/tags/RabbitMQ/"/>
     
   </entry>
   
   <entry>
     <title>RabbitMQ 1 分布式消息中间件 MQ选用 RabbitMQ特点，流程，名词介绍</title>
-    <link href="http://zswh33.github.io/2023/02/23/RabbitMQ/RabbitMQ-1_v2/"/>
-    <id>http://zswh33.github.io/2023/02/23/RabbitMQ/RabbitMQ-1_v2/</id>
+    <link href="https://zswh33.github.io/2023/02/23/RabbitMQ/RabbitMQ-1_v2/"/>
+    <id>https://zswh33.github.io/2023/02/23/RabbitMQ/RabbitMQ-1_v2/</id>
     <published>2023-02-23T07:08:52.000Z</published>
     <updated>2023-11-10T15:14:40.392Z</updated>
     
@@ -376,41 +400,17 @@
     
     
     
-    <category term="学习" scheme="http://zswh33.github.io/categories/%E5%AD%A6%E4%B9%A0/"/>
+    <category term="学习" scheme="https://zswh33.github.io/categories/%E5%AD%A6%E4%B9%A0/"/>
     
     
-    <category term="RabbitMQ" scheme="http://zswh33.github.io/tags/RabbitMQ/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>RabbitMQ 0 中间件 消息中间件常用协议 特点</title>
-    <link href="http://zswh33.github.io/2023/02/23/RabbitMQ/RabbitMQ-0/"/>
-    <id>http://zswh33.github.io/2023/02/23/RabbitMQ/RabbitMQ-0/</id>
-    <published>2023-02-23T07:08:52.000Z</published>
-    <updated>2023-11-10T15:14:38.095Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="中间件"><a href="#中间件" class="headerlink" title="中间件"></a>中间件</h1><h2 id="分布式消息中间件"><a href="#分布式消息中间件" class="headerlink" title="分布式消息中间件"></a>分布式消息中间件</h2><h3 id="当前"><a href="#当前" class="headerlink" title="当前"></a>当前</h3><ul><li><p>ActiveMQ</p></li><li><p>RabbitMQ</p><ul><li>在AMQP基础上完成</li><li>优点：<ul><li>基于erlang语言，高并发特性</li><li>吞吐量万级</li><li>MQ功能完善</li><li>支持多种编程语言</li><li>开源管理界面完善</li><li>社区活跃度高</li></ul></li><li>缺点<ul><li>商业版收费</li><li>学习成本高</li></ul></li></ul></li><li><p>Kafka</p><ul><li>优点：性能很强，单机写入TPS约百万条&#x2F;s。</li><li>缺点：<ul><li>在单机超过64队列&#x2F;分区，Load会发生明显的飙高现象。队列越多，load越高，发送响应时间变长；</li><li>一台宕机，就会产生消息乱序。</li><li>消费失败不支持重试</li></ul></li></ul></li><li><p>RocketMQ</p><ul><li>阿里、滴滴开发的国产分布式消息中间件</li><li>优点：<ul><li>单机吞吐量十万级，</li><li>消息可以做到0丢失，</li><li>支持分布式，扩展性好。</li><li>支持10亿级别消息堆积；</li><li>支持自定义</li></ul></li><li>缺点：<ul><li>支持的客户端不多。</li></ul></li></ul></li></ul><h3 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h3><ul><li>消息中间件监控数据</li><li>异步数据传输场景</li><li>削峰填谷场景</li><li>任务调度场景</li><li>海量数据同步场景</li><li>分布式事务场景</li><li>日记管理场景</li><li>大数据分析场景</li></ul><h3 id="要求"><a href="#要求" class="headerlink" title="要求"></a>要求</h3><ul><li>AMQP</li><li>MQTT</li><li>持久化设计</li><li>Kafka协议</li><li>消息分发设计</li><li>高可用</li><li>可靠性</li><li>容错</li></ul><h2 id="负载均衡中间件"><a href="#负载均衡中间件" class="headerlink" title="负载均衡中间件"></a>负载均衡中间件</h2><ul><li>Nginx</li><li>LVS负载均衡<ul><li>对Nginx进行集群</li></ul></li><li>KeepAlive<ul><li>保持心跳，保持高可用</li></ul></li><li>CDN<ul><li>加速</li></ul></li></ul><h2 id="缓存中间件"><a href="#缓存中间件" class="headerlink" title="缓存中间件"></a>缓存中间件</h2><ul><li>MemCache</li><li>Redis</li></ul><h2 id="数据库中间件"><a href="#数据库中间件" class="headerlink" title="数据库中间件"></a>数据库中间件</h2><p><em>Mysql不保证高可用性</em></p><p><em>数据库中间件：实现Mysql集群，高可用性</em></p><ul><li>Mycat</li><li>ShardingJdbc</li></ul><h2 id="使用案例"><a href="#使用案例" class="headerlink" title="使用案例"></a>使用案例</h2><ul><li>异步数据保存<ul><li>实现削峰</li></ul></li><li>订单数据的消息分发</li><li>分布式事务</li><li>消息的容错</li><li>分布式锁</li><li>分布式会话</li><li>分库分表</li></ul><h2 id="消息中间件核心组成"><a href="#消息中间件核心组成" class="headerlink" title="消息中间件核心组成"></a>消息中间件核心组成</h2><ul><li>消息的协议</li><li>消息的持久化机制</li><li>消息的分发策略</li><li>消息的高可用，高可靠</li><li>消息的容错机制</li></ul><h1 id="网络协议三要素"><a href="#网络协议三要素" class="headerlink" title="网络协议三要素"></a>网络协议三要素</h1><ul><li>语法：语法是用户数据与控制信息的结构与格式以及数据出现的顺序</li><li>语义：语义是解释控制信息的每个部分的意义。它规定了需要发出何种控制信息，以及完成的动作与做出什么样的响应</li><li>时序：时序是对事件发生顺序的详细说明。</li></ul><h1 id="面试：为什么消息中间件不直接使用http协议？"><a href="#面试：为什么消息中间件不直接使用http协议？" class="headerlink" title="面试：为什么消息中间件不直接使用http协议？"></a>面试：为什么消息中间件不直接使用http协议？</h1><ul><li>因为http请求报文头和响应报文头是比较复杂的，包含了cookie，数据的加密解密，状态码，响应码等附加功能，对于一个消息而言，不需要这些复杂的功能，，消息只需要负责数据传递，存储，分发就可以，且追求高性能，进行简洁，快速；</li><li>大部分http使用的是短连接，在实际交互过程中，一个请求到响应很有可能会中断，中断后就不会进行持久化，造成请求的丢失，这样不利于消息中间件的业务场景。消息中间件可能是一个长期获取消息的过程，出现问题和故障要对数据或消息进行持久化等，目的是为了保证消息和数据的高可靠和稳健的运行。</li></ul><h1 id="消息中间件常用协议"><a href="#消息中间件常用协议" class="headerlink" title="消息中间件常用协议"></a>消息中间件常用协议</h1><ul><li>OpenWire，<strong>AMQP，MQTT，Kafka</strong>，OpenMessage协议</li></ul><h2 id="AMQP"><a href="#AMQP" class="headerlink" title="AMQP"></a>AMQP</h2><p>全称：Advanced Message Queuing Protocol</p><p>高级消息队列协议。</p><p>特性</p><ul><li>分布式事务支持</li><li>消息持久化支持</li><li>高性能和高可靠的消息处理优势</li></ul><p>支持者</p><ul><li>RabbitMQ，ActiveMQ</li></ul><h2 id="MQTT"><a href="#MQTT" class="headerlink" title="MQTT"></a>MQTT</h2><p>Message Queuing Telemetry Transport</p><p>是IBM开放的一个即时通讯协议，物联网系统架构的重要组成部分</p><p>特点</p><ul><li>轻量</li><li>结构简单</li><li>速度快，不支持事务</li><li>没有持久化设计</li></ul><p>应用场景</p><ul><li>计算能力有限</li><li>低带宽</li><li>网络不稳定场景</li></ul><p>支持者</p><ul><li>RabbitMQ，AvtiveMQ<ul><li>默认关闭MQTT协议，需要手动打开</li></ul></li></ul><h2 id="OpenMessage"><a href="#OpenMessage" class="headerlink" title="OpenMessage"></a>OpenMessage</h2><p>Apache RocketMQ</p><p>由阿里、雅虎、滴滴、Stremalio等公司共同参与创立的分布式消息中间件、流处理领域的应用开发标准；</p><p>特点：</p><ul><li>结构简单</li><li>解析速度快</li><li>支持事务和持久化设计</li></ul><h2 id="Kafka协议"><a href="#Kafka协议" class="headerlink" title="Kafka协议"></a>Kafka协议</h2><p>Kafka</p><p>基于TCP&#x2F;IP的二进制协议，消息内部通过长度来分割，由一些基本数据类型组成</p><p>特点</p><ul><li>结构简单</li><li>解析速度快</li><li>无事务支持</li><li>有持久化设计</li></ul><h1 id="消息队列持久化"><a href="#消息队列持久化" class="headerlink" title="消息队列持久化"></a>消息队列持久化</h1><p><em>将数据存入磁盘，而不是存在内存中，使数据永久保存</em></p><h1 id="消息队列分发策略"><a href="#消息队列分发策略" class="headerlink" title="消息队列分发策略"></a>消息队列分发策略</h1><p>角色：生产者，存储消息，消费者；</p><h2 id="执行过程"><a href="#执行过程" class="headerlink" title="执行过程"></a>执行过程</h2><ul><li>生产者生成消息</li><li>MQ进行存储</li><li>消费者通过<strong>PUSH推或PULL拉</strong>的方式获取消息</li></ul><h2 id="多个消息中间件消息分发策略的机制和对比"><a href="#多个消息中间件消息分发策略的机制和对比" class="headerlink" title="多个消息中间件消息分发策略的机制和对比"></a>多个消息中间件消息分发策略的机制和对比</h2><table><thead><tr><th></th><th>ActiveMQ</th><th>RabbitMQ</th><th>Kafka</th><th>RocketMQ</th></tr></thead><tbody><tr><td>发布订阅</td><td>支持</td><td>支持</td><td>支持</td><td>支持</td></tr><tr><td>轮询分发</td><td>支持</td><td>支持</td><td>支持</td><td>&#x2F;</td></tr><tr><td>公平分发</td><td>&#x2F;</td><td>支持</td><td>支持</td><td>&#x2F;</td></tr><tr><td>重发</td><td>支持</td><td>支持</td><td>&#x2F;</td><td>支持</td></tr><tr><td>消息拉取</td><td>&#x2F;</td><td>支持</td><td>支持</td><td>支持</td></tr></tbody></table><ul><li><p>轮询分发：每个服务器分配到的消息数量一致</p></li><li><p>公平分发：每个服务器分配到的消息数量<strong>不一致</strong>，能者多劳 ；</p></li><li><p>消息拉取：很少使用，RPC</p></li></ul><h1 id="消息队列高可用和高可靠"><a href="#消息队列高可用和高可靠" class="headerlink" title="消息队列高可用和高可靠"></a>消息队列高可用和高可靠</h1><h2 id="高可用"><a href="#高可用" class="headerlink" title="高可用"></a>高可用</h2><p><em>即：集群。</em></p><p>是指产品在规定的条件和规定的时刻或时间内处于可执行规定功能状态的能力；</p><p>当业务量增加时，请求也过多，一台消息中间件服务器会触及硬件（CPU，内存，磁盘）的极限，一台消息服务器已经无法满足业务的需求，所以消息中间件必须支持集群部署，来达到高可用的目的。</p><p>集群模式1，Master-Slave主从共享数据的部署方式</p><p><img lazyload alt="image" data-src="/RabbitMQ-1/%E6%9C%AA%E5%91%BD%E5%90%8D%E7%BB%98%E5%9B%BE.drawio.svg"></p><p>集群模式2，Master-Slave主从同步部署模式</p><p>集群模式3，多主集群同步部署模式</p><p>集群模式4，多主集群转发部署模式</p><p>集群模式5，Master-Slave与Breok-Cluster组合方案</p><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ol><li>消息共享</li><li>消息同步</li><li>元数据共享</li></ol><h2 id="高可靠"><a href="#高可靠" class="headerlink" title="高可靠"></a>高可靠</h2><p><strong>指系统可以无故障持续运行</strong></p><p>比如一个系统崩溃，报错，异常等不影响线上业务的正常运行，出错率极低，就称之为：高可靠。</p><p>如何保证中间件消息的可靠性？</p><ol><li>消息的传输：通过协议来保证系统间数据解析的正确性</li><li>消息的存储可靠：通过持久化来保证消息的可靠性</li></ol>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;中间件&quot;&gt;&lt;a href=&quot;#中间件&quot; class=&quot;headerlink&quot; title=&quot;中间件&quot;&gt;&lt;/a&gt;中间件&lt;/h1&gt;&lt;h2 id=&quot;分布式消息中间件&quot;&gt;&lt;a href=&quot;#分布式消息中间件&quot; class=&quot;headerlink&quot; title=&quot;分布式消息</summary>
-      
-    
-    
-    
-    <category term="学习" scheme="http://zswh33.github.io/categories/%E5%AD%A6%E4%B9%A0/"/>
-    
-    
-    <category term="RabbitMQ" scheme="http://zswh33.github.io/tags/RabbitMQ/"/>
+    <category term="RabbitMQ" scheme="https://zswh33.github.io/tags/RabbitMQ/"/>
     
   </entry>
   
   <entry>
     <title>Redis restudy 8 缓存穿透，击穿，雪崩</title>
-    <link href="http://zswh33.github.io/2023/02/13/Redis/Redis-restudy-8/"/>
-    <id>http://zswh33.github.io/2023/02/13/Redis/Redis-restudy-8/</id>
+    <link href="https://zswh33.github.io/2023/02/13/Redis/Redis-restudy-8/"/>
+    <id>https://zswh33.github.io/2023/02/13/Redis/Redis-restudy-8/</id>
     <published>2023-02-13T15:23:29.000Z</published>
     <updated>2023-11-10T15:15:21.105Z</updated>
     
@@ -424,17 +424,17 @@
     
     
     
-    <category term="学习" scheme="http://zswh33.github.io/categories/%E5%AD%A6%E4%B9%A0/"/>
+    <category term="学习" scheme="https://zswh33.github.io/categories/%E5%AD%A6%E4%B9%A0/"/>
     
     
-    <category term="Redis" scheme="http://zswh33.github.io/tags/Redis/"/>
+    <category term="Redis" scheme="https://zswh33.github.io/tags/Redis/"/>
     
   </entry>
   
   <entry>
     <title>Redis restudy 7 发布订阅 主从复制 哨兵模式</title>
-    <link href="http://zswh33.github.io/2023/02/13/Redis/Redis-restudy-7/"/>
-    <id>http://zswh33.github.io/2023/02/13/Redis/Redis-restudy-7/</id>
+    <link href="https://zswh33.github.io/2023/02/13/Redis/Redis-restudy-7/"/>
+    <id>https://zswh33.github.io/2023/02/13/Redis/Redis-restudy-7/</id>
     <published>2023-02-13T11:29:57.000Z</published>
     <updated>2023-11-10T15:15:19.083Z</updated>
     
@@ -448,17 +448,17 @@
     
     
     
-    <category term="学习" scheme="http://zswh33.github.io/categories/%E5%AD%A6%E4%B9%A0/"/>
+    <category term="学习" scheme="https://zswh33.github.io/categories/%E5%AD%A6%E4%B9%A0/"/>
     
     
-    <category term="Redis" scheme="http://zswh33.github.io/tags/Redis/"/>
+    <category term="Redis" scheme="https://zswh33.github.io/tags/Redis/"/>
     
   </entry>
   
   <entry>
     <title>Redis restudy 6 conf 持久化</title>
-    <link href="http://zswh33.github.io/2023/02/13/Redis/Redis-restudy-6/"/>
-    <id>http://zswh33.github.io/2023/02/13/Redis/Redis-restudy-6/</id>
+    <link href="https://zswh33.github.io/2023/02/13/Redis/Redis-restudy-6/"/>
+    <id>https://zswh33.github.io/2023/02/13/Redis/Redis-restudy-6/</id>
     <published>2023-02-13T07:54:23.000Z</published>
     <updated>2023-11-10T15:15:17.283Z</updated>
     
@@ -472,17 +472,17 @@
     
     
     
-    <category term="学习" scheme="http://zswh33.github.io/categories/%E5%AD%A6%E4%B9%A0/"/>
+    <category term="学习" scheme="https://zswh33.github.io/categories/%E5%AD%A6%E4%B9%A0/"/>
     
     
-    <category term="Redis" scheme="http://zswh33.github.io/tags/Redis/"/>
+    <category term="Redis" scheme="https://zswh33.github.io/tags/Redis/"/>
     
   </entry>
   
   <entry>
     <title>Redis restudy 5 事务 监视Jedis SpringBootRedis</title>
-    <link href="http://zswh33.github.io/2023/02/13/Redis/Redis-restudy-5/"/>
-    <id>http://zswh33.github.io/2023/02/13/Redis/Redis-restudy-5/</id>
+    <link href="https://zswh33.github.io/2023/02/13/Redis/Redis-restudy-5/"/>
+    <id>https://zswh33.github.io/2023/02/13/Redis/Redis-restudy-5/</id>
     <published>2023-02-13T04:36:14.000Z</published>
     <updated>2023-11-10T15:15:15.405Z</updated>
     
@@ -498,10 +498,10 @@
     
     
     
-    <category term="学习" scheme="http://zswh33.github.io/categories/%E5%AD%A6%E4%B9%A0/"/>
+    <category term="学习" scheme="https://zswh33.github.io/categories/%E5%AD%A6%E4%B9%A0/"/>
     
     
-    <category term="Redis" scheme="http://zswh33.github.io/tags/Redis/"/>
+    <category term="Redis" scheme="https://zswh33.github.io/tags/Redis/"/>
     
   </entry>
   
