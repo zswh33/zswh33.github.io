@@ -1,0 +1,954 @@
+<!DOCTYPE html><html lang="zh-CN"><head><!-- hexo injector head_begin start --><!-- Google tag (gtag.js) begins-->
+    <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-RFWZCCZB4V"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+    
+      gtag('config', 'G-RFWZCCZB4V');
+    </script>
+    <!-- Google tag (gtag.js) ends-->
+    <!-- hexo injector head_begin end -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="一个包含有学习日记的博客">
+    <meta name="author" content="uwupu">
+    
+    <title>
+        
+            Foundry 之 FORGE和CAST |
+        
+        uwupu 学习日志
+    </title>
+    
+
+
+    
+        <link rel="shortcut icon" href="https://img2.uwupu.win/icon/tx3_round.png">
+    
+    
+    
+    
+    
+    
+        
+            
+        
+            
+                
+
+
+            
+        
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"uwupu.win","root":"/","language":"zh-CN","path":"search.json"}
+    KEEP.theme_config = {"base_info":{"primary_color":"#F099BC","title":"uwupu 学习日志","author":"uwupu","avatar":"https://img2.uwupu.win/icon/tx3_round.png","logo":"https://img2.uwupu.win/icon/tx3_round.png","favicon":"https://img2.uwupu.win/icon/tx3_round.png"},"menu":{"home":"/","archives":"/archives","tags":"/tags","categories":"/categories","about":"/about"},"first_screen":{"enable":true,"background_img":"/images/bg.svg","background_img_dark":"/images/bg.svg","description":"哇！嗯嗯.","hitokoto":true},"social_contact":{"enable":false,"links":{"github":"https://github.com/zswh33","weixin":null,"qq":null,"weibo":null,"zhihu":null,"twitter":null,"x":null,"facebook":null,"email":"x@uwupu.win"}},"scroll":{"progress_bar":true,"percent":false,"hide_header":true},"home":{"announcement":null,"category":true,"tag":true,"post_datetime":"updated"},"post":{"author_badge":{"enable":true,"level_badge":false,"custom_badge":["啦啦啦啦啦"]},"word_count":{"wordcount":true,"min2read":true},"datetime_format":"YYYY-MM-DD HH:mm:ss","copyright_info":false,"share":false,"reward":{"enable":false,"img_link":null,"text":null,"icon":null}},"code_block":{"tools":{"enable":true,"style":"default"},"highlight_theme":"default"},"toc":{"enable":true,"number":false,"expand_all":false,"init_open":true,"layout":"right"},"website_count":{"busuanzi_count":{"enable":true,"site_uv":true,"site_pv":true,"page_pv":true}},"local_search":{"enable":true,"preload":true},"comment":{"enable":true,"use":"twikoo","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":"https://comments.uwupu.win/","region":null,"version":"1.6.39"},"waline":{"server_url":null,"reaction":false,"version":"3.3.2"},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false},"artalk":{"server":null},"disqus":{"shortname":null}},"rss":{"enable":true},"lazyload":{"enable":false},"cdn":{"enable":true,"provider":"cdnjs"},"pjax":{"enable":false},"footer":{"since":2020,"word_count":true,"site_deploy":{"enable":false,"provider":"github","url":null},"record":{"enable":false,"list":[{"code":null,"link":null}]}},"inject":{"enable":true,"css":[null,"/css/custom.css"],"js":[null,"/js/custom.js"]},"root":"","source_data":{"links":[{"title":"ooooooo"},{"name":"uwupu学习日志","link":"/","description":"啦啦啦啦啦~","avatar":"https://img2.uwupu.win/icon/aaa.png"},{"name":"TOOLS","link":"/links/tools/","description":"TOOLS","avatar":"https://img2.uwupu.win/icon/aaw.png"},{"name":"PHOTOS","link":"/links/photos/","description":"PHOTOS","avatar":"https://img2.uwupu.win/icon/aax.png"},{"title":"嗯嗯.."},{"name":"INDEX","link":"https://node.uwupu.win/","description":"INDEX?","avatar":"https://node.uwupu.win/image/logo.png"}],"photos":[{"url":"/images/images/pwaicon/512.png","name":"PWAICON"},{"url":"https://img2.uwupu.win/icon/tx3_round.png","name":"ICON"}],"tools":[{"category":"常用工具","anchorId":"JUU1JUI4JUI4JUU3JTk0JUE4JUU1JUI3JUE1JUU1JTg1JUI30"},{"name":"LinuxDo","link":"https://linux.do/","description":"LinuxDo","image":"/aaa.png"},{"name":"V2EX","link":"https://v2ex.com","description":"V2EX","image":"/aaa.png"},{"name":"Deepseek","link":"https://deepseek`.com","description":"deepseek","image":"/aaa.png"},{"category":"可能是凑数的","anchorId":"JUU1JThGJUFGJUU4JTgzJUJEJUU2JTk4JUFGJUU1JTg3JTkxJUU2JTk1JUIwJUU3JTlBJTg04"},{"name":"TicTocToe","link":"https://n.uwupu.win/threejs-study-tic-toc-toe","description":"TicTocToe","avatar":"https://node.uwupu.win/image/logo.png"},{"name":"INDEX","link":"https://node.uwupu.win/","description":"INDEX?","avatar":"https://node.uwupu.win/image/logo.png"}]},"version":"4.2.5"}
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"}
+    KEEP.language_code_block = {"copy":"复制代码","copied":"已复制","fold":"折叠代码块","folded":"已折叠"}
+    KEEP.language_copy_copyright = {"copy":"复制版权信息","copied":"已复制","title":"原文标题","author":"原文作者","link":"原文链接"}
+  </script>
+<meta name="generator" content="Hexo 7.3.0"><script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/font/css/fontawesome.min.css');loadCss('https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/font/css/regular.min.css');loadCss('https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/font/css/solid.min.css');loadCss('https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/font/css/brands.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/font/css/fontawesome.min.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/font/css/regular.min.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/font/css/solid.min.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/font/css/brands.min.css"></noscript></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+        <span class="scroll-progress-bar"></span>
+    
+
+    
+</div>
+
+
+
+<main class="page-container border-box">
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left flex-start border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="https://img2.uwupu.win/icon/tx3_round.png">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               uwupu 学习日志
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc border-box">
+                <ul class="menu-list border-box">
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/">
+                                
+                                首页
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/archives">
+                                
+                                归档
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/tags">
+                                
+                                标签
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/categories">
+                                
+                                分类
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/about">
+                                
+                                关于
+                                
+                            </a>
+                            
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="menu-text-color fas search fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile border-box flex-start">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list border-box">
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/">
+                            
+                            首页
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/archives">
+                            
+                            归档
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/tags">
+                            
+                            标签
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/categories">
+                            
+                            分类
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/about">
+                            
+                            关于
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+                
+
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+
+            <div class="post-content-bottom border-box">
+                
+                    <div class="post-title">
+                        Foundry 之 FORGE和CAST
+                    </div>
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="https://img2.uwupu.win/icon/tx3_round.png">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">uwupu</span>
+                                
+                                    <span class="author-badge">啦啦啦啦啦</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
+                <span class="datetime">2024-12-15 02:37:57</span>
+            </span>
+
+            
+                <span class="meta-info-item post-update-date">
+                    <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                    <span class="datetime" data-updated="Sun Jun 01 2025 06:01:52 GMT+0800">2025-06-01 06:01:52</span>
+                </span>
+            
+        
+
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/HackQuest/">HackQuest</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Foundry/">Foundry</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Solidity/">Solidity</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+            <span class="meta-info-item post-wordcount">
+                <i class="icon fas fa-file-word"></i>&nbsp;<span>2k 字</span>
+            </span>
+        
+        
+            <span class="meta-info-item post-min2read">
+                <i class="icon fas fa-clock"></i>&nbsp;<span>8 分钟</span>
+            </span>
+        
+        
+            <span class="meta-info-item post-pv">
+                <i class="icon fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body ">
+                    
+
+                    
+                         <p>Foundry类似于cargo或npm。</p>
+<p>参考文献：<a class="link" target="_blank" rel="noopener" href="https://www.hackquest.io/">https://www.hackquest.io/<i class="fas fa-external-link-alt"></i></a></p>
+<blockquote>
+<p>关键词</p>
+</blockquote>
+<ul>
+<li>pass，表示测试通过</li>
+</ul>
+<h1 id="Foundry介绍"><a href="#Foundry介绍" class="headerlink" title="Foundry介绍"></a>Foundry介绍</h1><p><strong>Foundry</strong> 是一个 Solidity 框架，用于构建、测试、模糊、调试和部署Solidity 智能合约。</p>
+<p>Foundry 用 Rust 语言编写，包含了一系列的可以与 Ethereum 网络交互的工具。主要有：</p>
+<ul>
+<li><p><strong>Forge</strong> 用来进行合约的测试。</p>
+</li>
+<li><p><strong>Cast</strong> 很方便的与合约进行交互，发交易，查询链上数据。</p>
+</li>
+<li><p><strong>Anvil</strong> 可以模拟一个私有节点。</p>
+</li>
+<li><p><strong>Chisel</strong> 可以在命令行快速的有效的实时的写合约，测试合约。</p>
+</li>
+</ul>
+<blockquote>
+<p>OTHER INFO</p>
+</blockquote>
+<p>基于rust。</p>
+<h1 id="FORGE"><a href="#FORGE" class="headerlink" title="FORGE"></a>FORGE</h1><p>项目管理工具，类似于npm。</p>
+<h2 id="forge-init-PROJECT-NAME"><a href="#forge-init-PROJECT-NAME" class="headerlink" title="forge init PROJECT_NAME"></a>forge init PROJECT_NAME</h2><p>项目初始化。创建一个项目。</p>
+<blockquote>
+<p>项目目录结构</p>
+</blockquote>
+<figure class="highlight text"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">D:\foundry_test\hello_foundry&gt;tree </span><br><span class="line">├─.github</span><br><span class="line">│  └─workflows</span><br><span class="line">├─lib       # 依赖库目录</span><br><span class="line">├─script      # 部署脚本文件</span><br><span class="line">├─src         # 智能合约目录</span><br><span class="line">└─test       # 测试用例文件夹</span><br><span class="line">├─foundry.toml # 配置文件</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="forge-build"><a href="#forge-build" class="headerlink" title="forge build"></a>forge build</h2><p>编译合约。默认输出到out文件夹。</p>
+<h2 id="forge-test"><a href="#forge-test" class="headerlink" title="forge test"></a>forge test</h2><p>测试合约。测试用例。</p>
+<blockquote>
+<p>用法</p>
+</blockquote>
+<ul>
+<li>forge test： 测试test下所有合约；</li>
+<li>forge test –match-path test/Counter.t.sol：指定要测试的文件夹。</li>
+<li>forge test –match-contract CounterTest –match-test test_Increment 命令，用 –match-contract 来指定测试<strong>合约的名称</strong>，其中 –match-test 用来指定调用的<strong>测试方法</strong>。</li>
+<li><code>-v</code>/<code>-vv</code>/<code>-vvv</code>/<code>-vvvv</code>：打印日志级别，v越多表示级别越高。<ul>
+<li>vv：打印日志，断言，预期结果，错误原因；</li>
+<li>vvv：打印测试失败的失败堆栈调用</li>
+<li>vvvv：打印所有的堆栈调用</li>
+<li>vvvvv：包括以上所有，另外包含对象的创建等信息。</li>
+</ul>
+</li>
+<li><code>--watch</code>：监听文件更改，文件一旦更改就运行测试。<ul>
+<li><code>--run-all</code>：与watch一起用，当文件更改就重新运行所有测试。</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>基本要求</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity 0.8.10;</span><br><span class="line"></span><br><span class="line">import "forge-std/Test.sol";</span><br><span class="line"></span><br><span class="line">contract ContractBTest is Test {</span><br><span class="line">    uint256 testNumber;</span><br><span class="line"></span><br><span class="line">    function setUp() public {</span><br><span class="line">        testNumber = 42;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    function testFail_Subtract43() public {</span><br><span class="line">        testNumber -= 43;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li>setUp为初始化方法。</li>
+<li>对于方法名：<ul>
+<li>测试方法必须以test作为开头，而且有分类：<ul>
+<li><code>以test开头</code>：这个方法的要求是要执行成功，也就是没有报错；</li>
+<li><code>以testFail开头</code>：这个方法的要求是要执行失败，也就是有报错；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>所有的测试方法必须有<code>external</code>或<code>public</code>。声明为<code>internal</code>或<code>private</code>的方法不会被forge处理。</li>
+</ul>
+<blockquote>
+<p>修改要求的测试结果</p>
+</blockquote>
+<figure class="highlight tex"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">function test<span class="built_in">_</span>CannotSubtract43() public {</span><br><span class="line">    vm.expectRevert(stdError.arithmeticError);</span><br><span class="line">    testNumber -= 43;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>作为uint的testNumber执行后会变成负数，会报错，这是本来的流程。</p>
+<p>这个方法以test开头，但<code>vm.expectRevert(stdError.arithmeticError);</code>修改了pass的条件，含义为“期待出现arithmeticError”，也就是这里“如果出现arithmeticError，则pass，与<code>testFail</code>功能类似。</p>
+<blockquote>
+<p>打印测试日志</p>
+</blockquote>
+<p><code>console2.log</code>：与printf的使用方法一致。</p>
+<h2 id="forge-create-合约部署"><a href="#forge-create-合约部署" class="headerlink" title="forge create/合约部署"></a>forge create/合约部署</h2><p>合约部署和验证。<code>也可以用solidity-scripting来实现，不过这里不介绍。</code></p>
+<blockquote>
+<p>准备</p>
+</blockquote>
+<p>部署：测试币账号、区块链节点的RPC_URL；</p>
+<p>验证：区块链浏览器的ETHERSCAN_API_KEY</p>
+<blockquote>
+<p>准备获取</p>
+</blockquote>
+<p>RPC_URL：可以从<a class="link" target="_blank" rel="noopener" href="https://dashboard.alchemy.com/">Alchemy<i class="fas fa-external-link-alt"></i></a>获取。</p>
+<p>ETHERSCAN_API_KEY：在<a class="link" target="_blank" rel="noopener" href="https://etherscan.io/myapikey">以太坊区块链浏览器<i class="fas fa-external-link-alt"></i></a>中创建 app，会分配对应的 API KEY TOKEN。</p>
+<blockquote>
+<p>EXAMPLE</p>
+</blockquote>
+<p>部署一个ERC20合约为例。合约只有一个构造函数，用来指定Token的名称、标识符、精度及初始发行量信息。</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">// SPDX-License-Identifier: UNLICENSED</span><br><span class="line">pragma solidity ^0.8.0;</span><br><span class="line"></span><br><span class="line">import {ERC20} from "solmate/tokens/ERC20.sol";</span><br><span class="line"></span><br><span class="line">contract MyToken is ERC20 {</span><br><span class="line">    constructor(</span><br><span class="line">        string memory name,</span><br><span class="line">        string memory symbol,</span><br><span class="line">        uint8 decimals,</span><br><span class="line">        uint256 initialSupply</span><br><span class="line">    ) ERC20(name, symbol, decimals) {</span><br><span class="line">        _mint(msg.sender, initialSupply);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>需要安装包transmissions11/solmate。<code>forge install transmissions11/solmate</code></p>
+<blockquote>
+<p>部署</p>
+</blockquote>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">forge create \</span><br><span class="line"> --rpc-url https://eth-sepolia.g.alchemy.com/v2/xxxxxx \ </span><br><span class="line"> --constructor-args <span class="string">"MyToken"</span> <span class="string">"MT"</span> 18 1000000000000000  \ </span><br><span class="line"> --private-key 0xxxxxxx  \ </span><br><span class="line"> --etherscan-api-key xxxx  \ </span><br><span class="line"> --verify src/MyToken.sol:MyToken</span><br><span class="line"> --broadcast </span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li><p>RPC_URL: 即RPCURL</p>
+</li>
+<li><p>private-key： 钱包私钥</p>
+</li>
+<li><p>verify: 验证合约</p>
+<ul>
+<li>MyContract：实际部署的合约。</li>
+</ul>
+</li>
+<li><p>constructor-args: 可选，构造函数参数。</p>
+</li>
+<li><p>–broadcast 部署到网络中。</p>
+</li>
+</ul>
+<h2 id="forge-verify-contract-验证合约"><a href="#forge-verify-contract-验证合约" class="headerlink" title="forge verify-contract/验证合约"></a>forge verify-contract/验证合约</h2><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">forge verify-contract \</span><br><span class="line">    --chain-id 11155111 \</span><br><span class="line">    --num-of-optimizations 1000000 \</span><br><span class="line">    --watch \</span><br><span class="line">    --constructor-args $(cast abi-encode <span class="string">"constructor(string,string,uint256,uint256)"</span> <span class="string">"ForgeUSD"</span> <span class="string">"FUSD"</span> 18 1000000000000000000000) \</span><br><span class="line">    --etherscan-api-key &lt;your_etherscan_api_key&gt; \</span><br><span class="line">    --compiler-version v0.8.10+commit.fc410830 \</span><br><span class="line">    &lt;the_contract_address&gt; \</span><br><span class="line">	    src/MyToken.sol:MyToken </span><br></pre></td></tr></tbody></table></figure>
+
+<p>基本信息：</p>
+<p>-<br>  the_contract_address：合约地址。</p>
+<ul>
+<li><path>:<contractname>：合约源码的路径及合约名称，如果合约文件中包含多个合约，需要使用 :MyContract 这种方式指定具体的合约。</contractname></path></li>
+<li>etherscan-api-key：区块链浏览器的 API KEY TOKEN，用于验证合约。</li>
+</ul>
+<p>以及部署合约时的环境信息:</p>
+<ul>
+<li>constructor-args：合约构造器的参数，以 ABI-encoded 形式提供，如果没有构造器参数，该属性可忽略。</li>
+<li>compiler-version：合约编译器版本。如果没有指定则会自动检测。</li>
+<li>num-of-optimizations：Solidity 编译器在进行优化时迭代运行的次数。请注意，如果在<strong>验证</strong>时未设置优化次数，则默认为 0，而如果在<strong>部署</strong>时未设置，则默认为 200，因此，如果保留默认编译设置，需要使用–num-of-optimizations 200 来确保验证通过。</li>
+<li>chain-id：测试网的ID，sepolia 测试网为 11155111。</li>
+<li>watch：用于查询验证结果。</li>
+</ul>
+<h2 id="solidity-scripting-更方便的部署与验证"><a href="#solidity-scripting-更方便的部署与验证" class="headerlink" title="solidity-scripting 更方便的部署与验证"></a>solidity-scripting 更方便的部署与验证</h2><p>forge create输入的参数过多，可以使用脚本更方便的进行部署合约。（注意不是js）</p>
+<p>简述：<code>使用solidity写一个Script：从环境变量中取参数，然后部署到区块链中。</code></p>
+<ol>
+<li>首先创建<code>.env</code> 。（我以为这个.env可以自动输入，直到后面的教程居然来了句<code>source .env</code>，<del>我可去<code>*****</code>的</del>，这个操作可以的，只是我没想到居然这样）</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// 区块链 RPC 节点地址</span><br><span class="line">SEPOLIA_RPC_URL=xxxx</span><br><span class="line">// 钱包私钥</span><br><span class="line">PRIVATE_KEY=xxxx</span><br><span class="line">// 区块链浏览器的 API KEY TOKEN</span><br><span class="line">ETHERSCAN_API_KEY=xxxx</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li>source一下。</li>
+<li>编辑foundry.toml，这里可以使用<strong>环境变量</strong>。</li>
+</ol>
+<figure class="highlight toml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[rpc_endpoints]</span></span><br><span class="line"><span class="attr">sepolia</span> = <span class="string">"${SEPOLIA_RPC_URL}"</span></span><br><span class="line"></span><br><span class="line"><span class="section">[etherscan]</span></span><br><span class="line"><span class="attr">sepolia</span> = { key = <span class="string">"${ETHERSCAN_API_KEY}"</span> }</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="4">
+<li>创建一个脚本（==script==）。在script文件夹下，创建一个MyToken.s.sol文件，输入以下内容。</li>
+</ol>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">// SPDX-License-Identifier: UNLICENSED</span><br><span class="line">pragma solidity ^0.8.25;</span><br><span class="line"></span><br><span class="line">import {Script} from "forge-std/Script.sol";</span><br><span class="line">import "../src/MyToken.sol";</span><br><span class="line"></span><br><span class="line">contract MyTokenScript is Script {</span><br><span class="line"></span><br><span class="line">    function run() external {</span><br><span class="line">        uint256 deployer = vm.envUint("PRIVATE_KEY");//从环境变量拿钱包私钥</span><br><span class="line">        vm.startBroadcast(deployer);//开始广播交易，我这里有个错误但方便的理解：相当于连接以太网</span><br><span class="line">        MyToken myToken = new MyToken("MyToken", "MT", 18, 1000000000000000000);//部署合约</span><br><span class="line">        vm.stopBroadcast();//关闭交易，我这里有个错误但方便的理解：类似于断开以太网</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="5">
+<li>运行脚本</li>
+</ol>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 加载 .env 文件中的变量</span></span><br><span class="line"><span class="built_in">source</span> .<span class="built_in">env</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 部署并验证合约</span></span><br><span class="line">forge script script/MyToken.s.sol:MyTokenScript --rpc-url <span class="variable">$SEPOLIA_RPC_URL</span> --broadcast --verify -vvvv</span><br></pre></td></tr></tbody></table></figure>
+
+<p>接下来会打印部署结果，以及部署的合约地址。</p>
+<h1 id="CAST"><a href="#CAST" class="headerlink" title="CAST"></a>CAST</h1><h2 id="基本介绍"><a href="#基本介绍" class="headerlink" title="基本介绍"></a>基本介绍</h2><p>cast是Foundry用于执行以太坊RPC调用的命令行工具，可以使用Cast进行智能合约的调用、发送交易或检索链数据。</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cast &lt;subcommand&gt;</span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p>EXAMPLE</p>
+</blockquote>
+<p>比如cast获取代币的总供应量.</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cast call 0x6b175474e89094c44da98b954eedeac495271d0f <span class="string">"totalSupply()(uint256)"</span> --rpc-url &lt;your rpc url&gt; 8603853182003814300330472690</span><br></pre></td></tr></tbody></table></figure>
+
+<p>使用cast发送消息.</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cast send --private-key &lt;Your Private Key&gt; 0x3c44cdddb6a900fa2b585dd299e03d12fa4293bc $(cast from-utf8 <span class="string">"hello world"</span>) --rpc-url http://127.0.0.1:8545/</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="获取链上信息"><a href="#获取链上信息" class="headerlink" title="获取链上信息"></a>获取链上信息</h2><p>首先要设定环境变量<code>ETH_RPC_URL</code>，然后执行以下命令即可。</p>
+<ul>
+<li><code>cast chain-id</code>: 获取当前链的ID</li>
+<li><code>cast  chain</code>: 获取当前链的名称</li>
+<li><code>cast client</code> 获取当前客户端版本</li>
+<li><code>cast gas-price</code> 获取当前的gas价格</li>
+<li><code>cast block-number</code> 获取当前最新的区块号</li>
+<li><code>cast basefee</code> 获取指定区块的基础费用</li>
+<li><code>cast block &lt;BLOCK ID&gt;</code>：获取指定区块的详细信息。区块高度，时间戳，交易数等。</li>
+<li><code>cast age</code>：获取指定区块的具体时间。</li>
+</ul>
+<h2 id="获取账户信息"><a href="#获取账户信息" class="headerlink" title="获取账户信息"></a>获取账户信息</h2><p><code>cast balance &lt;ADDRESS | ENS_NAME.eth&gt;</code></p>
+<p>ADDRESS：地址。</p>
+<p>ENS_NAME.eth: ENS名称。</p>
+<p>可以通过地址或者ENS名称查询账户余额。</p>
+<h2 id="发送交易"><a href="#发送交易" class="headerlink" title="发送交易"></a>发送交易</h2><blockquote>
+<p>发送交易/调用合约函数</p>
+</blockquote>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cast send --private-key &lt;private_key_addr&gt; &lt;contract_addr&gt; <span class="string">"exampleFunc(uint256)"</span> &lt;argument_value_of_the_function&gt;</span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p>EXAMPLE</p>
+</blockquote>
+<p>存款函数</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cast send --private-key PRIVATE_KEY CONTRACT_ADDR <span class="string">"deposit(uint256)"</span> 10</span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p>其他</p>
+</blockquote>
+<p>如果出现不存在的函数，则会触发fallback函数: <code>cast send --private-key &lt;private_key_addr&gt; &lt;contract_addr&gt; "dummy()"</code></p>
+<p>可以触发receive函数：<code>cast send --private-key &lt;private_key_addr&gt; &lt;contract_addr&gt; --value 10gwei</code></p>
+<h2 id="获取合约代码"><a href="#获取合约代码" class="headerlink" title="获取合约代码"></a>获取合约代码</h2><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cast etherscan-source &lt;contract_address&gt;</span><br></pre></td></tr></tbody></table></figure>
+
+<p>可以获取到智能合约的源代码。</p>
+
+                    
+                </div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/HackQuest/">HackQuest</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Foundry/">Foundry</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Solidity/">Solidity</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                            <div class="prev-post">
+                                <a class="prev" rel="prev" href="/2024/12/17/HackQuest/HackQuest_FoundryStudy-AnvilAndChisel/" title="Foundry_Study Anvil和Chisel">
+                                    <span class="left arrow-icon flex-center">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Foundry_Study Anvil和Chisel</span>
+                                        <span class="post-nav-item">上一篇</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="next-post">
+                                <a class="next" rel="next" href="/2024/12/15/HackQuest/HackQuest_Note_Solidity_part/" title="HackQuest Solidity 部分知识">
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">HackQuest Solidity 部分知识</span>
+                                        <span class="post-nav-item">下一篇</span>
+                                    </span>
+                                    <span class="right arrow-icon flex-center">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+    <div class="comments-container border-box">
+        <div id="comments-anchor" class="comment-area-title border-box">
+            <i class="fas fa-comments"></i>&nbsp;评论
+        </div>
+        <div class="comment-plugin-fail border-box">
+    <span class="fail-tip">评论插件加载失败</span>
+    <button class="reload keep-button">点击重新加载</button>
+</div>
+<div class="comment-plugin-loading flex-center border-box">
+    <i class="loading-icon fa-solid fa-spinner fa-spin"></i>
+    <span class="load-tip">正在加载评论插件</span>
+</div>
+<script data-pjax="">
+  window.KeepCommentPlugin = {}
+  window.KeepCommentPlugin.hideLoading = () => {
+    const cplDom = document.querySelector('.comments-container .comment-plugin-loading')
+    cplDom.style.display = 'none'
+  }
+  window.KeepCommentPlugin.loadFailHandle = () => {
+    window.KeepCommentPlugin.hideLoading()
+    const cpfDom = document.querySelector('.comments-container .comment-plugin-fail')
+    cpfDom.style.display = 'flex'
+    cpfDom.querySelector('.reload').addEventListener('click', () => {
+      window.location.reload()
+    })
+  }
+</script>
+
+        
+            
+
+    <div class="twikoo-container">
+        <div id="twikoo-comment"></div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twikoo/1.6.39/twikoo.all.min.js" async="" onerror="window.KeepCommentPlugin.loadFailHandle()"></script>
+        <script async="" onerror="window.KeepCommentPlugin.loadFailHandle()">
+          window.KeepCommentPlugin.initTwikoo = () => {
+            if (window?.twikoo) {
+              twikoo.init({
+                el: '#twikoo-comment',
+                envId: 'https://comments.uwupu.win/',
+                region: '',
+                lang: 'zh-CN' || 'zh-CN'
+              })
+              window.KeepCommentPlugin.hideLoading()
+            } else {
+              setTimeout(() => {
+                window.KeepCommentPlugin.initTwikoo()
+              }, 1000)
+            }
+          }
+
+          if ('false' === 'true') {
+            setTimeout(() => {
+              window.KeepCommentPlugin.initTwikoo()
+            }, 1200)
+          } else {
+            window.addEventListener('DOMContentLoaded', window.KeepCommentPlugin.initTwikoo)
+          }
+        </script>
+    </div>
+
+
+        
+    </div>
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Foundry%E4%BB%8B%E7%BB%8D"><span class="nav-text">Foundry介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#FORGE"><span class="nav-text">FORGE</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#forge-init-PROJECT-NAME"><span class="nav-text">forge init PROJECT_NAME</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#forge-build"><span class="nav-text">forge build</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#forge-test"><span class="nav-text">forge test</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#forge-create-%E5%90%88%E7%BA%A6%E9%83%A8%E7%BD%B2"><span class="nav-text">forge create/合约部署</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#forge-verify-contract-%E9%AA%8C%E8%AF%81%E5%90%88%E7%BA%A6"><span class="nav-text">forge verify-contract/验证合约</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#solidity-scripting-%E6%9B%B4%E6%96%B9%E4%BE%BF%E7%9A%84%E9%83%A8%E7%BD%B2%E4%B8%8E%E9%AA%8C%E8%AF%81"><span class="nav-text">solidity-scripting 更方便的部署与验证</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CAST"><span class="nav-text">CAST</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D"><span class="nav-text">基本介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E9%93%BE%E4%B8%8A%E4%BF%A1%E6%81%AF"><span class="nav-text">获取链上信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E8%B4%A6%E6%88%B7%E4%BF%A1%E6%81%AF"><span class="nav-text">获取账户信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%91%E9%80%81%E4%BA%A4%E6%98%93"><span class="nav-text">发送交易</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E5%90%88%E7%BA%A6%E4%BB%A3%E7%A0%81"><span class="nav-text">获取合约代码</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="copyright-info info-item">
+    ©&nbsp;<span>2020</span>&nbsp;-&nbsp;2025
+    
+            &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">uwupu</a>
+        
+    </div>
+
+    <div class="theme-info info-item">
+        由&nbsp;<a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;驱动&nbsp;&amp;&nbsp;主题&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a>
+    </div>
+
+    
+
+    
+        <div class="count-info info-item">
+            
+                <span class="count-item border-box word">
+                    <span class="item-type border-box">总字数</span>
+                    <span class="item-value border-box word">163.8k</span>
+                </span>
+            
+
+            
+                <span class="count-item border-box uv">
+                    <span class="item-type border-box">访客数</span>
+                    <span class="item-value border-box uv" id="busuanzi_value_site_uv"></span>
+                </span>
+            
+
+            
+                <span class="count-item border-box pv">
+                    <span class="item-type border-box">访问量</span>
+                    <span class="item-value border-box pv" id="busuanzi_value_site_pv"></span>
+                </span>
+            
+        </div>
+    
+
+    
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="post-tools-list border-box">
+        <!-- PC encrypt again -->
+        
+
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+            <li class="tools-item flex-center go-to-comments">
+                <i class="fas fa-comment"></i>
+                <span class="post-comments-count"></span>
+            </li>
+        
+
+        <!-- PC full screen -->
+        <li class="tools-item flex-center full-screen">
+            <i class="fa-solid fa-expand"></i>
+        </li>
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <!-- toggle mode -->
+        
+            <li class="tools-item tool-toggle-theme-mode flex-center">
+                <i class="fas fa-moon"></i>
+            </li>
+        
+
+        <!-- rss -->
+        
+
+        <!-- to bottom -->
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+            <li class="tools-item go-to-comments-tablet flex-center">
+                <i class="fas fa-comment"></i>
+            </li>
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="搜索..." spellcheck="false" type="search" class="search-input">
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Foundry%E4%BB%8B%E7%BB%8D"><span class="nav-text">Foundry介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#FORGE"><span class="nav-text">FORGE</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#forge-init-PROJECT-NAME"><span class="nav-text">forge init PROJECT_NAME</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#forge-build"><span class="nav-text">forge build</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#forge-test"><span class="nav-text">forge test</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#forge-create-%E5%90%88%E7%BA%A6%E9%83%A8%E7%BD%B2"><span class="nav-text">forge create/合约部署</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#forge-verify-contract-%E9%AA%8C%E8%AF%81%E5%90%88%E7%BA%A6"><span class="nav-text">forge verify-contract/验证合约</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#solidity-scripting-%E6%9B%B4%E6%96%B9%E4%BE%BF%E7%9A%84%E9%83%A8%E7%BD%B2%E4%B8%8E%E9%AA%8C%E8%AF%81"><span class="nav-text">solidity-scripting 更方便的部署与验证</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CAST"><span class="nav-text">CAST</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D"><span class="nav-text">基本介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E9%93%BE%E4%B8%8A%E4%BF%A1%E6%81%AF"><span class="nav-text">获取链上信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E8%B4%A6%E6%88%B7%E4%BF%A1%E6%81%AF"><span class="nav-text">获取账户信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%91%E9%80%81%E4%BA%A4%E6%98%93"><span class="nav-text">发送交易</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E5%90%88%E7%BA%A6%E4%BB%A3%E7%A0%81"><span class="nav-text">获取合约代码</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+
+
+<!-- common js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/js/utils.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/js/header-shrink.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/js/back2top.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/js/toggle-theme.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/js/code-block.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/js/main.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/js/libs/anime.min.js"></script>
+
+<!-- local search -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/js/local-search.min.js"></script>
+
+
+<!-- lazyload -->
+
+
+<div class="">
+    <!-- home page -->
+    
+
+    <!-- post page -->
+    
+        <!-- post-helper -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/js/post/post-helper.min.js"></script>
+
+        <!-- toc -->
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/js/post/toc.min.js"></script>
+        
+
+        <!-- copyright-info -->
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- categories page -->
+    
+
+    <!-- links page -->
+    
+
+    <!-- photos page -->
+    
+
+    <!-- tools page -->
+    
+</div>
+
+<!-- mermaid -->
+
+    
+<script src="//cdn.jsdelivr.net/npm/mermaid@10.5.0/dist/mermaid.min.js"></script>
+
+
+
+
+
+
+<!-- pjax -->
+
+
+
+    
+        
+    
+        
+            
+
+
+        
+    
+
+
+
+<script src="/bundle.js"></script></body></html>
