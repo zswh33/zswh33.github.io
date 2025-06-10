@@ -1,4 +1,457 @@
-<!DOCTYPE html><html lang="zh-CN"><head><script async="" src="https://www.googletagmanager.com/gtag/js?id=G-RFWZCCZB4V"></script><script>function gtag(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],gtag("js",new Date),gtag("config","G-RFWZCCZB4V")</script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><meta name="keywords" content="Hexo Theme Keep"><meta name="description" content="一个包含有学习日记的博客"><meta name="author" content="uwupu"><title>openEuler 4 源代码软件安装 systemd | uwupu 学习日志</title><link rel="shortcut icon" href="https://img2.uwupu.win/icon/tx3_round.png"><script class="keep-theme-configurations">const KEEP=window.KEEP||{};KEEP.hexo_config={hostname:"uwupu.win",root:"/",language:"zh-CN",path:"search.json"},KEEP.theme_config={base_info:{primary_color:"#F099BC",title:"uwupu 学习日志",author:"uwupu",avatar:"https://img2.uwupu.win/icon/tx3_round.png",logo:"https://img2.uwupu.win/icon/tx3_round.png",favicon:"https://img2.uwupu.win/icon/tx3_round.png"},menu:{home:"/",archives:"/archives",tags:"/tags",categories:"/categories",about:"/about"},first_screen:{enable:!0,background_img:"https://img.qlqqs.com/random",background_img_dark:"https://www.loliapi.com/acg/",description:"哇！嗯嗯.",hitokoto:!0},social_contact:{enable:!1,links:{github:"https://github.com/zswh33",weixin:null,qq:null,weibo:null,zhihu:null,twitter:null,x:null,facebook:null,email:"x@uwupu.win"}},scroll:{progress_bar:!0,percent:!1,hide_header:!0},home:{announcement:null,category:!0,tag:!0,post_datetime:"updated"},post:{author_badge:{enable:!0,level_badge:!1,custom_badge:["啦啦啦啦啦"]},word_count:{wordcount:!0,min2read:!0},datetime_format:"YYYY-MM-DD HH:mm:ss",copyright_info:!1,share:!1,reward:{enable:!1,img_link:null,text:null,icon:null}},code_block:{tools:{enable:!0,style:"default"},highlight_theme:"default"},toc:{enable:!0,number:!1,expand_all:!1,init_open:!0,layout:"right"},website_count:{busuanzi_count:{enable:!0,site_uv:!0,site_pv:!0,page_pv:!0}},local_search:{enable:!0,preload:!0},comment:{enable:!0,use:"twikoo",valine:{appid:null,appkey:null,server_urls:null,placeholder:null},gitalk:{github_id:null,github_admins:null,repository:null,client_id:null,client_secret:null,proxy:null},twikoo:{env_id:"https://comments.uwupu.win/",region:null,version:"1.6.39"},waline:{server_url:null,reaction:!1,version:"3.3.2"},giscus:{repo:null,repo_id:null,category:"Announcements",category_id:null,reactions_enabled:!1},artalk:{server:null},disqus:{shortname:null}},rss:{enable:!0},lazyload:{enable:!1},cdn:{enable:!0,provider:"cdnjs"},pjax:{enable:!1},footer:{since:2020,word_count:!0,site_deploy:{enable:!1,provider:"github",url:null},record:{enable:!0,list:[{code:"萌ICP备20251033号",link:"https://icp.gov.moe/?keyword=20251033"}]}},inject:{enable:!0,css:[null,"/css/custom.css","/css/first-screen.css","/css/header.css","/css/home-post-item.css","/css/article.css","/css/tags.css"],js:[null,"/js/custom.js","/js/first-screen.js"]},root:"",source_data:{links:[{title:"ooooooo"},{name:"uwupu学习日志",link:"/",description:"啦啦啦啦啦~",avatar:"https://img2.uwupu.win/icon/aaa.png"},{name:"TOOLS",link:"/links/tools/",description:"TOOLS",avatar:"https://img2.uwupu.win/icon/aaw.png"},{name:"PHOTOS",link:"/links/photos/",description:"PHOTOS",avatar:"https://img2.uwupu.win/icon/aax.png"},{title:"嗯嗯.."},{name:"INDEX",link:"https://node.uwupu.win/",description:"INDEX?",avatar:"https://node.uwupu.win/image/logo.png"}],photos:[{url:"/images/images/pwaicon/512.png",name:"PWAICON"},{url:"https://img2.uwupu.win/icon/tx3_round.png",name:"ICON"}],tools:[{category:"常用工具",anchorId:"JUU1JUI4JUI4JUU3JTk0JUE4JUU1JUI3JUE1JUU1JTg1JUI30"},{name:"LinuxDo",link:"https://linux.do/",description:"LinuxDo",image:"/aaa.png"},{name:"V2EX",link:"https://v2ex.com",description:"V2EX",image:"/aaa.png"},{name:"Deepseek",link:"https://deepseek`.com",description:"deepseek",image:"/aaa.png"},{category:"可能是凑数的",anchorId:"JUU1JThGJUFGJUU4JTgzJUJEJUU2JTk4JUFGJUU1JTg3JTkxJUU2JTk1JUIwJUU3JTlBJTg04"},{name:"TicTocToe",link:"https://n.uwupu.win/threejs-study-tic-toc-toe",description:"TicTocToe",avatar:"https://node.uwupu.win/image/logo.png"},{name:"INDEX",link:"https://node.uwupu.win/",description:"INDEX?",avatar:"https://node.uwupu.win/image/logo.png"}]},version:"4.2.5"},KEEP.language_ago={second:"%s 秒前",minute:"%s 分钟前",hour:"%s 小时前",day:"%s 天前",week:"%s 周前",month:"%s 个月前",year:"%s 年前"},KEEP.language_code_block={copy:"复制代码",copied:"已复制",fold:"折叠代码块",folded:"已折叠"},KEEP.language_copy_copyright={copy:"复制版权信息",copied:"已复制",title:"原文标题",author:"原文作者",link:"原文链接"}</script><meta name="generator" content="Hexo 7.3.0"><script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/font/css/fontawesome.min.css');loadCss('https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/font/css/regular.min.css');loadCss('https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/font/css/solid.min.css');loadCss('https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/font/css/brands.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/font/css/fontawesome.min.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/font/css/regular.min.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/font/css/solid.min.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/font/css/brands.min.css"></noscript></head><body><div class="progress-bar-container"><span class="scroll-progress-bar"></span></div><main class="page-container border-box"><div class="page-main-content border-box"><div class="page-main-content-top"><header class="header-wrapper"><div class="border-box header-content"><div class="left flex-start border-box"><a class="logo-image border-box" href="/"><img src="https://img2.uwupu.win/icon/tx3_round.png"> </a><a class="site-name border-box" href="/">uwupu 学习日志</a></div><div class="right border-box"><div class="pc border-box"><ul class="menu-list border-box"><li class="menu-item flex-start border-box"><a class="menu-text-color border-box" href="/">首页</a></li><li class="menu-item flex-start border-box"><a class="menu-text-color border-box" href="/archives">归档</a></li><li class="menu-item flex-start border-box"><a class="menu-text-color border-box" href="/tags">标签</a></li><li class="menu-item flex-start border-box"><a class="menu-text-color border-box" href="/categories">分类</a></li><li class="menu-item flex-start border-box"><a class="menu-text-color border-box" href="/about">关于</a></li><li class="menu-item search search-popup-trigger"><i class="menu-text-color fas search fa-search"></i></li></ul></div><div class="mobile border-box flex-start"><div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div><div class="icon-item menu-bar"><div class="menu-bar-middle"></div></div></div></div></div><div class="header-drawer"><ul class="drawer-menu-list border-box"><li class="drawer-menu-item border-box not-sub-menu"><label class="drawer-menu-label border-box"><a class="drawer-menu-text-color left-side flex-start border-box" href="/">首页</a></label></li><li class="drawer-menu-item border-box not-sub-menu"><label class="drawer-menu-label border-box"><a class="drawer-menu-text-color left-side flex-start border-box" href="/archives">归档</a></label></li><li class="drawer-menu-item border-box not-sub-menu"><label class="drawer-menu-label border-box"><a class="drawer-menu-text-color left-side flex-start border-box" href="/tags">标签</a></label></li><li class="drawer-menu-item border-box not-sub-menu"><label class="drawer-menu-label border-box"><a class="drawer-menu-text-color left-side flex-start border-box" href="/categories">分类</a></label></li><li class="drawer-menu-item border-box not-sub-menu"><label class="drawer-menu-label border-box"><a class="drawer-menu-text-color left-side flex-start border-box" href="/about">关于</a></label></li></ul></div><div class="window-mask"></div></header></div><div class="page-main-content-middle border-box"><div class="main-content border-box"><div class="fade-in-down-animation"><div class="post-page-container border-box"><div class="post-content-container border-box"><div class="post-content-bottom border-box"><div class="post-title">openEuler 4 源代码软件安装 systemd</div><div class="post-header border-box"><div class="avatar-box border-box"><img src="https://img2.uwupu.win/icon/tx3_round.png"></div><div class="info-box"><div class="author border-box"><span class="name">uwupu</span> <span class="author-badge">啦啦啦啦啦</span></div><div class="meta-info border-box"><div class="post-meta-info-container border-box post"><div class="post-meta-info border-box"><span class="meta-info-item post-create-date"><i class="icon fa-solid fa-calendar-plus"></i>&nbsp; <span class="datetime">2022-11-26 18:42:19</span> </span><span class="meta-info-item post-update-date"><i class="icon fa-solid fa-file-pen"></i>&nbsp; <span class="datetime" data-updated="Sun Jun 01 2025 06:01:52 GMT+0800">2025-06-01 06:01:52</span> </span><span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;<ul class="post-category-ul"><li class="category-item"><a href="/categories/Linux/">Linux</a></li></ul></span><span class="post-tag meta-info-item border-box"><ul class="post-tag-ul"><li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Linux/">Linux</a></li><li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/openEuler/">openEuler</a></li></ul></span><span class="meta-info-item post-wordcount"><i class="icon fas fa-file-word"></i>&nbsp;<span>975 字</span> </span><span class="meta-info-item post-min2read"><i class="icon fas fa-clock"></i>&nbsp;<span>3 分钟</span> </span><span class="meta-info-item post-pv"><i class="icon fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span></span></div></div></div></div></div><div class="post-content keep-markdown-body"><h1 id="源代码软件安装"><a href="#源代码软件安装" class="headerlink" title="源代码软件安装"></a>源代码软件安装</h1><h2 id="源代码软件"><a href="#源代码软件" class="headerlink" title="源代码软件"></a>源代码软件</h2><p>Linux安装软件除了用rpm，还可以使用<strong>源代码软件安装</strong>；</p><p>Linux下许多软件通过源代码包发行，源代码包移植性较好，不同用户可以编译并运行；</p><blockquote><p>包管理软件优先使用软件包安装，但也会出现需要源代码安装的场景：</p></blockquote><ul><li>软件包版本太旧；</li><li>没有现成软件包可用；</li><li>软件包缺乏某些特性；</li><li>编译参数不适用当前业务 <strong>或</strong> 可通过优化编译参数提高性能；</li></ul><blockquote><p>优缺点</p></blockquote><p>优点：</p><ul><li>编译过程可用指定参数，灵活性好；</li><li>经过本机比阿尼，使得软件与本机兼容性最好。</li></ul><p>缺点：</p><ul><li>配置及编译过程繁琐；</li><li>可用由于一些问题导致没有依赖包；</li></ul><h2 id="如何进行源代码安装"><a href="#如何进行源代码安装" class="headerlink" title="如何进行源代码安装"></a>如何进行源代码安装</h2><p><em>configure、make、make install</em></p><h3 id="基本步骤"><a href="#基本步骤" class="headerlink" title="基本步骤"></a>基本步骤</h3><ul><li>下载源码并解压；</li><li>查看README和INSTALL文件<ul><li>这些文件记录了软件的安装方法和注意事项；</li></ul></li><li>创建Makefile文件<ul><li>执行./configure脚本命令生成；</li></ul></li><li>编译<ul><li>通过make命令将源码自动编译成二进制文件；</li></ul></li><li>安装软件<ul><li>make install将二进制文件安装到对应目录中。</li><li>目录默认为：<code>/usr/local</code></li><li>配置文件位置为：<code>/usr/local/etc/</code>或<code>/usr/local/**/etc</code></li></ul></li></ul><h1 id="Systemd"><a href="#Systemd" class="headerlink" title="Systemd"></a>Systemd</h1><p><em>d，deamon，守护进程</em></p><p>在Linux中，systemd是与SysV和LSB初始化脚本兼容的系统和服务管理器，开启systemd服务可以提供基于守护进程的按需启动策略；</p><p>支持快照和系统状态恢复，维护系统挂载和自挂载点，使得各服务之间基于从属关系实现更为精细的逻辑控制，具有更高的并行性能；</p><h2 id="unit"><a href="#unit" class="headerlink" title="unit"></a>unit</h2><p>systemd服务的开启和监督系统基于unit的概念；</p><p>unit由一个与配置文件对应的名称和类型组成，unit通常有以下几种类型：</p><p>unit，单元：让系统直到如何进行操作和管理的资源。</p><ul><li>Service unit：系统服务；</li><li>Target unit：一组systemd units；</li><li>Automount unit：文件系统挂载点；</li><li>Device unit：内核识别的设备文件；</li><li>Mount unit：文件系统挂载点；</li><li>Path unit：在一个文件系统中的文件或目录；</li><li>Scope unit：外部创建的进程；</li><li>Snapshot unit：systemd manager的保存状态。</li></ul><p>特性：</p><ul><li>更快的启动速度；</li><li>提供按需启动能力；</li><li>采用cgroup特性追踪和管理进程生命周期；</li><li>启动挂载点和自动挂载的管理；</li><li>实现事务性依赖关系管理；</li><li>与SysV初始化脚本兼容；</li><li>能够对系统进行快照和恢复。</li></ul><h2 id="如何使用systemd"><a href="#如何使用systemd" class="headerlink" title="如何使用systemd"></a>如何使用systemd</h2><p>systemd使用systemctl命令来对系统服务进行运行、关闭、重启、状态打印、启用和禁用的操作；</p><p>systemctl与sysvinit（service）命令功能相似，建议用systemctl来进行系统服务管理；</p><ul><li><p><strong>查看当前正在运行的服务</strong>：<code>systemctl list-units --type service</code>；</p><ul><li>若加上 <code>--all</code> 参数，则列出所有的服务；</li></ul></li><li><p><strong>查看特定服务的状态</strong>：<code>systemctl status NAME.service</code></p><ul><li><pre><code class="language-shell">[root@localhost node-v18.12.1]# systemctl status firewalld
+<!DOCTYPE html><html lang="zh-CN"><head><!-- hexo injector head_begin start --><!-- Google tag (gtag.js) begins-->
+    <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-RFWZCCZB4V"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+    
+      gtag('config', 'G-RFWZCCZB4V');
+    </script>
+    <!-- Google tag (gtag.js) ends-->
+    <!-- hexo injector head_begin end -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="一个包含有学习日记的博客">
+    <meta name="author" content="uwupu">
+    
+    <title>
+        
+            openEuler 4 源代码软件安装 systemd |
+        
+        uwupu 学习日志
+    </title>
+    
+
+
+    
+        <link rel="shortcut icon" href="/images/hexo128.png">
+    
+    
+    
+    
+    
+    
+        
+            
+        
+            
+                
+
+
+            
+        
+            
+                
+
+
+            
+        
+            
+                
+
+
+            
+        
+            
+                
+
+
+            
+        
+            
+                
+
+
+            
+        
+            
+                
+
+
+            
+        
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"uwupu.win","root":"/","language":"zh-CN","path":"search.json"}
+    KEEP.theme_config = {"base_info":{"primary_color":"#F099BC","title":"uwupu 学习日志","author":"uwupu","avatar":"images/zhenxun3.png","logo":"images/zhenxun3.png","favicon":"images/hexo128.png"},"menu":{"home":"/","archives":"/archives","tags":"/tags","categories":"/categories","about":"/about"},"first_screen":{"enable":true,"background_img":"https://img.qlqqs.com/random","background_img_dark":"https://www.loliapi.com/acg/","description":"哇！嗯嗯.","hitokoto":true},"social_contact":{"enable":false,"links":{"github":null,"weixin":null,"qq":null,"weibo":null,"zhihu":null,"twitter":null,"x":null,"facebook":null,"email":"x@uwupu.win"}},"scroll":{"progress_bar":true,"percent":false,"hide_header":true},"home":{"announcement":null,"category":true,"tag":true,"post_datetime":"updated"},"post":{"author_badge":{"enable":true,"level_badge":false,"custom_badge":["啦啦啦啦啦"]},"word_count":{"wordcount":true,"min2read":true},"datetime_format":"YYYY-MM-DD HH:mm:ss","copyright_info":false,"share":false,"reward":{"enable":false,"img_link":null,"text":null,"icon":null}},"code_block":{"tools":{"enable":true,"style":"default"},"highlight_theme":"default"},"toc":{"enable":true,"number":false,"expand_all":false,"init_open":true,"layout":"right"},"website_count":{"busuanzi_count":{"enable":true,"site_uv":true,"site_pv":true,"page_pv":true}},"local_search":{"enable":true,"preload":true},"comment":{"enable":true,"use":"twikoo","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":"https://comments.uwupu.win/","region":null,"version":"1.6.39"},"waline":{"server_url":null,"reaction":false,"version":"3.3.2"},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false},"artalk":{"server":null},"disqus":{"shortname":null}},"rss":{"enable":true},"lazyload":{"enable":false},"cdn":{"enable":true,"provider":"cdnjs"},"pjax":{"enable":false},"footer":{"since":2020,"word_count":true,"site_deploy":{"enable":false,"provider":"github","url":null},"record":{"enable":true,"list":[{"code":"萌ICP备20251033号","link":"https://icp.gov.moe/?keyword=20251033"}]}},"inject":{"enable":true,"css":[null,"/css/custom.css","/css/first-screen.css","/css/header.css","/css/home-post-item.css","/css/article.css","/css/tags.css"],"js":[null,"/js/custom.js","/js/first-screen.js"]},"root":"","source_data":{"links":[{"title":"ooooooo"},{"name":"uwupu学习日志","link":"/","description":"啦啦啦啦啦~","avatar":"https://img2.uwupu.win/icon/aaa.png"},{"name":"TOOLS","link":"/links/tools/","description":"TOOLS","avatar":"https://img2.uwupu.win/icon/aaw.png"},{"name":"PHOTOS","link":"/links/photos/","description":"PHOTOS","avatar":"https://img2.uwupu.win/icon/aax.png"},{"title":"嗯嗯.."},{"name":"INDEX","link":"https://node.uwupu.win/","description":"INDEX?","avatar":"https://node.uwupu.win/image/logo.png"}],"photos":[{"url":"/images/images/pwaicon/512.png","name":"PWAICON"},{"url":"https://img2.uwupu.win/icon/tx3_round.png","name":"ICON"}],"tools":[{"category":"常用工具","anchorId":"JUU1JUI4JUI4JUU3JTk0JUE4JUU1JUI3JUE1JUU1JTg1JUI30"},{"name":"LinuxDo","link":"https://linux.do/","description":"LinuxDo","image":"/aaa.png"},{"name":"V2EX","link":"https://v2ex.com","description":"V2EX","image":"/aaa.png"},{"name":"Deepseek","link":"https://deepseek`.com","description":"deepseek","image":"/aaa.png"},{"category":"可能是凑数的","anchorId":"JUU1JThGJUFGJUU4JTgzJUJEJUU2JTk4JUFGJUU1JTg3JTkxJUU2JTk1JUIwJUU3JTlBJTg04"},{"name":"TicTocToe","link":"https://n.uwupu.win/threejs-study-tic-toc-toe","description":"TicTocToe","avatar":"https://node.uwupu.win/image/logo.png"},{"name":"INDEX","link":"https://node.uwupu.win/","description":"INDEX?","avatar":"https://node.uwupu.win/image/logo.png"}]},"version":"4.2.5"}
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"}
+    KEEP.language_code_block = {"copy":"复制代码","copied":"已复制","fold":"折叠代码块","folded":"已折叠"}
+    KEEP.language_copy_copyright = {"copy":"复制版权信息","copied":"已复制","title":"原文标题","author":"原文作者","link":"原文链接"}
+  </script>
+<meta name="generator" content="Hexo 7.3.0"><script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/font/css/fontawesome.min.css');loadCss('https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/font/css/regular.min.css');loadCss('https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/font/css/solid.min.css');loadCss('https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/font/css/brands.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/font/css/fontawesome.min.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/font/css/regular.min.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/font/css/solid.min.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/font/css/brands.min.css"></noscript></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+        <span class="scroll-progress-bar"></span>
+    
+
+    
+</div>
+
+
+
+<main class="page-container border-box">
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left flex-start border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/zhenxun3.png">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               uwupu 学习日志
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc border-box">
+                <ul class="menu-list border-box">
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/">
+                                
+                                首页
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/archives">
+                                
+                                归档
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/tags">
+                                
+                                标签
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/categories">
+                                
+                                分类
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/about">
+                                
+                                关于
+                                
+                            </a>
+                            
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="menu-text-color fas search fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile border-box flex-start">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list border-box">
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/">
+                            
+                            首页
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/archives">
+                            
+                            归档
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/tags">
+                            
+                            标签
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/categories">
+                            
+                            分类
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/about">
+                            
+                            关于
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+                
+
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+
+            <div class="post-content-bottom border-box">
+                
+                    <div class="post-title">
+                        openEuler 4 源代码软件安装 systemd
+                    </div>
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/zhenxun3.png">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">uwupu</span>
+                                
+                                    <span class="author-badge">啦啦啦啦啦</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
+                <span class="datetime">2022-11-26 18:42:19</span>
+            </span>
+
+            
+                <span class="meta-info-item post-update-date">
+                    <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                    <span class="datetime" data-updated="Sun Jun 01 2025 06:01:52 GMT+0800">2025-06-01 06:01:52</span>
+                </span>
+            
+        
+
+        
+            <span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="post-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/Linux/">Linux</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Linux/">Linux</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/openEuler/">openEuler</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+            <span class="meta-info-item post-wordcount">
+                <i class="icon fas fa-file-word"></i>&nbsp;<span>975 字</span>
+            </span>
+        
+        
+            <span class="meta-info-item post-min2read">
+                <i class="icon fas fa-clock"></i>&nbsp;<span>3 分钟</span>
+            </span>
+        
+        
+            <span class="meta-info-item post-pv">
+                <i class="icon fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+            </span>
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body ">
+                    
+
+                    
+                         <h1 id="源代码软件安装"><a href="#源代码软件安装" class="headerlink" title="源代码软件安装"></a>源代码软件安装</h1><h2 id="源代码软件"><a href="#源代码软件" class="headerlink" title="源代码软件"></a>源代码软件</h2><p>Linux安装软件除了用rpm，还可以使用<strong>源代码软件安装</strong>；</p>
+<p>Linux下许多软件通过源代码包发行，源代码包移植性较好，不同用户可以编译并运行；</p>
+<blockquote>
+<p> 包管理软件优先使用软件包安装，但也会出现需要源代码安装的场景：</p>
+</blockquote>
+<ul>
+<li>软件包版本太旧；</li>
+<li>没有现成软件包可用；</li>
+<li>软件包缺乏某些特性；</li>
+<li>编译参数不适用当前业务 <strong>或</strong> 可通过优化编译参数提高性能；</li>
+</ul>
+<blockquote>
+<p>优缺点</p>
+</blockquote>
+<p>优点：</p>
+<ul>
+<li>编译过程可用指定参数，灵活性好；</li>
+<li>经过本机比阿尼，使得软件与本机兼容性最好。</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>配置及编译过程繁琐；</li>
+<li>可用由于一些问题导致没有依赖包；</li>
+</ul>
+<h2 id="如何进行源代码安装"><a href="#如何进行源代码安装" class="headerlink" title="如何进行源代码安装"></a>如何进行源代码安装</h2><p><em>configure、make、make install</em></p>
+<h3 id="基本步骤"><a href="#基本步骤" class="headerlink" title="基本步骤"></a>基本步骤</h3><ul>
+<li>下载源码并解压；</li>
+<li>查看README和INSTALL文件<ul>
+<li>这些文件记录了软件的安装方法和注意事项；</li>
+</ul>
+</li>
+<li>创建Makefile文件<ul>
+<li>执行./configure脚本命令生成；</li>
+</ul>
+</li>
+<li>编译<ul>
+<li>通过make命令将源码自动编译成二进制文件；</li>
+</ul>
+</li>
+<li>安装软件<ul>
+<li>make install将二进制文件安装到对应目录中。</li>
+<li>目录默认为：<code>/usr/local</code></li>
+<li>配置文件位置为：<code>/usr/local/etc/</code>或<code>/usr/local/**/etc</code></li>
+</ul>
+</li>
+</ul>
+<h1 id="Systemd"><a href="#Systemd" class="headerlink" title="Systemd"></a>Systemd</h1><p><em>d，deamon，守护进程</em></p>
+<p>在Linux中，systemd是与SysV和LSB初始化脚本兼容的系统和服务管理器，开启systemd服务可以提供基于守护进程的按需启动策略；</p>
+<p>支持快照和系统状态恢复，维护系统挂载和自挂载点，使得各服务之间基于从属关系实现更为精细的逻辑控制，具有更高的并行性能；</p>
+<h2 id="unit"><a href="#unit" class="headerlink" title="unit"></a>unit</h2><p>systemd服务的开启和监督系统基于unit的概念；</p>
+<p>unit由一个与配置文件对应的名称和类型组成，unit通常有以下几种类型：</p>
+<p>unit，单元：让系统直到如何进行操作和管理的资源。</p>
+<ul>
+<li>Service unit：系统服务；</li>
+<li>Target unit：一组systemd units；</li>
+<li>Automount unit：文件系统挂载点；</li>
+<li>Device unit：内核识别的设备文件；</li>
+<li>Mount unit：文件系统挂载点；</li>
+<li>Path unit：在一个文件系统中的文件或目录；</li>
+<li>Scope unit：外部创建的进程；</li>
+<li>Snapshot unit：systemd manager的保存状态。</li>
+</ul>
+<p>特性：</p>
+<ul>
+<li>更快的启动速度；</li>
+<li>提供按需启动能力；</li>
+<li>采用cgroup特性追踪和管理进程生命周期；</li>
+<li>启动挂载点和自动挂载的管理；</li>
+<li>实现事务性依赖关系管理；</li>
+<li>与SysV初始化脚本兼容；</li>
+<li>能够对系统进行快照和恢复。</li>
+</ul>
+<h2 id="如何使用systemd"><a href="#如何使用systemd" class="headerlink" title="如何使用systemd"></a>如何使用systemd</h2><p>systemd使用systemctl命令来对系统服务进行运行、关闭、重启、状态打印、启用和禁用的操作；</p>
+<p>systemctl与sysvinit（service）命令功能相似，建议用systemctl来进行系统服务管理；</p>
+<ul>
+<li><p><strong>查看当前正在运行的服务</strong>：<code>systemctl list-units --type service</code>；</p>
+<ul>
+<li>若加上 <code>--all</code> 参数，则列出所有的服务；</li>
+</ul>
+</li>
+<li><p><strong>查看特定服务的状态</strong>：<code>systemctl status NAME.service</code></p>
+<ul>
+<li><pre><code class="language-shell">[root@localhost node-v18.12.1]# systemctl status firewalld
 ● firewalld.service - firewalld - dynamic firewall daemon
      Loaded: loaded (/usr/lib/systemd/system/firewalld.service; enabled; vendor&gt;
      Active: active (running) since Mon 2022-10-24 02:38:05 CST; 22h ago
@@ -8,7 +461,138 @@
      Memory: 26.8M
      CGroup: /system.slice/firewalld.service
              └─829 /usr/bin/python3 -s /usr/sbin/firewalld --nofork --nopid
-</code></pre></li><li><p>结果参数：</p><ul><li>Loaded：服务是否被加载，并显示对应的绝对路径是否启用；</li><li>Active：服务是否正在运行，并显示时间节点；</li><li>Main PID：服务的PID值；</li><li>CGroup：相关控制组的其他信息</li></ul></li></ul></li><li><p><strong>运行服务</strong>：<code>systemctl start NAME.service</code></p></li><li><p><strong>关闭服务</strong>：<code>systemctl stop NAME.service</code></p></li><li><p><strong>重启服务</strong>：<code>systemctl restart NAME.service</code></p></li><li><p><strong>启用服务</strong>（开机启动）：<code>systemctl enable NAME.service</code></p></li><li><p><strong>禁用服务</strong>（开机不启动）：<code>systemctl disable NAME.service</code></p></li></ul><h2 id="其他操作"><a href="#其他操作" class="headerlink" title="其他操作"></a>其他操作</h2><ul><li><strong>关闭系统</strong>：<code>systemctl poweroff</code></li><li><strong>重启系统</strong>：<code>systemctl reboot</code></li><li><strong>系统待机</strong>：<code>systemctl suspend</code></li><li><strong>系统休眠</strong>：<code>systemctl hibernate</code><ul><li>系统待机并休眠：<code>systemctl hybrid-sleep</code></li></ul></li></ul></div><div class="post-bottom-tags-and-share border-box"><div><ul class="post-tags-box border-box"><li class="tag-item border-box"><i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Linux/">Linux</a></li><li class="tag-item border-box"><i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/openEuler/">openEuler</a></li></ul></div><div></div></div><div class="post-nav border-box"><div class="prev-post"><a class="prev" rel="prev" href="/2022/11/27/openEuler/openEuler-5/" title="openEuler 5 文件系统 磁盘 磁盘分区 LVM"><span class="left arrow-icon flex-center"><i class="fas fa-chevron-left"></i> </span><span class="title flex-center"><span class="post-nav-title-item text-ellipsis">openEuler 5 文件系统 磁盘 磁盘分区 LVM</span> <span class="post-nav-item">上一篇</span></span></a></div><div class="next-post"><a class="next" rel="next" href="/2022/11/26/openEuler/OpenEuler-3/" title="OpenEuler 3 文件权限设置 文件属主设置 umask DNF软件包管理"><span class="title flex-center"><span class="post-nav-title-item text-ellipsis">OpenEuler 3 文件权限设置 文件属主设置 umask DNF软件包管理</span> <span class="post-nav-item">下一篇</span> </span><span class="right arrow-icon flex-center"><i class="fas fa-chevron-right"></i></span></a></div></div><div class="comments-container border-box"><div id="comments-anchor" class="comment-area-title border-box"><i class="fas fa-comments"></i>&nbsp;评论</div><div class="comment-plugin-fail border-box"><span class="fail-tip">评论插件加载失败</span> <button class="reload keep-button">点击重新加载</button></div><div class="comment-plugin-loading flex-center border-box"><i class="loading-icon fa-solid fa-spinner fa-spin"></i> <span class="load-tip">正在加载评论插件</span></div><script data-pjax="">window.KeepCommentPlugin={},window.KeepCommentPlugin.hideLoading=()=>{document.querySelector(".comments-container .comment-plugin-loading").style.display="none"},window.KeepCommentPlugin.loadFailHandle=()=>{window.KeepCommentPlugin.hideLoading();const e=document.querySelector(".comments-container .comment-plugin-fail");e.style.display="flex",e.querySelector(".reload").addEventListener("click",()=>{window.location.reload()})}</script><div class="twikoo-container"><div id="twikoo-comment"></div><script src="https://cdnjs.cloudflare.com/ajax/libs/twikoo/1.6.39/twikoo.all.min.js" async="" onerror="window.KeepCommentPlugin.loadFailHandle()"></script><script async="" onerror="window.KeepCommentPlugin.loadFailHandle()">window.KeepCommentPlugin.initTwikoo = () => {
+</code></pre>
+</li>
+<li><p>结果参数：</p>
+<ul>
+<li>Loaded：服务是否被加载，并显示对应的绝对路径是否启用；</li>
+<li>Active：服务是否正在运行，并显示时间节点；</li>
+<li>Main PID：服务的PID值；</li>
+<li>CGroup：相关控制组的其他信息</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>运行服务</strong>：<code>systemctl start NAME.service</code></p>
+</li>
+<li><p><strong>关闭服务</strong>：<code>systemctl stop NAME.service</code></p>
+</li>
+<li><p><strong>重启服务</strong>：<code>systemctl restart NAME.service</code></p>
+</li>
+<li><p><strong>启用服务</strong>（开机启动）：<code>systemctl enable NAME.service</code></p>
+</li>
+<li><p><strong>禁用服务</strong>（开机不启动）：<code>systemctl disable NAME.service</code></p>
+</li>
+</ul>
+<h2 id="其他操作"><a href="#其他操作" class="headerlink" title="其他操作"></a>其他操作</h2><ul>
+<li><strong>关闭系统</strong>：<code>systemctl poweroff</code></li>
+<li><strong>重启系统</strong>：<code>systemctl reboot</code></li>
+<li><strong>系统待机</strong>：<code>systemctl suspend</code></li>
+<li><strong>系统休眠</strong>：<code>systemctl hibernate</code><ul>
+<li>系统待机并休眠：<code>systemctl hybrid-sleep</code></li>
+</ul>
+</li>
+</ul>
+
+                    
+                </div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Linux/">Linux</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/openEuler/">openEuler</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                            <div class="prev-post">
+                                <a class="prev" rel="prev" href="/2022/11/27/openEuler/openEuler-5/" title="openEuler 5 文件系统 磁盘 磁盘分区 LVM">
+                                    <span class="left arrow-icon flex-center">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">openEuler 5 文件系统 磁盘 磁盘分区 LVM</span>
+                                        <span class="post-nav-item">上一篇</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="next-post">
+                                <a class="next" rel="next" href="/2022/11/26/openEuler/OpenEuler-3/" title="OpenEuler 3 文件权限设置 文件属主设置 umask DNF软件包管理">
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">OpenEuler 3 文件权限设置 文件属主设置 umask DNF软件包管理</span>
+                                        <span class="post-nav-item">下一篇</span>
+                                    </span>
+                                    <span class="right arrow-icon flex-center">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+    <div class="comments-container border-box">
+        <div id="comments-anchor" class="comment-area-title border-box">
+            <i class="fas fa-comments"></i>&nbsp;评论
+        </div>
+        <div class="comment-plugin-fail border-box">
+    <span class="fail-tip">评论插件加载失败</span>
+    <button class="reload keep-button">点击重新加载</button>
+</div>
+<div class="comment-plugin-loading flex-center border-box">
+    <i class="loading-icon fa-solid fa-spinner fa-spin"></i>
+    <span class="load-tip">正在加载评论插件</span>
+</div>
+<script data-pjax="">
+  window.KeepCommentPlugin = {}
+  window.KeepCommentPlugin.hideLoading = () => {
+    const cplDom = document.querySelector('.comments-container .comment-plugin-loading')
+    cplDom.style.display = 'none'
+  }
+  window.KeepCommentPlugin.loadFailHandle = () => {
+    window.KeepCommentPlugin.hideLoading()
+    const cpfDom = document.querySelector('.comments-container .comment-plugin-fail')
+    cpfDom.style.display = 'flex'
+    cpfDom.querySelector('.reload').addEventListener('click', () => {
+      window.location.reload()
+    })
+  }
+</script>
+
+        
+            
+
+    <div class="twikoo-container">
+        <div id="twikoo-comment"></div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twikoo/1.6.39/twikoo.all.min.js" async="" onerror="window.KeepCommentPlugin.loadFailHandle()"></script>
+        <script async="" onerror="window.KeepCommentPlugin.loadFailHandle()">
+          window.KeepCommentPlugin.initTwikoo = () => {
             if (window?.twikoo) {
               twikoo.init({
                 el: '#twikoo-comment',
@@ -30,4 +614,311 @@
             }, 1200)
           } else {
             window.addEventListener('DOMContentLoaded', window.KeepCommentPlugin.initTwikoo)
-          }</script></div></div></div></div><div class="pc-post-toc right-toc"><div class="post-toc-wrap border-box"><div class="post-toc border-box"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%BA%90%E4%BB%A3%E7%A0%81%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85"><span class="nav-text">源代码软件安装</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%BA%90%E4%BB%A3%E7%A0%81%E8%BD%AF%E4%BB%B6"><span class="nav-text">源代码软件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E8%BF%9B%E8%A1%8C%E6%BA%90%E4%BB%A3%E7%A0%81%E5%AE%89%E8%A3%85"><span class="nav-text">如何进行源代码安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%AD%A5%E9%AA%A4"><span class="nav-text">基本步骤</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Systemd"><span class="nav-text">Systemd</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#unit"><span class="nav-text">unit</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8systemd"><span class="nav-text">如何使用systemd</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E6%93%8D%E4%BD%9C"><span class="nav-text">其他操作</span></a></li></ol></li></ol></div></div></div></div></div></div></div><div class="page-main-content-bottom border-box"><footer class="footer border-box"><div class="copyright-info info-item">©&nbsp;<span>2020</span>&nbsp;-&nbsp;2025 &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">uwupu</a></div><div class="theme-info info-item">由&nbsp;<a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;驱动&nbsp;&amp;&nbsp;主题&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a></div><div class="count-info info-item"><span class="count-item border-box word"><span class="item-type border-box">总字数</span> <span class="item-value border-box word">160k</span> </span><span class="count-item border-box uv"><span class="item-type border-box">访客数</span> <span class="item-value border-box uv" id="busuanzi_value_site_uv"></span> </span><span class="count-item border-box pv"><span class="item-type border-box">访问量</span> <span class="item-value border-box pv" id="busuanzi_value_site_pv"></span></span></div><div class="record-info info-item"><div class="record-item border-box"><a target="_blank" href="https://icp.gov.moe/?keyword=20251033">萌ICP备20251033号</a></div></div></footer></div></div><div class="post-tools right-toc"><div class="post-tools-container border-box"><ul class="post-tools-list border-box"><li class="tools-item flex-center toggle-show-toc"><i class="fas fa-list"></i></li><li class="tools-item flex-center go-to-comments"><i class="fas fa-comment"></i> <span class="post-comments-count"></span></li><li class="tools-item flex-center full-screen"><i class="fa-solid fa-expand"></i></li></ul></div></div><div class="side-tools"><div class="side-tools-container border-box"><ul class="side-tools-list side-tools-show-handle border-box"><li class="tools-item tool-font-adjust-plus flex-center"><i class="fas fa-search-plus"></i></li><li class="tools-item tool-font-adjust-minus flex-center"><i class="fas fa-search-minus"></i></li><li class="tools-item tool-toggle-theme-mode flex-center"><i class="fas fa-moon"></i></li><li class="tools-item tool-scroll-to-bottom flex-center"><i class="fas fa-arrow-down"></i></li></ul><ul class="exposed-tools-list border-box"><li class="tools-item toggle-show-toc-tablet flex-center"><i class="fas fa-list"></i></li><li class="tools-item go-to-comments-tablet flex-center"><i class="fas fa-comment"></i></li><li class="tools-item tool-toggle-show flex-center"><i class="fas fa-cog fa-spin"></i></li><li class="tools-item tool-scroll-to-top flex-center show-arrow"><i class="arrow fas fa-arrow-up"></i> <span class="percent"></span></li></ul></div></div><div class="zoom-in-image-mask"><img class="zoom-in-image"></div><div class="search-pop-overlay"><div class="popup search-popup"><div class="search-header"><span class="search-input-field-pre"><i class="fas fa-keyboard"></i></span><div class="search-input-container"><input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="搜索..." spellcheck="false" type="search" class="search-input"></div><span class="close-popup-btn"><i class="fas fa-times"></i></span></div><div id="search-result"><div id="no-result"><i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i></div></div></div></div><div class="tablet-post-toc-mask"><div class="tablet-post-toc"><div class="post-toc-wrap border-box"><div class="post-toc border-box"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%BA%90%E4%BB%A3%E7%A0%81%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85"><span class="nav-text">源代码软件安装</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%BA%90%E4%BB%A3%E7%A0%81%E8%BD%AF%E4%BB%B6"><span class="nav-text">源代码软件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E8%BF%9B%E8%A1%8C%E6%BA%90%E4%BB%A3%E7%A0%81%E5%AE%89%E8%A3%85"><span class="nav-text">如何进行源代码安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%AD%A5%E9%AA%A4"><span class="nav-text">基本步骤</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Systemd"><span class="nav-text">Systemd</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#unit"><span class="nav-text">unit</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8systemd"><span class="nav-text">如何使用systemd</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E6%93%8D%E4%BD%9C"><span class="nav-text">其他操作</span></a></li></ol></li></ol></div></div></div></div></main><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/js/utils.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/js/header-shrink.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/js/back2top.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/js/toggle-theme.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/js/code-block.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/js/main.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/js/libs/anime.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/js/local-search.min.js"></script><div><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/js/post/post-helper.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/js/post/toc.min.js"></script></div><script src="//cdnjs.cloudflare.com/ajax/libs/mermaid/10.5.0/mermaid.min.js"></script><script src="/bundle.js"></script></body></html>
+          }
+        </script>
+    </div>
+
+
+        
+    </div>
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%BA%90%E4%BB%A3%E7%A0%81%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85"><span class="nav-text">源代码软件安装</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%BA%90%E4%BB%A3%E7%A0%81%E8%BD%AF%E4%BB%B6"><span class="nav-text">源代码软件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E8%BF%9B%E8%A1%8C%E6%BA%90%E4%BB%A3%E7%A0%81%E5%AE%89%E8%A3%85"><span class="nav-text">如何进行源代码安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%AD%A5%E9%AA%A4"><span class="nav-text">基本步骤</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Systemd"><span class="nav-text">Systemd</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#unit"><span class="nav-text">unit</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8systemd"><span class="nav-text">如何使用systemd</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E6%93%8D%E4%BD%9C"><span class="nav-text">其他操作</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="copyright-info info-item">
+    ©&nbsp;<span>2020</span>&nbsp;-&nbsp;2025
+    
+            &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">uwupu</a>
+        
+    </div>
+
+    <div class="theme-info info-item">
+        由&nbsp;<a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;驱动&nbsp;&amp;&nbsp;主题&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a>
+    </div>
+
+    
+
+    
+        <div class="count-info info-item">
+            
+                <span class="count-item border-box word">
+                    <span class="item-type border-box">总字数</span>
+                    <span class="item-value border-box word">160k</span>
+                </span>
+            
+
+            
+                <span class="count-item border-box uv">
+                    <span class="item-type border-box">访客数</span>
+                    <span class="item-value border-box uv" id="busuanzi_value_site_uv"></span>
+                </span>
+            
+
+            
+                <span class="count-item border-box pv">
+                    <span class="item-type border-box">访问量</span>
+                    <span class="item-value border-box pv" id="busuanzi_value_site_pv"></span>
+                </span>
+            
+        </div>
+    
+
+    
+        <div class="record-info info-item">
+            
+                
+                    <div class="record-item border-box">
+                        <a class="" target="_blank" href="https://icp.gov.moe/?keyword=20251033">
+                            萌ICP备20251033号
+                        </a>
+                    </div>
+                
+            
+        </div>
+    
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="post-tools-list border-box">
+        <!-- PC encrypt again -->
+        
+
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+            <li class="tools-item flex-center go-to-comments">
+                <i class="fas fa-comment"></i>
+                <span class="post-comments-count"></span>
+            </li>
+        
+
+        <!-- PC full screen -->
+        <li class="tools-item flex-center full-screen">
+            <i class="fa-solid fa-expand"></i>
+        </li>
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <!-- toggle mode -->
+        
+            <li class="tools-item tool-toggle-theme-mode flex-center">
+                <i class="fas fa-moon"></i>
+            </li>
+        
+
+        <!-- rss -->
+        
+
+        <!-- to bottom -->
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+            <li class="tools-item go-to-comments-tablet flex-center">
+                <i class="fas fa-comment"></i>
+            </li>
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="搜索..." spellcheck="false" type="search" class="search-input">
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%BA%90%E4%BB%A3%E7%A0%81%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85"><span class="nav-text">源代码软件安装</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%BA%90%E4%BB%A3%E7%A0%81%E8%BD%AF%E4%BB%B6"><span class="nav-text">源代码软件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E8%BF%9B%E8%A1%8C%E6%BA%90%E4%BB%A3%E7%A0%81%E5%AE%89%E8%A3%85"><span class="nav-text">如何进行源代码安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%AD%A5%E9%AA%A4"><span class="nav-text">基本步骤</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Systemd"><span class="nav-text">Systemd</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#unit"><span class="nav-text">unit</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8systemd"><span class="nav-text">如何使用systemd</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E6%93%8D%E4%BD%9C"><span class="nav-text">其他操作</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+
+
+<!-- common js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/js/utils.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/js/header-shrink.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/js/back2top.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/js/toggle-theme.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/js/code-block.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/js/main.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/js/libs/anime.min.js"></script>
+
+<!-- local search -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/js/local-search.min.js"></script>
+
+
+<!-- lazyload -->
+
+
+<div class="">
+    <!-- home page -->
+    
+
+    <!-- post page -->
+    
+        <!-- post-helper -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/js/post/post-helper.min.js"></script>
+
+        <!-- toc -->
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-theme-keep/4.2.5/js/post/toc.min.js"></script>
+        
+
+        <!-- copyright-info -->
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- categories page -->
+    
+
+    <!-- links page -->
+    
+
+    <!-- photos page -->
+    
+
+    <!-- tools page -->
+    
+</div>
+
+<!-- mermaid -->
+
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/mermaid/10.5.0/mermaid.min.js"></script>
+
+
+
+
+
+
+<!-- pjax -->
+
+
+
+    
+        
+    
+        
+            
+
+
+        
+    
+        
+            
+
+
+        
+    
+
+
+
+<script src="/bundle.js"></script></body></html>
